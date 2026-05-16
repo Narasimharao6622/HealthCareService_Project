@@ -1,0 +1,928 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: auto;
+	font-family: sans-serif;
+}
+
+:root {
+	--bgcolor: black;
+	--text-color: white;
+}
+
+@media screen and (orientation: landscape) {
+	html {
+		font-size: 16px;
+	}
+
+	.container {
+		width: 100%;
+		height: 100%;
+		background: rgb(86, 172, 233);
+	}
+
+	header {
+		width: 100%;
+		background: rgb(90, 232, 189);
+		box-shadow: 0 0 1rem .2rem black;
+		position: relative;
+	}
+
+	#hospitalName {
+		padding-top: 1rem;
+		font-size: clamp(1rem, 15vw, 3rem);
+		padding-left: 2rem;
+		cursor: default;
+		position: relative;
+		z-index: 10;
+		width: 95%;
+		font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+			Roboto, "Helvetica Neue", Arial, sans-serif;
+	}
+
+	#hospitalName::after {
+		content: "";
+		position: absolute;
+		bottom: 0rem;
+		left: 1rem;
+		width: 0rem;
+		height: 4%;
+		z-index: -1;
+		border-radius: 0;
+		background: linear-gradient(45deg, rgb(114, 224, 114), rgb(55, 55, 111),
+				rgb(246, 183, 67));
+		transition: height .3s ease-out, width .3s ease-in-out .3s,
+			border-radius .3s ease-in-out .3s, background .3s ease-in-out;
+	}
+
+	#hospitalName:hover::after {
+		width: 100%;
+		height: 90%;
+		border-radius: 2rem;
+		animation: coloranimate 7s infinite linear;
+	}
+
+	@keyframes coloranimate {
+		0% {
+			background: linear-gradient(45deg, rgb(114, 224, 114), rgb(55, 55, 111),
+					rgb(246, 183, 67));
+		}
+
+		25% {
+			background: linear-gradient(45deg, rgb(246, 183, 67), rgb(114, 224, 114), rgb(55, 55, 111));
+		}
+
+		50% {
+			background: linear-gradient(45deg, rgb(55, 55, 111), rgb(246, 183, 67), rgb(114, 224, 114));
+		}
+
+		75% {
+			background:
+				linear-gradient(45deg,
+					rgb(114,
+						224,
+						114),
+					rgb(55,
+						55,
+						111),
+					rgb(246,
+						183,
+						67));
+		}
+
+		100% {
+			background:
+				linear-gradient(45deg,
+					rgb(246,
+						183,
+						67),
+					rgb(114,
+						224,
+						114),
+					rgb(55,
+						55,
+						111));
+		}
+	}
+
+	header #heading {
+		font-size: clamp(.8rem, 4vw, 2rem);
+		letter-spacing: .1rem;
+		cursor: default;
+		padding: 2rem 2rem 2rem 5rem;
+	}
+
+	header #heading .formpagename {
+		transition: all .3s ease-in-out;
+		width: max-content;
+	}
+
+	header #heading .formpagename:hover::after {
+		content: '';
+		width: 100%;
+		height: .1rem;
+		background: black;
+		position: absolute;
+		bottom: 0rem;
+		left: 0;
+	}
+
+	header #heading .formpagename:hover {
+		transform: scale(1.01);
+		display: inline-block;
+	}
+
+	#patientRegistrationFrom {
+		background-color: rgb(178, 239, 209);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+	}
+
+	.informationBlock .heading {
+		margin-top: 1rem;
+		font-weight: bold;
+		width: max-content;
+		font-size: 1.3rem;
+		transition: all .2s ease-in-out;
+	}
+
+	.informationBlock .heading:hover {
+		animation: headingScale 1s ease-in-out 1 forwards both;
+	}
+
+	@keyframes headingScale {
+		from {
+			transform: scale(1);
+
+		}
+
+		to {
+			transform: scale(2);
+		}
+
+	}
+
+	.informationBlock {
+		width: 90%;
+		box-shadow: 5px 5px 12px black;
+		background-color: rgb(90, 187, 139);
+		border-radius: 1rem;
+		margin: 1rem;
+		padding: 2rem;
+		cursor: default;
+	}
+
+	.block {
+		padding: .3rem;
+		margin: 1rem;
+		width: 99%;
+		position: relative;
+		padding-left: 1rem;
+	}
+
+	.detailsHeading {
+		width: max-content;
+		font-size: clamp(.4rem, 4vw, 1.2rem);
+		padding: 0rem .7rem .7rem .7rem;
+		letter-spacing: .03rem;
+		cursor: default;
+	}
+
+	.takeInput {
+		margin-top: -.3rem;
+		width: 70%;
+		height: 2rem;
+		display: flex;
+		justify-content: space-between;
+	}
+
+	input {
+		width: 99%;
+		height: 100%;
+		outline: none;
+		border: none;
+		background: rgb(42, 174, 108);
+		font-size: clamp(.4rem, 4vw, 1rem);
+		letter-spacing: 1px;
+		border-radius: 4px;
+		border-bottom: 2px solid black;
+		padding-left: .4em;
+	}
+
+	#photo {
+		width: 55%;
+	}
+
+	select {
+		outline: none;
+		border: none;
+		height: 1.6rem;
+		font-size: clamp(.3rem, 4vw, 1rem);
+	}
+
+	.addressblock {
+		width: 90%;
+		box-shadow: 2px 2px 10px .1rem black;
+		border-radius: 1rem;
+		background-color: rgb(120, 215, 168);
+	}
+
+	.addressblock .takeInput {
+		padding: .5rem;
+		width: 90%;
+		margin-top: .5rem;
+	}
+
+	.addressblock .takeInput #pincode {
+		margin-top: 0;
+		width: 20%;
+		height: 100%;
+	}
+
+	.addressblock .takeInput input::placeholder {
+		color: rgb(60, 60, 60);
+		font-size: clamp(.3rem, 4vw, 1rem);
+		letter-spacing: 1px;
+	}
+
+	.enterContactDetails {
+		width: 90%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.conformContexbox {
+		width: 78%;
+	}
+
+	#varifyPhone,
+	#varifyEmailid {
+		width: 19%;
+	}
+
+	.varify {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: clamp(.4rem, 4vw, 1.3rem);
+		letter-spacing: .05rem;
+		font-weight: 600;
+		box-shadow: 0 0 0 .1rem black;
+		border-radius: 5px;
+		cursor: pointer;
+		background: rgb(3, 162, 128);
+	}
+
+	#verifyEmailidMessage.loading {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: clamp(.4rem, 4vw, 1.3rem);
+		letter-spacing: .05rem;
+		font-weight: 600;
+		box-shadow: 0 0 0 .1rem black;
+		border-radius: 5px;
+		cursor: pointer;
+		background: linear-gradient(45deg, rgb(27, 120, 100), rgb(3, 162, 128),
+				rgb(27, 120, 100), rgb(3, 162, 128), rgb(27, 120, 100),
+				rgb(3, 162, 128), rgb(27, 120, 100), rgb(3, 162, 128),
+				rgb(27, 120, 100), rgb(3, 162, 128)) no-repeat;
+		animation: loading .2s ease-in-out 0s infinite forwards both;
+	}
+
+	@keyframes loading {
+		0% {
+			background: red;
+		}
+
+		50% {
+			background: blue;
+		}
+
+		100% {
+			background: green;
+		}
+	}
+
+	#mobileOTP {
+		display: none;
+		width: 100%;
+		height: 100%;
+		border-radius: 5px;
+		padding-left: .2rem;
+		background: rgb(76, 194, 135);
+		font-size: clamp(.4rem, 4vw, 1rem);
+		/* box-shadow: 0 0 0 .1rem black; */
+	}
+
+	#emailOTP {
+		display: none;
+		width: 100%;
+		height: 100%;
+		border-radius: 5px;
+		padding-left: .2rem;
+		background: rgb(42, 174, 108);
+		font-size: clamp(.4rem, 4vw, 1rem);
+		/* box-shadow: 0 0 0 .1rem black; */
+		position: relative;
+	}
+
+	#emailOTP::before {
+		content: "*";
+		position: absolute;
+		z-index: 10;
+		bottom: -100%;
+		left: 0%;
+		width: 100%;
+		height: 100%;
+		background: red;
+	}
+
+	/*  #verifyEmailidMessage{
+    	position: relative;
+    }
+    
+    
+     #verifyEmailidMessage::before{
+    	content: "*";
+    	position: absolute;
+    	z-index: 10;
+    	bottom: -100%;
+    	left: 0%;
+    	width: 100%;
+    	height: 100%;
+    	background: red;
+    } */
+	.passwordBlock {
+		background-color: rgb(9, 118, 94);
+		border-radius: 1rem;
+		padding: 1rem;
+		margin-top: 2rem;
+	}
+
+	#passwordBlock {
+		width: 100%;
+		height: 100%;
+		background: rgb(42, 174, 108);
+		border-radius: 4px;
+		display: flex;
+	}
+
+	#passwordBlock input {
+		width: 96%;
+		border-radius: 4px 0 0 4px;
+	}
+
+	#passwordBlock i {
+		font-size: 1.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		border-radius: 0 4px 4px 0;
+		height: 99%;
+		border-bottom: 2px solid black;
+	}
+
+	.heading {
+		margin-left: 1rem;
+		margin-top: 4rem;
+		font-size: 1.2rem;
+		text-decoration: underline;
+	}
+
+	.conformAndSaveDetails {
+		height: 30%;
+		position: relative;
+		margin-bottom: 4rem;
+	}
+
+	.content {
+		display: flex;
+		height: 90%;
+		width: 99%;
+		font-size: 1.1rem;
+		margin-bottom: 1rem;
+		letter-spacing: .8px;
+	}
+
+	.content input {
+		width: 2rem;
+		height: 1.1rem;
+		margin-top: .1rem;
+		cursor: pointer;
+	}
+
+	.confirmbutton {
+		width: 8rem;
+		height: 2.5rem;
+	}
+
+	#submit {
+		width: 100%;
+		height: 100%;
+		background-color: rgb(3, 162, 128);
+		cursor: pointer;
+		border: 2px solid black;
+	}
+
+	.star::after {
+		content: "*";
+		color: red;
+		margin-left: .2rem;
+	}
+
+	.error-message {
+		opacity: 0;
+		width: 53%;
+		height: 10%;
+		margin-left: .3rem;
+		position: absolute;
+		padding: .5rem;
+		color: red;
+		font-size: clamp(.3rem, 4vw, 1rem);
+		display: flex;
+		align-items: center;
+		margin-top: .5rem;
+		letter-spacing: .05rem;
+	}
+
+	.error-message::before {
+		content: "*";
+		width: 0;
+		height: 0;
+		/* border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 5px solid red; */
+		position: absolute;
+		top: 0;
+		left: 0%;
+	}
+
+	.image-preview {
+		width: 120px;
+		height: 120px;
+		border-radius: 50%;
+		border: 3px solid #2563eb;
+		object-fit: cover;
+		margin-top: 10px;
+		display: none;
+	}
+
+	#cropImagePopUp {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background: rgba(0, 0, 0, 0.692);
+		display: none;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		z-index: 1000;
+	}
+
+	.image-container {
+		border-radius: 10px;
+		padding: 20px;
+		width: 100%;
+		height: 100%;
+		max-height: 400px;
+		max-width: 400px;
+		margin-top: 20px;
+	}
+
+	#cropImage {
+		padding: 10px;
+		width: 100%;
+		display: none;
+	}
+
+	#previewImage {
+		width: 150px;
+		height: 150px;
+		border-radius: 50%;
+		object-fit: cover;
+		border: 3px solid #2563eb;
+		margin-top: 20px;
+	}
+
+	.crop-btn {
+		padding: 10px 20px;
+		margin-top: 25px;
+		background: #2563eb;
+		color: white;
+		border: none;
+		border-radius: 8px;
+		cursor: pointer;
+	}
+}
+
+@media screen and (orientation: portrait) {
+	html {
+		font-size: 16px;
+	}
+
+	body {
+		background-color: red;
+	}
+
+	.container {
+		width: 100%;
+		background: rgb(86, 172, 233);
+		overflow: hidden;
+	}
+
+	header {
+		width: 100%;
+		background: rgb(90, 232, 189);
+		box-shadow: 0 0 1rem .2rem black;
+		position: relative;
+	}
+
+	#hospitalName {
+		padding-top: 1rem;
+		font-size: clamp(1.5rem, 3vw, 4rem);
+		font-weight: bold;
+		padding-left: 1rem;
+		cursor: default;
+		position: relative;
+		z-index: 10;
+		width: 94%;
+		/* font-family: system-ui, -apple-system, BlinkMacSystemFont,
+                 "Segoe UI", Roboto, "Helvetica Neue",
+                 Arial, sans-serif; */
+		font-family: 'Poppins', sans-serif;
+	}
+
+	#hospitalName::after {
+		content: "";
+		position: absolute;
+		bottom: .4rem;
+		left: 1rem;
+		width: 0rem;
+		height: .1rem;
+		background: linear-gradient(45deg, rgb(114, 224, 114), rgb(55, 55, 111),
+				rgb(246, 183, 67));
+		transition: all .3s ease-in-out;
+	}
+
+	#hospitalName:hover::after {
+		width: 94%;
+	}
+
+	header #heading {
+		font-weight: 600;
+		letter-spacing: .1rem;
+		cursor: default;
+		position: relative;
+		left: 7vw;
+		top: 3.5rem;
+		display: inline;
+	}
+
+	.formpagename {
+		font-size: clamp(.5rem, 55vw, 1.5rem);
+		width: 90%;
+		position: relative;
+		transition: all .5s ease-in-out;
+	}
+
+	.formpagename::after {
+		content: '';
+		width: 0;
+		height: .1rem;
+		background: rgb(65, 63, 63);
+		position: absolute;
+		bottom: 0rem;
+		left: 50%;
+		transition: all .5s ease-in-out;
+	}
+
+	.formpagename:hover::after {
+		left: 0;
+		width: 100%;
+	}
+
+	header .formpagename:hover {
+		color: rgb(65, 63, 63);
+	}
+
+	#patientRegistrationFrom {
+		padding-top: 3rem;
+		width: 100%;
+		background-color: rgb(178, 239, 209);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+	}
+
+	#patientRegistrationFrom .heading {
+		font-weight: bold;
+		width: 88%;
+		margin-left: 1rem;
+		font-size: clamp(.5rem, 5vw, 1.2rem);
+		text-decoration: underline;
+	}
+
+	.takePersonalDetails {
+		width: 90%;
+	}
+
+	.informationBlock {
+		width: 90%;
+		box-shadow: 5px 5px 12px black;
+		background-color: rgb(90, 187, 139);
+		border-radius: 1rem;
+		margin: 1rem;
+		padding: .9rem;
+		cursor: default;
+	}
+
+	.block {
+		padding: .5rem;
+		width: 98%;
+	}
+
+	.detailsHeading {
+		font-size: clamp(.1rem, 5vw, 1rem);
+		padding: .7rem .7rem .7rem .7rem;
+		letter-spacing: .03rem;
+		cursor: default;
+	}
+
+	.takeInput {
+		margin-top: -.3rem;
+		margin-left: .7rem;
+		width: 90%;
+		height: 1.8rem;
+		position: relative;
+		display: flex;
+		justify-content: space-between;
+	}
+
+	input {
+		width: 99%;
+		height: 99%;
+		outline: none;
+		border: none;
+		background: rgb(42, 174, 108);
+		font-size: clamp(.4rem, 4vw, 1rem);
+		letter-spacing: 1px;
+		padding-left: .2rem;
+		border-radius: 4px;
+		border-bottom: 2px solid black;
+		position: relative;
+	}
+
+	#addressbox {
+		width: 95%;
+		border-radius: 1rem;
+		background-color: rgb(178, 239, 209);
+		box-shadow: 2px 2px 10px .1rem black;
+	}
+
+	.addressblock .takeInput {
+		width: 90%;
+		margin: 1rem;
+	}
+
+	.addressblock .takeInput input {
+		width: 100%;
+		margin-top: .5rem;
+	}
+
+	#photo {
+		width: 70%;
+		font-size: .8rem;
+	}
+
+	#Gender .takeInput::after,
+	#photo .takeInput::after,
+	#bloodGroup .takeInput::after {
+		background: transparent;
+	}
+
+	#bloodGroup input,
+	#Gender input,
+	#photo input {
+		background: transparent;
+	}
+
+	select {
+		outline: none;
+		border: none;
+		height: 1.6rem;
+		font-size: clamp(.3rem, 4vw, 1rem);
+	}
+
+	.enterContactDetails {
+		height: 100%;
+	}
+
+	.conformContexbox {
+		width: 77%;
+	}
+
+	#varifyPhone,
+	#varifyEmailid {
+		width: 19%;
+	}
+
+	.varify {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: clamp(.4rem, 4vw, 1.3rem);
+		letter-spacing: .05rem;
+		font-weight: 600;
+		box-shadow: 0 0 0 .1rem black;
+		border-radius: 5px;
+		cursor: pointer;
+		background: rgb(3, 162, 128);
+	}
+
+	#mobileOTP {
+		display: none;
+		width: 100%;
+		height: 100%;
+		border-radius: 5px;
+		padding-left: .2rem;
+		background: rgb(76, 194, 135);
+		font-size: clamp(.4rem, 4vw, 1rem);
+		/* box-shadow: 0 0 0 .1rem black; */
+	}
+
+	#emailOTP {
+		display: none;
+		width: 100%;
+		height: 100%;
+		border-radius: 5px;
+		padding-left: .2rem;
+		background: rgb(42, 174, 108);
+		font-size: clamp(.4rem, 4vw, 1rem);
+		/* box-shadow: 0 0 0 .1rem black; */
+	}
+
+	#mobileVarifiedMessage,
+	#emailVarifiedMessage {
+		display: none;
+	}
+
+	.passwordBlock {
+		background-color: rgb(9, 118, 94);
+		border-radius: 1rem;
+		padding: .5rem;
+		margin-top: 2rem;
+	}
+
+	.passwordBlock .block {
+		width: 100%;
+		height: auto;
+		display: flex;
+		flex-direction: column;
+		align-items: start;
+	}
+
+	#passwordBlock {
+		width: 100%;
+		height: 100%;
+		background: rgb(42, 174, 108);
+		border-radius: 4px;
+		display: flex;
+	}
+
+	#passwordBlock input {
+		width: 100%;
+		border-radius: 4px 0 0 4px;
+	}
+
+	#passwordBlock i {
+		font-size: 1.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		border-radius: 0 4px 4px 0;
+		border: 2px solid transparent;
+		box-shadow: 0 0 2rem .1rem black;
+	}
+
+	/* .heading{
+        margin-left: 1rem;
+        margin-top: 4rem;
+        font-size: 1.2rem;
+        text-decoration: underline;
+    } */
+	.conformAndSaveDetails {
+		height: 30%;
+		position: relative;
+		margin-bottom: 4rem;
+	}
+
+	.content {
+		display: flex;
+		height: 90%;
+		width: 99%;
+		font-size: 1.1rem;
+		margin-bottom: 1rem;
+		letter-spacing: .8px;
+	}
+
+	.content input {
+		width: 3rem;
+		height: 1.1rem;
+		margin-top: .1rem;
+		cursor: pointer;
+	}
+
+	.confirmbutton {
+		width: 10rem;
+		height: 2.5rem;
+	}
+
+	#submit {
+		width: 100%;
+		height: 100%;
+		background-color: rgb(3, 162, 128);
+		cursor: pointer;
+		border: 2px solid black;
+	}
+
+	.star::after {
+		content: "*";
+		color: red;
+		margin-left: .2rem;
+	}
+	.image-preview {
+		width: 120px;
+		height: 120px;
+		border-radius: 50%;
+		border: 3px solid #2563eb;
+		object-fit: cover;
+		margin-top: 10px;
+		display: none;
+	}
+
+	#cropImagePopUp {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background: rgba(0, 0, 0, 0.692);
+		display: none;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		z-index: 1000;
+	}
+
+	.image-container {
+		border-radius: 10px;
+		padding: 20px;
+		width: 100%;
+		height: 100%;
+		max-height: 400px;
+		max-width: 400px;
+		margin-top: 20px;
+	}
+
+	#cropImage {
+		padding: 10px;
+		width: 100%;
+		display: none;
+	}
+
+	#previewImage {
+		width: 150px;
+		height: 150px;
+		border-radius: 50%;
+		object-fit: cover;
+		border: 3px solid #2563eb;
+		margin-top: 20px;
+	}
+
+	.crop-btn {
+		padding: 10px 20px;
+		margin-top: 25px;
+		background: #2563eb;
+		color: white;
+		border: none;
+		border-radius: 8px;
+		cursor: pointer;
+	}
+}

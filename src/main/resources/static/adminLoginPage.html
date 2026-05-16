@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login Page</title>
+<link rel="stylesheet" href="/css/adminCSS_files/adminLoginPage.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+	integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+	<div id="loginBlock">
+		<form action="">
+			<div class="container">
+				<div id="heading" class="inpBlock">
+					<h1>Admin Login Page</h1>
+				</div>
+				<div class="inpBlock block1">
+					<input type="text" name="userid" id="userName" required
+						placeholder="User ID">
+				</div>
+				<div class="inpBlock block1">
+					<div id="passblock">
+						<input type="password" name="password" id="password" required
+							placeholder="password"> <i id="eye"
+							class="fa-solid fa-eye-slash" onmousedown="viewPass()"
+							onmouseup="hidePass()"></i>
+					</div>
+				</div>
+				<div class="inpBlock">
+					<input type="submit" value="Login" id="button">
+				</div>
+				<div id="errorMessage"></div>
+				<div class="inpBlock">
+					<a href="#" id="checkPassword">forget password</a>
+					<h1 id="message"></h1>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div id="loadingBody">
+		<div class="loader"></div>
+	</div>
+	<script src="/js/adminJS_files/adminLoginPage.js"></script>
+</body>
+
+</html>

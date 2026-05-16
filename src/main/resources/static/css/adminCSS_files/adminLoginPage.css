@@ -1,0 +1,154 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+@media screen and (orientation: landscape) {
+	body {
+		width: 100%;
+		height: 100vh;
+		background-color: gray;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition :all 1s ease-in-out;
+	}
+	.container {
+		width: 40vw;
+		height: 70vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		background-color: gray;
+		border: 2px solid gray;
+		position: relative;
+		/* right: 15vw; */
+		border-radius: 20px;
+		box-shadow: inset 1px 1px 10px white, inset 3px 3px 15px black, inset
+			-1px -1px 10px black, inset -3px -3px 15px white, 1px 1px 10px white,
+			3px 3px 15px black, -1px -1px 10px black, -3px -3px 15px white;
+	}
+	.inpBlock {
+		width: 100%;
+		height: 20%;
+		/* background-color: red; */
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		/* border: 2px solid black; */
+	}
+	#heading {
+		width: 100%;
+		height: 30%; letter-spacing : 2px;
+		font-size: 1.8vw;
+		font-family: sans-serif;
+		word-spacing: 15px;
+		text-shadow: 1px 1px 5px white, 2px 2px 7px black, -1px -1px 5px black,
+			-3px -3px 7px white;
+		letter-spacing: 2px;;
+	}
+	.block1 {
+		width: 100%;
+		height: 15%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	#passblock {
+		width: 90%;
+		height: 50%;
+		border-radius: 10px;
+		box-shadow: inset 1px 1px 5px white, inset 3px 3px 10px black, inset
+			-1px -1px 5px black, inset -3px -3px 10px white, 1px 1px 5px white,
+			3px 3px 10px black, -1px -1px 5px black, -3px -3px 10px white;
+	}
+	input {
+		border: 1px solid gray;
+		outline: none;
+		border-radius: 10px;
+		font-size: 1.3vw;
+		padding: 0 5% 0 5%;
+		background-color: transparent;
+	}
+	#userName {
+		width: 80%;
+		height: 50%;
+		box-shadow: inset 1px 1px 5px white, inset 3px 3px 10px black, inset
+			-1px -1px 5px black, inset -3px -3px 10px white, 1px 1px 5px white,
+			3px 3px 10px black, -1px -1px 5px black, -3px -3px 10px white;
+	}
+	#password {
+		width: 80%;
+		height: 100%;
+		border: none;
+		outline: none;
+	}
+	#button {
+		width: 60%;
+		height: 50%;
+		border: 2px solid gray;
+		border-radius: 10px;
+		background-color: transparent;
+		box-shadow: inset 1px 1px 5px white, inset 3px 3px 10px black, inset
+			-1px -1px 5px black, inset -3px -3px 10px white, 1px 1px 5px white,
+			3px 3px 10px black, -1px -1px 5px black, -3px -3px 10px white;
+	}
+	input::placeholder {
+		color: black;
+		letter-spacing: 1.5px;
+		font-size: 1.2vw;
+		font-family: monospace;
+	}
+	#eye {
+		position: relative;
+		left: 3%;
+		font-size: 1.2vw;
+		cursor: pointer;
+	}
+	#loadingBody {
+		width: 100%;
+		height: 100vh;
+		position: absolute;
+		top: 0;
+		left: 0;
+		background-color: rgba(230, 227, 227, 0.6);
+		z-index: 10;
+		display: none;
+		align-items: center;
+		justify-content: center;
+	}
+	.loader {
+		width: 4.2rem;
+		height: 4.2rem;
+		border: 5px solid black;
+		border-top: 5px solid transparent;
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+	}
+	@keyframes spin {
+	0%{
+		transform: rotate(0deg);
+	}
+	/* 30% { transform: rotate(200deg); } */
+	100%{
+		transform:rotate(360deg);
+	}
+
+	}
+	#errorMessage {
+	position: absolute;
+	color : red;
+	font-size: 1.2vw;
+	color: red;
+	bottom: 11vh;
+}
+
+}
+@media screen and (orientation: portrait) {
+	body {
+		width: 100%;
+		height: 100vh;
+		background-color: green;
+	}
+}

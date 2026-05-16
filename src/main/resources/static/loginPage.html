@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoginPage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/userCSS_files/loginPage.css">
+</head>
+
+<body>
+    <div class="loginPage">
+        <div class="container">
+            <div class="block box1">
+                <div class="headLineBox">
+                    <span class="heading">Login Page</span>
+                </div>
+            </div>
+            <div class="block box2">
+                <form id="formPage">
+                    <div class="inputbox inputBox1">
+                        <div id="emailidBox">
+                            <label for="email" id="emailLableBox">
+                                <span class="inputHeading" id="emailidInputHeading">Enter your email id</span>
+                            </label>
+                            <input type="email" name="email" id="email" required>
+                        </div>
+                    </div>
+                    <div class="inputbox inputBox2">
+                        <div id="passwordBox">
+                            <label for="password" id="passwordLabelBox">
+                                <span class="inputHeading" id="passwordInputHeading">Enter your password</span>
+                            </label>
+                            <div id="passwordInputField">
+                                <input type="password" name="password" id="password" required>
+                                <i class="fa-solid fa-eye-slash" id="eyeKey"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inputbox inputBox3">
+                        <div class="rememberMeBox">
+                            <input type="radio" name="remember" id="remember">
+                            <label for="remember">remember me</label>
+                        </div>
+                    </div>
+                    <div class="inputbox inputBox4">
+                        <div class="submit">
+                            <input type="submit" id="submit" value="Login">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="block box3">
+                <footer>
+                    <div class="forgetPasswordBlock">
+                        <a href="#">forget password</a>
+                    </div>
+                    <div class="newRegistration">
+                        <a href="/registrationPage.html">new registration</a>
+                    </div>
+                    <div class="about">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, quisquam.</p>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <script src="js/userJS_files/loginPage.js"></script>
+</body>
+
+</html>

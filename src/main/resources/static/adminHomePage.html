@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/adminCSS_files/adminHomePage.css">
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="logo">
+            Hospital Admin
+        </div>
+        <div class="searchBar">
+            <input type="text" placeholder="Search doctors, patients, schedules...">
+        </div>
+        <div class="adminProfile" onclick="showProfile()">
+            <div class="profileContainer" id="profileContainer">
+                <div id="profileContainerBack" onclick="backToHomePageFromProfileContainer()"></div>
+                <div class="showProfileContainer">
+                    <div class="adminProfileHeader">
+                        <img alt="Admin Profile" class="adminProfileImage" id="adminProfileContainerImage" onclick="showFullProfileImage()">
+                        <div id="fullProfileImageContainer" style="display:none;">
+                            <img id="fullProfileImage"></img>
+                            <div class="profileFooter">
+                                <div id="changeProfileImage" onclick="changeProfile()">Change Profile Image
+                                    <input type="file" id="changeProfileImageInput" accept="image/*"
+                                        onchange="updateProfileImage(event)" style="display:none;">
+                                </div>
+                                <div id="back" onclick="hideFullProfileImage()">Back</div>
+                            </div>
+                        </div>
+                        <div>
+                            <h2 id="adminName"></h2>
+                            <p id="adminRole">System Administrator</p>
+                            <p id="adminID"></p>
+                        </div>
+                    </div>
+                    <div class="adminProfileBody">
+                        <div class="profileItem" id="inputNameContainer">
+                            <span>Gender</span>
+                            <p id="adminGender">
+                                <input type="text" name="gender" class="input" id="adminGenderInput" value=""
+                                    readonly>
+                            </p>
+                        </div>
+                        <div class="profileItem">
+                            <span>Date of Birth</span>
+                            <p id="adminDateOfBirth">
+                                <input type="text" class="input" name="dateOfBirth" id="adminDateOfBirthInput"
+                                    value="" readonly>
+                            </p>
+                        </div>
+                        <div class="profileItem">
+                            <span>Email Id</span>
+                            <p id="adminEmail">
+                                <input type="email" name="email" class="input" id="adminEmailInput"
+                                    value="">
+                            </p>
+                        </div>
+                        <div class="profileItem">
+                            <span>Mobile Number</span>
+                            <p id="adminPhone">
+                                <input type="tel" name="phone" class="input" id="adminPhoneInput" value="">
+                            </p>
+                        </div>
+                        <div class="profileItem">
+                            <span>Join Date</span>
+                            <p id="adminJoinDate">
+                                <input type="text" class="input" name="joinDate" id="adminJoinDateInput"
+                                    value="" readonly>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="adminProfileFooter">
+                        <button class="editProfileBtn" onclick="editAdminDetails(this)">Edit Profile</button>
+                        <button class="logoutBtn" onclick="logoutAdmin()">Logout</button>
+                    </div>
+                </div>
+            </div>
+            <img id="adminProfileImage" src="" alt="Admin Profile">
+            <h4 id="homePageAdminName"></h4>
+        </div>
+        <!-- <div id="profileContainerBack" onclick="backToHomePageFromProfileContainer()"></div> -->
+    </header>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <h2>Menu</h2>
+            <ul>
+                <li onclick="openDoctorManagement()">Doctor Management</li>
+                <li onclick="openPatientManagement()">Patient Management</li>
+                <li onclick="showMessage('About Hospital')">About</li>
+                <li onclick="showMessage('Contact Details')">Contact</li>
+                <li onclick="showMessage('Help Center')">Help</li>
+                <li onclick="showMessage('Hospital Manuals')">Manuals</li>
+                <li onclick="showMessage('Doctor Schedules')">Schedules</li>
+                <li onclick="showMessage('Settings Opened')">Settings</li>
+            </ul>
+            <div id="doctorManagementBlock">
+                <div class="doctorManagementContainer">
+                    <!-- Header -->
+                    <div class="doctorManagementHeader">
+                        <h1>Doctor Management</h1>
+                        <button class="addDoctorBtn" onclick="openAddDoctorPopup()">
+                            Add Doctor
+                        </button>
+                    </div>
+                    <!-- Search -->
+                    <div class="doctorSearchContainer">
+                        <input type="text" placeholder="Search doctor..." id="doctorSearchInput">
+                    </div>
+                    <!-- Doctors List -->
+                    <div class="doctorCardsContainer" id="doctorCardsContainer">
+                        <!-- Doctor Card -->
+                        <!-- <div class="doctorCard">
+
+                            <div class="doctorTopSection">
+                                <img alt="Doctor">
+
+                                <div>
+                                    <h2>Dr. John</h2>
+                                    <p>Cardiologist</p>
+                                </div>
+                            </div>
+
+                            <div class="doctorDetails">
+
+                                <div class="doctorInfo">
+                                    <span>Email</span>
+                                    <p>doctor@gmail.com</p>
+                                </div>
+
+                                <div class="doctorInfo">
+                                    <span>Phone</span>
+                                    <p>9876543210</p>
+                                </div>
+
+                                <div class="doctorInfo">
+                                    <span>Timing</span>
+                                    <p>9:00 AM - 5:00 PM</p>
+                                </div>
+
+                                <div class="doctorInfo">
+                                    <span>Experience</span>
+                                    <p>8 Years</p>
+                                </div>
+
+                            </div>
+
+                            <div class="doctorButtons">
+
+                                <button class="updateBtn">
+                                    Update
+                                </button>
+
+                                <button class="timingBtn">
+                                    Update Timing
+                                </button>
+
+                                <button class="deleteBtn">
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </div> -->
+                    </div>
+                </div>
+                <!-- Add Doctor Popup -->
+                <div class="popupContainer" id="addDoctorPopup">
+                    <div class="popupBox">
+                        <h2 style="color:black">Add Doctor</h2>
+                        <input type="file" name="" id="doctorImageInput" accept="image/*"
+                            onchange="previewDoctorImage(event)">
+                        <input type="text" placeholder="Doctor Name" required id="doctorName">
+                        <input type="text" placeholder="Specialization" required id="doctorSpecialization">
+                        <input type="email" placeholder="Email" required id="doctorEmail">
+                        <input type="text" placeholder="Phone Number" required id="doctorPhone">
+                        <input type="text" placeholder="Timing" required id="doctorTiming">
+                        <input type="text" placeholder="Experience" required id="doctorExperience">
+                        <div class="popupButtons">
+                            <button onclick="addDoctor()">
+                                Save
+                            </button>
+                            <button onclick="closeAddDoctorPopup()">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="patientManagementBlock">
+                <div class="patientManagementContainer">
+                    <!-- Header -->
+                    <div class="patientManagementHeader">
+                        <h1>Patient Management</h1>
+                    </div>
+                    <!-- Search -->
+                    <div class="patientSearchContainer">
+                        <input type="text" placeholder="Search patient..." id="patientSearchInput">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- MAIN CONTENT -->
+        <div class="content">
+            <!-- TOP CARDS -->
+            <div class="cards">
+                <div class="card">
+                    <h3>Total Patients</h3>
+                    <p id="patients">1245</p>
+                </div>
+                <div class="card">
+                    <h3>Total Doctors</h3>
+                    <p id="doctors">56</p>
+                </div>
+                <div class="card">
+                    <h3>Appointments Today</h3>
+                    <p id="appointments">128</p>
+                </div>
+                <div class="card">
+                    <h3>Emergency Cases</h3>
+                    <p id="emergencyCases">12</p>
+                </div>
+            </div>
+            <!-- SCHEDULES -->
+            <div class="scheduleSection">
+                <!-- TABLE -->
+                <div class="scheduleTable">
+                    <h2 style="margin-bottom:20px;">
+                        Doctor Schedule
+                    </h2>
+                    <table>
+                        <tr>
+                            <th>Doctor</th>
+                            <th>Department</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                        </tr>
+                        <tr>
+                            <td>Dr. Ravi</td>
+                            <td>Cardiology</td>
+                            <td>14 May 2026</td>
+                            <td>10:00 AM</td>
+                        </tr>
+                        <tr>
+                            <td>Dr. Priya</td>
+                            <td>Neurology</td>
+                            <td>14 May 2026</td>
+                            <td>11:30 AM</td>
+                        </tr>
+                        <tr>
+                            <td>Dr. Kiran</td>
+                            <td>Orthopedic</td>
+                            <td>15 May 2026</td>
+                            <td>09:00 AM</td>
+                        </tr>
+                        <tr>
+                            <td>Dr. Sai</td>
+                            <td>Dermatology</td>
+                            <td>15 May 2026</td>
+                            <td>02:00 PM</td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- NOTICE BOARD -->
+                <div class="notice">
+                    <h3>Hospital Notices</h3>
+                    <ul>
+                        <li>Blood donation camp on Sunday.</li>
+                        <li>New MRI machine installed.</li>
+                        <li>Emergency ward maintenance at 6 PM.</li>
+                        <li>Staff meeting tomorrow morning.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FOOTER -->
+    <footer>
+        © 2026 Hospital Management System | Admin Dashboard
+    </footer>
+    <script src="/js/adminJS_files/adminHomePage.js"></script>
+</body>
+
+</html>

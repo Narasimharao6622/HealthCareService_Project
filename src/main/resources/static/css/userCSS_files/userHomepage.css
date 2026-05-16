@@ -1,0 +1,425 @@
+:root {
+    --primary: #2E86DE;
+    --secondary: #F5F9FF;
+    --accent: #28C76F;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--secondary);
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.navbarLeft{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* flex-direction: column; */
+    padding: 15px 20px;
+    background: white;
+    width: 80%;
+}
+.details{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#userHomeProfilePage{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    /* background: red ; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin-right: 10px;
+    /* background: url(../../images/profiles/1776667673988_image3.jpg) no-repeat center; */
+    background-position: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#profilePhoto{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#profilePhoto img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+#homePageUserName{
+	font-size: bold;
+}
+/* profile page */
+
+/* CONTAINER */
+.container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0%;
+    height: 0%;
+    margin: auto;
+    border-radius: 1rem;
+    box-shadow: 10px 10px 10px green;
+    background-color: #28C76F;
+    padding: 20px;
+    z-index: 10000;
+}
+.container::before{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: white;	
+}
+
+#userHomeProfilePageBackButton{
+    opacity: 1;
+    position: absolute;
+    top: 1%;
+    right: 1%;
+    width: 20px;
+    height: 20px;
+    border-bottom: white;
+    background: black;
+    border-radius: 100%;
+}
+#profileContainer{
+    display: none;
+    width: 0px;
+    height: 0px;
+    transition: all 1s ease;
+}
+#userHomeProfilePageBackButton:hover{
+    animation: blowing 2s linear infinite;
+}
+@keyframes blowing {
+    0%{
+        box-shadow:0 0 1px 2px #28C76F,0 0 1px 4px #28c76f69, 0 0 1px 6px white;
+    }
+    25%{
+        box-shadow:0 0 1px 2px #28c76f69, 0 0 1px 4px white,0 0 1px 6px #28C76F;
+    }
+    50%{
+        box-shadow:0 0 1px 4px white,0 0 1px 6px #28C76F,0 0 1px 2px #28c76f69;
+    }
+    75%{
+        box-shadow:0 0 1px 2px #28c76f69, 0 0 1px 4px white,0 0 1px 6px #28C76F;
+    }
+    100%{
+        box-shadow:0 0 1px 2px #28C76F,0 0 1px 4px #28c76f69, 0 0 1px 6px white;
+    }
+}
+
+/* PROFILE HEADER */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: var(--white);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.profile-header #userImage {
+    background-color: red;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+#userImage img{
+	width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    background: red;
+}
+
+.profile-info h2 {
+    margin: 0;
+}
+
+/* TABS */
+.tabs {
+    display: flex;
+    margin-top: 20px;
+    border-bottom: 2px solid #ddd;
+}
+
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 2s ease;
+}
+
+.tab.active {
+    border-bottom: 3px solid var(--primary);
+    font-weight: bold;
+}
+
+/* CONTENT */
+.tab-content {
+    display: none;
+    background: var(--white);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* FORM */
+.form-group {
+    margin-bottom: 15px;
+}
+
+#profile input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid black;
+    border-radius: 5px;
+    background: transparent;
+    outline: none;
+}
+
+/* BUTTON */
+button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* APPOINTMENTS */
+.appointment {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+
+.logo {
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-links button {
+    padding: 8px 12px;
+    border: none;
+    background: var(--primary);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* HAMBURGER */
+.menu-toggle {
+    display: none;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+/* HERO */
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--primary);
+    color: white;
+}
+
+.hero h1 {
+    font-size: 2rem;
+}
+
+.hero button {
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* SEARCH */
+.search-box {
+    margin: 10px auto;
+    max-width: 500px;
+    display: flex;
+    position: relative;
+    background: red;
+}
+
+.search-box .searchInputBox {
+    flex: 1;
+}
+.search-box .searchInputBox  input{
+    padding: 4px;
+    width: 100%;
+    height: 100%;
+    /* background-color: transparent; */
+}
+/* Searched result */
+#searchedResult{
+    flex: 1;
+    position: absolute;
+    top: 160%;
+    left: 1%;
+    max-height: 0px;
+    overflow-x: hidden;
+    width: 100%;
+    display: none;
+    gap: 15px;
+    /* border: 2px solid black; */
+    flex-direction: column;
+    background: white;
+    border-radius: 10px;
+    color: black;
+    transition: all 1s ease;
+}
+::-webkit-scrollbar{
+    display: none;
+}
+.search_Result{
+    width: 99.5%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    background: white;
+    color: black;
+    transition: all 1s ease;
+    cursor: default;
+}
+.search_Result:hover{
+    transform: scale(1.02);
+}
+.search_Result .doctor_image{
+    width: 11.5%;
+    height: 95%;
+    margin-left: 10px;
+    margin-right: 20px;
+    border-radius: 100%;
+    background: blue;
+}
+.search_Result .doctor_name{
+	font-weight: bold;
+}
+.noDoctorsFound{
+    padding: 10px;
+}
+/* GRID COMMON */
+.grid {
+    display: grid;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* CATEGORIES */
+.categories {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+/* DOCTORS */
+.doctors {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.doctor-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.doctor-card button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* FOOTER */
+.footer {
+    text-align: center;
+    padding: 20px;
+    background: var(--primary);
+    color: white;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        background: white;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        padding: 10px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .hero h1 {
+        font-size: 1.5rem;
+    }
+    /* Profile Header */
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .tabs {
+        overflow-x: auto;
+    }
+}
+
+

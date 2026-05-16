@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Registration Form</title>
+	<link rel="icon" href="/images/icons8-health-50.png">
+
+	<!-- <link rel="stylesheet" href="/css/userCSS_files/registrationPage.css"> -->
+	<link rel="stylesheet" href="./css/userCSS_files/registrationPage.css">
+	<!-- Cropper CSS -->
+	<link rel="stylesheet" href="./css/userCSS_files/cropper.min.css" />
+	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" /> -->
+
+
+	<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+		integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+	<div class="container">
+		<header>
+			<div id="hospitalName">Health Care App for Doctor consultancy</div>
+			<div id="heading">
+				<span class="formpagename">Registration Form</span>
+			</div>
+		</header>
+		<section>
+			<form action="#" id="patientRegistrationFrom">
+				<div class="takePersonalDetails informationBlock">
+					<div class="heading">Enter your Personal details..</div>
+					<div id="photobox" class="block">
+						<div class="detailsHeading star">Upload image</div>
+						<div class="takeInput"><input type="file" name="photo" id="photo" accept="image/*" required>
+						</div>
+
+						<div id="cropImagePopUp">
+							<div class="image-container"><img id="cropImage"></div>
+							<button type="button" class="crop-btn" id="cropButton">Crop Image</button>
+						</div>
+						<img id="previewImage" class="image-preview">
+					</div>
+
+					<div id="namebox" class="block">
+						<div class="detailsHeading star">Enter the Name of the
+							Person</div>
+						<div class="takeInput">
+							<input type="text" name="name" id="name" required>
+						</div>
+					</div>
+					<div id="Gender" class="block">
+						<div class="detailsHeading star">Select Gender</div>
+						<div class="takeInput">
+							<select name="gender" id="gender">
+								<option value="">---select---</option>
+								<option value="male">Male</option>
+								<option value="female">Female</option>
+								<option value="others">Others</option>
+							</select>
+						</div>
+					</div>
+					<div id="dabBox" class="block">
+						<div class="detailsHeading star">Date of Birth</div>
+						<div class="takeInput">
+							<input type="date" name="dob" id="dob" required>
+						</div>
+					</div>
+					<div id="bloodGroup" class="block">
+						<div class="detailsHeading star">select blood group</div>
+						<div class="takeInput">
+							<select name="bloodgroup" id="bloodgroup">
+								<option value="">---select---</option>
+								<option value="A+">A+</option>
+								<option value="A-">A-</option>
+								<option value="B+">B+</option>
+								<option value="B-">B-</option>
+								<option value="O+">O+</option>
+								<option value="O-">O-</option>
+								<option value="AB+">AB+</option>
+								<option value="AB-">AB-</option>
+							</select>
+						</div>
+					</div>
+					<div id="addressbox" class="block">
+						<div class="detailsHeading heading">Address of the person</div>
+						<div class="addressblock">
+							<div class="takeInput">
+								<input type="text" name="house_no" id="house_no" placeholder="House no">
+							</div>
+							<div class="takeInput">
+								<input type="text" name="street" id="street" placeholder="Enter Street">
+							</div>
+							<div class="takeInput">
+								<input type="text" name="location" id="location" required
+									placeholder="Enter your village name">
+							</div>
+							<div class="takeInput">
+								<input type="text" name="city" id="city" required placeholder="Enter city">
+							</div>
+							<div class="takeInput">
+								<input type="text" name="district" id="district" required placeholder="Enter District">
+							</div>
+							<div class="takeInput">
+								<input type="text" name="state" id="state" required placeholder="State">
+							</div>
+							<div class="takeInput">
+								<input type="text" name="pincode" id="pincode" required placeholder="Pincode">
+								<div id="pincode-error" class="error-message"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="enterContactDetails informationBlock">
+					<div class="heading">Enter your Contect details..</div>
+					<div id="mobileNumberbox" class="block">
+						<div class="detailsHeading star">Enter mobile number</div>
+						<div class="takeInput">
+							<input type="tel" name="mainmobilenumber" class="conformContexbox" id="mobilenumber"
+								required>
+							<div id="varifyPhone">
+								<div class="varify" id="mobileNumberVerifyMessage"></div>
+								<input type="text" name="otp1" id="mobileOTP" placeholder="Enter OTP">
+								<div class="varify" id="mobileVarifiedMessage"></div>
+							</div>
+						</div>
+					</div>
+					<div id="Emergency" class="block">
+						<div class="detailsHeading">
+							Emergency Mobile Number <span class="optionalheading">(Optional)</span>
+						</div>
+						<div class="takeInput">
+							<input type="tel" name="emergencyMobileNumber" id="emergencyMobileNumber">
+						</div>
+					</div>
+					<div id="emailid" class="block">
+						<div class="detailsHeading star">Enter email id</div>
+						<div class="takeInput">
+							<input type="email" name="mainemail" class="conformContexbox" id="email" required>
+							<div id="varifyEmailid">
+								<div class="varify" id="verifyEmailidMessage"></div>
+								<input type="text" name="otp2" id="emailOTP" placeholder="Enter OTP">
+								<div class="varify" id="emailVarifiedMessage"></div>
+							</div>
+						</div>
+						<div id="emailErrorMessage" class="error-message"></div>
+					</div>
+					<div id="alternativeemail" class="block">
+						<div class="detailsHeading">
+							Enter alternative email id <span class="optionalheading">(Optional)</span>
+						</div>
+						<div class="takeInput">
+							<input type="email" name="alternativeemail" id="alternativeemail">
+						</div>
+					</div>
+					<div class="passwordBlock">
+						<div class="heading">Set password</div>
+						<div id="passwordblock" class="block">
+							<div class="detailsHeading">
+								Enter password
+							</div>
+							<div class="takeInput">
+								<div id="passwordBlock">
+									<input type="password" name="password" id="password" required><i id="Icon"
+										class="fa-solid fa-eye-slash"></i>
+								</div>
+							</div>
+						</div>
+						<div id="conformpasswordblock" class="block">
+							<div class="detailsHeading">Conform password</div>
+							<div class="takeInput">
+								<div id="passwordBlock">
+									<input type="password" name="conformpassword" id="conformpassword" required><i
+										id="conformIcon" class="fa-solid fa-eye-slash"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="conformAndSaveDetails informationBlock">
+					<div class="content">
+						<input type="radio" name="conform" id="conformAggrement" required>
+						I agree to the Terms & Conditions and Privacy Policy of the HealtCare Management System.
+					</div>
+					<div class="confirmbutton">
+						<input type="submit" name="" id="submit" value="conform">
+					</div>
+				</div>
+				<!-- <i class="fa-solid fa-eye"></i> -->
+			</form>
+		</section>
+	</div>
+	<script src="./js/userJS_files/registrationPage.js"></script>
+	<!-- Cropper JS -->
+	<script src="./js/userJS_files/cropper.min.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script> -->
+</body>
+
+</html>
