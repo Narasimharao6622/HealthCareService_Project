@@ -8,8 +8,8 @@ import jakarta.persistence.Id;
 @Entity
 public class Address {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)	
-	private int address_id;
+	@GeneratedValue(strategy = GenerationType.UUID)	
+	private String address_id;
 	
 	private String house_no;
 	private String street;
@@ -19,7 +19,7 @@ public class Address {
 	private String state;
 	private String country = "INDIA";
 	private long pincode;
-	public int getAddress_id() {
+	public String getAddress_id() {
 		return address_id;
 	}
 	public String getHouse_no() {

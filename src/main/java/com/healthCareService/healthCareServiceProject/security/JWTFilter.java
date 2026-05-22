@@ -33,8 +33,13 @@ public class JWTFilter extends OncePerRequestFilter {
 
 
 		String path = request.getServletPath();
-		if (path.equals("/doctorController/saveDoctor") || path.equals("/appController/adminLogin")
-				|| path.equals("/appController/user_login")) {
+//		System.out.println(path);
+		if (path.equals("/appController/forgetPassword") ||
+			path.equals("/appController/adminLogin") || 
+			path.equals("/appController/user_login") ||
+			path.equals("/appController/email_otp_send") ||
+			path.equals("/appController/clearOTP") 
+			) {
 
 			filterChain.doFilter(request, response);
 			return;
@@ -42,7 +47,7 @@ public class JWTFilter extends OncePerRequestFilter {
 		String token = null;
 		String value = null;
 		String actualPath = "";
-//		System.out.println(path);
+		
 		if(path.startsWith("/adminController")) {
 			actualPath = "admin-token";
 		}else if(path.startsWith("/userController")) {
@@ -62,16 +67,12 @@ public class JWTFilter extends OncePerRequestFilter {
 		
 		if (token != null) {
 			try {
-				value = jwtService.extractEmail(token);
+				value = jwtService.extractValue(token);
 				if (value != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
 					UserDetails userDetails = customUserDetailsService.loadUserByUsername(value);
-
 					if (jwtService.validateToken(token, userDetails)) {
-
 						UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 								userDetails, null, userDetails.getAuthorities());
-
 						authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 						SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 					}
@@ -82,5 +83,4 @@ public class JWTFilter extends OncePerRequestFilter {
 		}
 		filterChain.doFilter(request, response);
 	}
-
 }

@@ -1,13 +1,13 @@
-@media screen and (orientation: landscape) {
-    * {
-        margin: 0;
-        padding: 0;
-    }
+* {
+    margin: 0;
+    padding: 0;
+}
 
-    html {
-        font-size: 16px;
-        border-radius: 10px;
-    }
+html {
+    font-size: 16px;
+    border-radius: 10px;
+}
+@media screen and (orientation: landscape) {
 
     .loginPage {
         width: 100vw;
@@ -149,7 +149,6 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        overflow: hidden;
     }
 
     #passwordInputField #password {
@@ -185,12 +184,12 @@
 
     .rememberMeBox label {
         width: 100%;
-        font-size: 1.1rem;
+        font-size: 1.5rem;
         position: relative;
     }
 
     .rememberMeBox input {
-        width: 3%;
+        width: 4%;
         height: 90%;
         margin-right: .4rem;
     }
@@ -210,7 +209,7 @@
     .inputHeading {
         width: max-content;
         height: 70%;
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         padding: 0 .5rem 0 .5rem;
         position: relative;
         z-index: 10;
@@ -254,7 +253,6 @@
 
     .container .box3 {
         flex-grow: 2;
-        /* background-color: red; */
     }
 
     footer {
@@ -264,7 +262,6 @@
         align-items: center;
         justify-content: space-evenly;
         flex-direction: column;
-        /* background-color: red; */
         position: relative;
     }
 
@@ -279,29 +276,18 @@
 
 }
 
-@media screen and (min-width: 360px) and (max-width: 900px) {
-    * {
-        margin: 0;
-        padding: 0;
-    }
-
-    html {
-        font-size: 16px;
-        border-radius: 10px;
-    }
-
+@media screen and (orientation: portrait) {
     .loginPage {
         width: 100vw;
         height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: red;
     }
 
     .container {
         width: 90%;
-        height: 80%;
+        height: 60%;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -363,7 +349,7 @@
     }
 
     #formPage {
-        width: 80%;
+        width: 90%;
         height: 100%;
         background: linear-gradient(-45deg, rgb(92, 218, 168) 15%, rgb(8, 112, 70) 76%);
         display: flex;
@@ -380,7 +366,7 @@
         align-items: center;
         flex-direction: column;
         flex-grow: 1;
-        width: 95%;
+        width: 100%;
     }
 
     .inputBox3 {
@@ -403,10 +389,12 @@
         width: 90%;
         height: 90%;
         position: relative;
+        z-index: 10;
         overflow: hidden;
     }
 
     #emailidBox input {
+        display: block;
         position: absolute;
         z-index: 1;
         background: transparent;
@@ -419,15 +407,18 @@
         letter-spacing: .07rem;
     }
     .inputHeading{
-        font-size: .3rem;
+        top: -3px;
+        position: relative;
+        font-size: 5rem;
     }
+
     .check {
         box-shadow: 0 0 0 2px black;
     }
 
     #passwordBox #passwordInputField {
         position: absolute;
-        z-index: 1;
+        z-index: 2;
         width: 90%;
         height: 50%;
         display: flex;
@@ -435,7 +426,7 @@
         align-items: center;
         overflow: hidden;
     }
-
+    
     #passwordInputField #password {
         position: relative;
         z-index: 1;
@@ -450,9 +441,9 @@
 
     #passwordInputField i {
         position: relative;
-        width: 8%;
+        width: 13%;
         height: 100%;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -468,13 +459,14 @@
 
     .rememberMeBox label {
         width: 100%;
-        font-size: 1.1rem;
+        font-size: 1.3rem;
         position: relative;
+        top: -2px;
     }
 
     .rememberMeBox input {
-        width: 3%;
-        height: 90%;
+        width: 6%;
+        /* height: 90%; */
         margin-right: .4rem;
     }
 

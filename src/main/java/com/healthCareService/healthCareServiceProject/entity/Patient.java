@@ -20,8 +20,8 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Patient {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)	
-	private int patientid;
+	@GeneratedValue(strategy = GenerationType.UUID)	
+	private String patientid;
 	@Column(nullable = false)
 	private String name;
 	@Column(nullable = false)
@@ -40,21 +40,23 @@ public class Patient {
 	private Address address;
 	
 	private String password;
+	
 	@Enumerated(EnumType.STRING)
 	private Roles hasRole;
 	
 	
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(joinColumns = @JoinColumn(name = "patientId"),inverseJoinColumns = @JoinColumn(name = "doctorId"))
-	private List<Doctor> consaltentdoctors;
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(joinColumns = @JoinColumn(name = "patientid"),inverseJoinColumns = @JoinColumn(name = "doctorid"))
+	private List<Doctor> consaltantdoctors;
+	
 	
 	private String imagefilepath;
 
-	public int getPatientid() {
+	public String getPatientid() {
 		return patientid;
 	}
 
-	public void setPatientid(int patientid) {
+	public void setPatientid(String patientid) {
 		this.patientid = patientid;
 	}
 
@@ -138,12 +140,12 @@ public class Patient {
 		this.password = password;
 	}
 
-	public List<Doctor> getConsaltentdoctors() {
-		return consaltentdoctors;
+	public List<Doctor> getConsaltantdoctors() {
+		return consaltantdoctors;
 	}
 
-	public void setConsaltentdoctors(List<Doctor> consaltentdoctors) {
-		this.consaltentdoctors = consaltentdoctors;
+	public void setConsaltantdoctors(List<Doctor> consaltantdoctors) {
+		this.consaltantdoctors = consaltantdoctors;
 	}
 
 	public String getImagefilepath() {

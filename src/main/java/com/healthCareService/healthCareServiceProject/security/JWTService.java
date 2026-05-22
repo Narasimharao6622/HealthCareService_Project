@@ -19,40 +19,32 @@ public class JWTService {
     private static final String SECRET =
             "healthCare_App_for_Doctors_Consultancy889743";
 
-    public String generateToken(String email,long expiryTime) {
-    	System.out.println(expiryTime +" Days");
+    public String generateToken(String id,long expiryTime) {
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(id)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(expiryTime))
                 .signWith(getKey() , SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String extractEmail(String token) {
-
+    public String extractValue(String token) {
         return extractClaims(token).getSubject();
     }
 
-    public boolean validateToken(
-            String token,
-            UserDetails userDetails) {
-
-        String email = extractEmail(token);
-
-        return email.equals(userDetails.getUsername())
+    public boolean validateToken(String token, UserDetails userDetails) {
+        String value = extractValue(token);
+        return value.equals(userDetails.getUsername())
                 && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
-
         return extractClaims(token)
                 .getExpiration()
                 .before(new Date());
     }
 
     private Claims extractClaims(String token) {
-
         return Jwts.parserBuilder()
                 .setSigningKey(getKey())
                 .build()
@@ -61,12 +53,7 @@ public class JWTService {
     }
 
     private Key getKey() {
-
-        byte[] keyBytes =
-                Decoders.BASE64.decode(
-                        Base64.getEncoder()
-                                .encodeToString(SECRET.getBytes()));
-
+        byte[] keyBytes = Decoders.BASE64.decode(Base64.getEncoder().encodeToString(SECRET.getBytes()));
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

@@ -112,7 +112,7 @@ public class GlobleExceptionHandler {
 	public ResponseEntity<ErrorResponse<?>> handledEmailIdException(EmailIdException ex,HttpServletRequest request){
 		ErrorResponse<?> errorResponse = new ErrorResponse<>();
 		errorResponse.setCondition(true);
-		errorResponse.setStatus(404);
+		errorResponse.setStatus(403);
 		errorResponse.setMessage(ex.getMessage());
 		return new ResponseEntity<>(errorResponse,HttpStatus.OK);
 	}

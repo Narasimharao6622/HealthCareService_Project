@@ -8,11 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.healthCareService.healthCareServiceProject.entity.Doctor;
 import com.healthCareService.healthCareServiceProject.entity.Patient;
 
 
 @Repository
-public interface PatientRepo extends JpaRepository<Patient, Integer>{
+public interface PatientRepo extends JpaRepository<Patient, String>{
 	
 	@Query("select patient from Patient patient where patient.mobilenumber = ?1")
 	public Optional<Patient> checkMobileNumber(long mobilenumber);
@@ -25,6 +26,9 @@ public interface PatientRepo extends JpaRepository<Patient, Integer>{
 	
 	@Query("select p from Patient p where p.emailid = :email")
 	public Optional<Patient> findByEmail(String email);
+	
+	@Query("SELECT d FROM Patient p JOIN p.consaltantdoctors d WHERE p.patientid = :id")
+	public List<Doctor> getDoctorAppointments(String id);
 
 	
 }

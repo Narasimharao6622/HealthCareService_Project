@@ -7,7 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -15,14 +14,15 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Doctor {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int doctorid;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String doctorid;
 	private String name;
 	private String specialization;
 	private int age;
 	private String gender;
 	private long number;
 	private String email;
+	private int experiance;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private Address address;
@@ -30,8 +30,8 @@ public class Doctor {
 	private int salary;
 	private int noofcasesaccepted;
 	private int noofcaseshold;
-	private int totalrating;
-
+	private double totalrating;
+	
 	@OneToMany(cascade = CascadeType.ALL)
 //	@JoinColumn(name = "date_id",nullable = false)
 	private List<WorkingDates> workingdates;
@@ -39,7 +39,7 @@ public class Doctor {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Rating> rating;
 
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "consaltentdoctors")
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "consaltantdoctors")
 	private List<Patient> consaltentpatients;
 
 	private String imagefilepath;
@@ -49,6 +49,17 @@ public class Doctor {
 		return consaltentpatients;
 	}
 
+	
+	public int getExperiance() {
+		return experiance;
+	}
+
+
+	public void setExperiance(int experiance) {
+		this.experiance = experiance;
+	}
+
+
 	public String getImagefilepath() {
 		return imagefilepath;
 	}
@@ -57,19 +68,19 @@ public class Doctor {
 		this.imagefilepath = imagefilepath;
 	}
 
-	public int getDoctorid() {
+	public String getDoctorid() {
 		return doctorid;
 	}
 
-	public void setDoctorid(int doctorid) {
+	public void setDoctorid(String doctorid) {
 		this.doctorid = doctorid;
 	}
 
-	public int getTotalrating() {
+	public double getTotalrating() {
 		return totalrating;
 	}
 
-	public void setTotalrating(int totalrating) {
+	public void setTotalrating(double totalrating) {
 		this.totalrating = totalrating;
 	}
 

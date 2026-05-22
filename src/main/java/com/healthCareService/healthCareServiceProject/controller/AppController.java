@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -90,6 +91,7 @@ public class AppController {
 		ApiResponse<?> response = new ApiResponse<>(201, "Registrated successfully", null);
 		return ResponseEntity.status(201).body(response);
 	}
+	
 	@PostMapping("/check-mobile-number")
 	public ResponseEntity<ApiResponse<?>> checkMobileNumber(String mobilenumber) {
 		long number = Long.parseLong(mobilenumber);
@@ -106,25 +108,22 @@ public class AppController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	
 	@PostMapping("/user_login")
 	public ResponseEntity<ApiResponse<?>> login(@RequestBody LoginRequest userDetails, HttpServletResponse response) {
 		// validate user from database
 		Patient patient = patientService.login(userDetails.getEmailid(), userDetails.getPassword());
-		System.out.println(patient);
-		
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDetails.getEmailid(),userDetails.getPassword()));
-		
+		//create JWT token
+		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(patient.getPatientid(),userDetails.getPassword()));
 		long expiryTime =  (System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1));
 		long cookieAge = TimeUnit.DAYS.toSeconds(1);
 		String token = "";
 		if(userDetails.isRememberme()) {
 			// 1 day + 31 days
 			expiryTime = (System.currentTimeMillis() + TimeUnit.DAYS.toMillis(31));
-			token = jwtService.generateToken(patient.getEmailid(),expiryTime);	
+			token = jwtService.generateToken(patient.getPatientid(),expiryTime);	
 			cookieAge = TimeUnit.DAYS.toSeconds(31);
 		}else 
-			token = jwtService.generateToken(patient.getEmailid(),expiryTime);
+			token = jwtService.generateToken(patient.getPatientid(),expiryTime);
 		if(authentication.isAuthenticated()) {
 			//create cookie for storing the token
 			ResponseCookie cookies = ResponseCookie.from("User-token",token)
@@ -183,8 +182,6 @@ public class AppController {
 		adminService.login(adminRequest);
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(adminRequest.getAdminid(), adminRequest.getPassword()));
 		
-		System.out.println("Hai");
-
 		String token =jwtService.generateToken(adminRequest.getAdminid(), System.currentTimeMillis() + TimeUnit.DAYS.toMillis(31));
 		if(authentication.isAuthenticated()) {
 			ResponseCookie cookie = ResponseCookie.from("admin-token",token)
@@ -202,17 +199,29 @@ public class AppController {
 		return ResponseEntity.status(200).body(apiResponse);
 	}
 	
-	
-	
-	
-	
+	@PostMapping("/forgetPassword")
+	public ResponseEntity<?> forgetPassword(@RequestParam("email") String email){
+		System.out.println(email);
+		String otp = OTPUtil.generateOtp();
+		otpStore.saveOtp(email, otp);
+		ApiResponse<?> apiResponse = new ApiResponse<>(200,otp,null);; 
+		apiResponse.setCondition(patientService.forgetPassword(email));
+		return ResponseEntity.ok().body(apiResponse);
+	}
 	
 	@PostMapping("/email_otp_send")
 	public ResponseEntity<ApiResponse<?>> userEmailOTP(@RequestParam String email) {
 		String otp = OTPUtil.generateOtp();
 		otpStore.saveOtp(email, otp);
 		ApiResponse<?> response = new ApiResponse<>(200,otp,null);
+		response.setCondition(true);
 		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
+	
+	@PostMapping("/clearOTP")
+	public String clearOTPAfterTimeOut(@RequestParam String email) {
+		otpStore.clearOtp(email);
+		return "OTP expired";
 	}
 
 	// Verify OTP
@@ -220,6 +229,7 @@ public class AppController {
 	public ResponseEntity<ApiResponse<?>> verifyOtp(@RequestParam String email, @RequestParam String otp) {
 		if(appService.verifyOTP(email, otp)) {
 			ApiResponse<?> response = new ApiResponse<>(200,"verified",null);
+			response.setCondition(true);
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		}
 		throw new OTPError("Invalid otp");

@@ -27,7 +27,6 @@ public class CustomUserDetails implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		if(admin != null) {
-			System.out.println("hai");
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
 		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
@@ -44,11 +43,9 @@ public class CustomUserDetails implements UserDetails {
 	@Override
 	public String getUsername() {
 		if(admin!=null) {
-			System.out.println("admin object");
 			return admin.getAdminid();
 		}
-		System.out.println("user object");
-		return patient.getEmailid();
+		return patient.getPatientid();
 	}
 
 	@Override

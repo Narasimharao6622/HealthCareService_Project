@@ -32,11 +32,11 @@ public class SecurityConfig {
 
 								"/favicon.ico",
 
-								// allow all Controllers methods
+								// allow this all Controllers methods
 								"/doctorController/**", "/appController/**",
-
+								
 								"/loginPage.html", "/registrationPage.html", "/adminRegistrationPage.html",
-								"/adminLoginPage.html",
+								"/adminLoginPage.html","/forgetPassword.html",
 
 								"/css/**", "/js/**", "/images/**")
 						.permitAll()

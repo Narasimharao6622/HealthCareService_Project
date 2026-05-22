@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.healthCareService.healthCareServiceProject.configuration.AppConfig;
@@ -29,6 +31,7 @@ import com.healthCareService.healthCareServiceProject.entity.Roles;
 import com.healthCareService.healthCareServiceProject.exception.FileException;
 import com.healthCareService.healthCareServiceProject.exception.NameNotFound;
 import com.healthCareService.healthCareServiceProject.exception.NoDoctorsFoundError;
+import com.healthCareService.healthCareServiceProject.exception.PasswordError;
 import com.healthCareService.healthCareServiceProject.exception.UserError;
 import com.healthCareService.healthCareServiceProject.exception.validation.EmailIdException;
 import com.healthCareService.healthCareServiceProject.exception.validation.MobileNumberExcetion;
@@ -46,7 +49,7 @@ public class PatientService {
 	@Autowired
 	private RegistrationDetailsValidationClass validationClass;
 
-	public Patient saveUserDetails(PatientDTO requestpatient,AddressDTO requestaddress,MultipartFile file) {
+	public Patient saveUserDetails(PatientDTO requestpatient, AddressDTO requestaddress, MultipartFile file) {
 		ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
 		Address address = context.getBean(Address.class);
@@ -63,14 +66,15 @@ public class PatientService {
 		patient.setAge(requestpatient.getAge());
 		patient.setGender(requestpatient.getGender());
 		patient.setBloodgroup(requestpatient.getBloodgroup());
-		patient.setMobilenumber(checkMobileIsPresentInDB(validationClass.verifyMobilenumber(requestpatient.getMobilenumber())));
+		patient.setMobilenumber(
+				checkMobileIsPresentInDB(validationClass.verifyMobilenumber(requestpatient.getMobilenumber())));
 		patient.setEmailid(checkEmailidPresentInDB(requestpatient.getEmailid()));
 		patient.setSecondmobilenumber(validationClass.verifyMobilenumber(requestpatient.getSecondmobilenumber()));
 		patient.setSecondemailid(requestpatient.getSecondemailid());
 		patient.setPassword(encoder.encode(requestpatient.getPassword()));
 		patient.setAddress(address);
 		patient.setHasRole(Roles.USER);
-		
+
 		if (!file.isEmpty()) {
 			String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
 
@@ -87,68 +91,63 @@ public class PatientService {
 				} else {
 					throw new FileException("File too large");
 				}
-			}catch(IOException e) {
+			} catch (IOException e) {
 				throw new FileException(e.getMessage());
 			}
 			Patient response = repo.save(patient);
 			System.out.println(response);
-			if(response==null) {
+			if (response == null) {
 				try {
-					Path path = Paths.get(uploadDir+fileName);
+					Path path = Paths.get(uploadDir + fileName);
 					Files.delete(path);
 					throw new UserError("user doesn't saved..");
-				}catch (IOException e) {
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 		}
 		return patient;
 	}
-	public Patient login(String userEmailid, String password) {
-		Optional<Patient> ispatient = repo.findByEmail(userEmailid);
-		if (ispatient.isPresent()) {
-			Patient patient = ispatient.get();
-			if (encoder.matches(password,patient.getPassword())) {
+
+	public Patient login(String email, String password) {
+		Optional<Patient> dbPatient = repo.findByEmail(email);
+		if (dbPatient.isPresent()) {
+			Patient patient = dbPatient.get();
+			if (encoder.matches(password, patient.getPassword())) {
 				return patient;
 			} else {
-				throw new UserError("Incorrect Password");
+				throw new PasswordError("Incorrect Password");
 			}
 		} else {
-			throw new UserError("Incorrect Email id");
+			throw new EmailIdException("Incorrect Email id");
 		}
 	}
-
 	public String checkEmailidPresentInDB(String emailid) {
 		Optional<Patient> user = repo.findByEmail(emailid);
-		if(user.isPresent()) {
+		if (user.isPresent()) {
 			throw new EmailIdException("Email id Already exisited...");
 		}
 		return emailid;
 	}
-
 	public long checkMobileIsPresentInDB(long verifyMobilenumber) {
 		Optional<Patient> patient = repo.checkMobileNumber(verifyMobilenumber);
-		if(patient.isPresent()) {
+		if (patient.isPresent()) {
 			throw new MobileNumberExcetion("Mobile number is already exist..");
 		}
 		return verifyMobilenumber;
-	}
-
-	public List<Doctor> getUserConsultedDoctersDetails(int id) {
-		
-		Optional<Patient> findPatient = repo.findById(id);
-	
+	} 
+	public List<Doctor> getUserConsultedDoctersDetails(String patientid) {
+		Optional<Patient> findPatient = repo.findById(patientid);
 		ArrayList<Doctor> consultentDoctors = new ArrayList<Doctor>();
-		if(findPatient.isEmpty()) {
+		if (findPatient.isEmpty()) {
 			throw new UserError("User Not Found..");
-		}else {
+		} else {
 			Patient patient = findPatient.get();
-			List<Doctor> getAllDoctors = patient.getConsaltentdoctors();
+			List<Doctor> getAllDoctors = patient.getConsaltantdoctors();
 			ListIterator<Doctor> allDoctors = getAllDoctors.listIterator();
 			if (!getAllDoctors.isEmpty()) {
 				while (allDoctors.hasNext()) {
 					Doctor doctor = allDoctors.next();
-					System.out.println(doctor);
 					doctor.setConsaltentpatients(null);
 					consultentDoctors.add(doctor);
 				}
@@ -159,28 +158,17 @@ public class PatientService {
 		return consultentDoctors;
 
 	}
-	public Patient findById(int id) {
-		List<Patient> getAllUser = repo.findAll();
-		ListIterator<Patient> allUsers = getAllUser.listIterator();
-		if(getAllUser.isEmpty()) {
-			throw new UserError("Database is empty");
-		}else {
-			while(allUsers.hasNext()) {
-				Patient patient = allUsers.next();
-				if(patient.getPatientid()==id) {
-					patient.setConsaltentdoctors(getUserConsultedDoctersDetails(id));;
-//					patient.setConsaltentdoctors(getUserConsuntedDoctersDetails(id));;
-					return patient;
-				}
-			}
-			throw new UserError("User Not Found..");
-		}
+
+	public List<Doctor> getDoctorAppointments(String id) {
+		Patient patient = repo.findById(id).orElseThrow(() -> new RuntimeException("Patient not found"));
+
+		return repo.getDoctorAppointments(patient.getPatientid());
 	}
 
 	public List<DoctorDTO> searchDoctorByname(String name) {
 		ArrayList<Doctor> doctorsList = dao.getAllDoctors();
 		List<DoctorDTO> finalList = new ArrayList<DoctorDTO>();
-		if(name.length()==0) {
+		if (name.length() == 0) {
 			throw new NameNotFound("Name cannot be empty");
 		}
 		if (!doctorsList.isEmpty()) {
@@ -192,7 +180,7 @@ public class PatientService {
 					for (int i = 0; i <= splitDBNameToWords.length - 1; i++) {
 						String word1 = splitDBNameToWords[i];
 						DoctorDTO doctorDTO = new DoctorDTO();
-						
+
 						doctorDTO.setName(doctor.getName());
 						doctorDTO.setAge(doctor.getAge());
 						doctorDTO.setGender(doctor.getGender());
@@ -200,18 +188,17 @@ public class PatientService {
 						doctorDTO.setSpecialization(doctor.getSpecialization());
 						doctorDTO.setTotalrating(doctor.getTotalrating());
 						doctorDTO.setWorkingdates(doctor.getWorkingdates());
-						
+
 						if (word1.equals("Dr.")) {
 							continue;
 						} else {
-							if(name.length()==1) {
-								if(Character.toLowerCase(name.charAt(0)) == Character.toLowerCase(word1.charAt(0))){
-									
+							if (name.length() == 1) {
+								if (Character.toLowerCase(name.charAt(0)) == Character.toLowerCase(word1.charAt(0))) {
+
 									finalList.add(doctorDTO);
 									break;
 								}
-							}
-							else if(word1.toLowerCase().contains(name.toLowerCase())) {
+							} else if (word1.toLowerCase().contains(name.toLowerCase())) {
 								finalList.add(doctorDTO);
 								break;
 							}
@@ -233,5 +220,68 @@ public class PatientService {
 		return finalList;
 	}
 
+	public boolean forgetPassword(String email) {
+		Patient patient = repo.findEmail(email);
+		if (patient != null) {
+			return true;
+		}
+		return false;
+	}
+
+	public List<DoctorDTO> getSpecialiazatioDoctors(String specialization) {
+		List<Doctor> doctorsList = dao.getAllDoctors();
+		if (doctorsList.isEmpty()) {
+			throw new NoDoctorsFoundError("DB is empty, No doctors are found...");
+		} 
+		else {
+			List<DoctorDTO> responseList = new LinkedList<DoctorDTO>();
+			List<Doctor> list = doctorsList.stream()
+					.filter(doctor -> doctor.getSpecialization().equalsIgnoreCase(specialization)).toList();
+			if(list.isEmpty()) {
+				throw new NoDoctorsFoundError("No doctors found for " + specialization);
+			}
+			else {
+				System.out.println("Doc");
+				list.stream().forEach(doctor ->{
+					DoctorDTO doctorResponse = new DoctorDTO();
+					doctorResponse.setName(doctor.getName());
+					doctorResponse.setAge(doctor.getAge());
+					doctorResponse.setGender(doctor.getGender());
+					doctorResponse.setImagefilepath(doctor.getImagefilepath());
+					doctorResponse.setNoofcasesaccepted(doctor.getNoofcasesaccepted());
+					doctorResponse.setTotalrating(doctor.getTotalrating());
+					doctorResponse.setNoofcaseshold(doctor.getNoofcaseshold());
+					doctorResponse.setRating(doctor.getRating());
+					doctorResponse.setWorkingdates(doctor.getWorkingdates());
+					doctorResponse.setExperiance(doctor.getExperiance());
+					doctorResponse.setSpecialization(doctor.getSpecialization());
+					doctorResponse.setDoctorid(doctor.getDoctorid());
+					responseList.add(doctorResponse);
+				});
+			}
+			return responseList;
+		}
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

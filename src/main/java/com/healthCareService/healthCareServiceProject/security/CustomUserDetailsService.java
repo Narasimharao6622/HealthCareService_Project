@@ -25,10 +25,11 @@ public class CustomUserDetailsService implements UserDetailsService{
 	
 	@Override
 	public UserDetails loadUserByUsername(String value) throws UsernameNotFoundException {
-		Optional<Patient> patientData = repo.findByEmail(value);
+		Optional<Patient> patientData = repo.findById(value);
+//		System.out.println(value);
 		if(patientData.isPresent()) {
 			Patient patient = patientData.get();
-			return User.withUsername(patient.getEmailid()).password(patient.getPassword()).roles(patient.getHasRole().name())
+			return User.withUsername(patient.getPatientid()).password(patient.getPassword()).roles(patient.getHasRole().name())
 					.build();
 		}
 		Optional<Admin> adminData = adminRepo.findById(value);

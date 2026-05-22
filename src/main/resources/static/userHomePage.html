@@ -2,13 +2,13 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Healthcare App</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Healthcare App</title>
 
-<link rel="icon" href="/favicon.ico">
+	<link rel="icon" href="/favicon.ico">
 
-<link rel="stylesheet" href="css/userCSS_files/userHomepage.css">
+	<link rel="stylesheet" href="css/userCSS_files/userHomepage.css">
 </head>
 
 <body>
@@ -23,55 +23,70 @@
 							<img id="userHomePagePhoto" alt="Profile">
 						</div>
 						<div class="container" id="profileContainer">
-							<div id="userHomeProfilePageBackButton"></div>
+							<div id="profileViewBox">
+								<div id="userHomeProfilePageBackButton"></div>
 
-							<!-- PROFILE HEADER -->
-							<div class="profile-header">
-								<div id="userImage">
-									<img id="userProfileImage" alt="no profile" src="">
-								</div>
-								<!-- <img src="https://via.placeholder.com/80" alt="Profile"> -->
-								<div class="profile-info">
-									<h2 id="profilePageUserName"></h2>
-									<p id="profilePageEmail"></p>
-									<p id="profilePageMobilenumber"></p>
-								</div>
-							</div>
-
-							<!-- TABS -->
-							<div class="tabs">
-								<div class="tab active" onclick="openTab('profile')">Profile</div>
-								<div class="tab" onclick="openTab('appointments')">Appointments</div>
-								<div class="tab" onclick="openTab('settings')">Settings</div>
-							</div>
-
-							<!-- PROFILE TAB -->
-							<div id="profile" class="tab-content active">
-								<div class="form-group">
-									<label>Name</label> <input id="profileinputName" value="Narasimha rao">
+								<!-- PROFILE HEADER -->
+								<div class="profile-header">
+									<div id="userImage">
+										<img id="userProfileImage" alt="no profile" src="">
+									</div>
+									<!-- <img src="https://via.placeholder.com/80" alt="Profile"> -->
+									<div class="profile-info">
+										<h2 id="profilePageUserName"></h2>
+										<p id="profilePageEmail"></p>
+										<p id="profilePageMobilenumber"></p>
+									</div>
 								</div>
 
-								<div class="form-group">
-									<label>Email</label> <input id="profileinputEmail"
-										value="raonarasimha716@gmail.com">
+								<!-- TABS -->
+								<div class="tabs">
+									<div id="profileTab" class="tab active" onclick="openTab('profile','profileTab')">
+										Profile</div>
+									<div id="appointmentTab" class="tab"
+										onclick="openTab('appointments','appointmentTab')">Appointments</div>
+									<div id="settingTab" class="tab" onclick="openTab('settings','settingTab')">Settings
+									</div>
+								</div>
+								<!-- PROFILE TAB -->
+								<div id="profile" class="tab-content active">
+									<div class="form-group">
+										<label>Name</label> <input id="profileinputName" value="" readonly>
+									</div>
+
+									<div class="form-group">
+										<label>Email</label> <input id="profileinputEmail" value="" readonly>
+									</div>
+
+									<div class="form-group">
+										<label>Phone</label> <input value="" id="profileinputphone" readonly>
+									</div>
+
+									<button onclick="saveProfile()">Update</button>
 								</div>
 
-								<div class="form-group">
-									<label>Phone</label> <input value="" id="profileinputphone">
+								<!-- APPOINTMENTS TAB -->
+								<div id="appointments" class="tab-content">
+									<div class="appointment">
+										<div class="appointmentDoctorCard">
+											<div class="image">
+												<img src="" class="doctorImage" alt="no image">
+											</div>
+											<div class="content">
+												<h3>join</h3>
+												<p>Dentist</p>
+												<p>
+													Appointment Date & Time <span>18 May 2026 - 10:30</span>
+												</p>
+											</div>
+										</div>
+									</div>
 								</div>
 
-								<button onclick="saveProfile()">Save</button>
-							</div>
-
-							<!-- APPOINTMENTS TAB -->
-							<div id="appointments" class="tab-content">
-								<div class="appointment">Dr. Ravi - 12 May 2026</div>
-								<div class="appointment">Dr. Priya - 18 May 2026</div>
-							</div>
-
-							<!-- SETTINGS TAB -->
-							<div id="settings" class="tab-content">
-								<button id="logout">Logout</button>
+								<!-- SETTINGS TAB -->
+								<div id="settings" class="tab-content">
+									<button id="logout">Logout</button>
+								</div>
 							</div>
 
 						</div>
@@ -96,19 +111,117 @@
 
 		<div class="search-box">
 			<div class="searchInputBox">
-				<input id="homePageSearch"
-					placeholder="Search doctors, hospitals..." />
+				<input id="homePageSearch" placeholder="Search doctors, hospitals..." />
 			</div>
 			<div id="searchedResult">
 				<div id="noDoctorsFound"></div>
-				
+
 			</div>
 		</div>
 
-		<button>Book Appointment</button>
-		<button>Online Consultation</button>
-	</div>
+		<button onclick="openBookAppointmentPage()">Book Appointment
+		</button>
+		<div class="openBookAppointmentPage">
+			<div class="diseaseBox">
+				<h2 class="box">Select Specialization</h2>
+				<div class="specializationListBox box">
+					<span class="specialization">Cardiology</span>
+					<span class="specialization">Dermatology</span> 
+					<span class="specialization">Neurology</span> 
+					<span class="specialization">Pediatrics</span> 
+					<span class="specialization">Oncology</span> 
+					<span class="specialization">Orthopedics</span> 
+					<span class="specialization">Dentist</span> 
+					<span class="specialization">Pulmonology </span> 
+					<span class="specialization">Rheumatology</span> 
+					<span class="specialization">Gastroenterology</span> 
+					<span class="specialization">Endocrinology</span>
+					<span class="specialization">medico</span>
+				</div>
+				<div class="box">
+					<button onclick="searchSpecializationDoctors()">search
+						Doctors</button>
+				</div>
+				<div id="noDoctorFound"></div>
+			</div>
+			<div id="specializationListBoxDashboard">
+				<div class="navbar">
+					<h1 id="dashboardHeading"> Dashboard</h1>
+					<button onclick="specializationListBoxDashboard_BackButton()">> Back</button>
+				</div>
+				<div class="dashboard">
+					<div class="welcome-box">
+						<h2>Hai, Angidi Narasimha Rao</h2>
+						<p>Manage your appointments, view doctor details, and book
+							consultations easily.</p>
+					</div>
+					<div class="card-container">
+						<div class="dashboard-card">
+							<h3>Total Appointments</h3>
+							<p>5 Appointments Booked</p>
+							<button>View Appointments</button>
+						</div>
+						<div class="dashboard-card">
+							<h3>Medical Reports</h3>
+							<p>Check your uploaded medical reports</p>
+							<button>View Reports</button>
+						</div>
+					</div>
 
+					<!-- Doctor Details -->
+					<div class="doctor-section">
+						<h2>Available Doctor</h2>
+						<!-- <div class="doctor-card">
+							<img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=400">
+							<div class="doctor-details">
+								<h3>Dr. Rajesh Sharma</h3>
+								<p>
+									<b>Specialization:</b> Cardiologist
+								</p>
+								<p>
+									<b>Experience:</b> 12 Years
+								</p>
+								<p>
+									<b>Hospital:</b> City Care Hospital
+								</p>
+								<p>
+									<b>Consultation Fee:</b> ₹800
+								</p>
+								<p>
+									<b>Available Time:</b> 10:00 AM - 4:00 PM
+								</p>
+								<button onclick="bookAppointment()">Book Appointment</button>
+							</div>
+						</div>
+						<div class="doctor-card">
+							<img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=400">
+							<div class="doctor-details">
+								<h3>Dr. Rajesh Sharma</h3>
+								<p>
+									<b>Specialization:</b> Cardiologist
+								</p>
+								<p>
+									<b>Experience:</b> 12 Years
+								</p>
+								<p>
+									<b>Hospital:</b> City Care Hospital
+								</p>
+								<p>
+									<b>Consultation Fee:</b> ₹800
+								</p>
+								<p>
+									<b>Available Time:</b> 10:00 AM - 4:00 PM
+								</p>
+								<button onclick="bookAppointment()">Book Appointment</button>
+							</div>
+						</div> -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<button onclick="openOnlineConsultancyPage()">Online
+			Consultation</button>
+	</div>
 	<!-- CATEGORIES -->
 	<div class="grid categories">
 		<div class="card">Dentist</div>

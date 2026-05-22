@@ -42,9 +42,6 @@ passwordLabelBox.addEventListener("mouseout", () => {
     passwordLabelBox.classList.remove("check")
 })
 
-
-
-
 function inputHeadingStyle(inputHeadingField, lableField) {
     inputHeadingField.style.transition = "all .2s ease-in-out"
     inputHeadingField.style.transform = "translate(3%,-90%)"
@@ -101,7 +98,6 @@ document.getElementById("formPage").addEventListener("submit", async (e) => {
         body: JSON.stringify(userDetails)
     }).then(async res => {
         var data = await res.json();
-		console.log(data)
         if (!res.ok) {
             throw new Error(data);
         }
@@ -111,22 +107,13 @@ document.getElementById("formPage").addEventListener("submit", async (e) => {
         if (data.status == 200) {
             window.location.reload();
 			window.location.replace("userHomePage.html");
+        }else if (data.status === 403) {
+            emailidInputHeading.style.background = "red"
         } else {
-            //window.location.reload();
-            console.log("No Data is present in the backend")
+            passwordInputHeading.style.background = "red"
         }
     }).catch(err => {
-		console.log(err);
-        if (err.status === 400) {
-            if (err.errors[0] === "Incorrect Email id") {
-                emailidInputHeading.style.background = "red"
-                return;
-            }
-            passwordInputHeading.style.background = "red"
-        } else {
-            alert("somting went to worng....")
-        	console.log(err.message)
-        }
+        alert("403 error");
     })
 })
 

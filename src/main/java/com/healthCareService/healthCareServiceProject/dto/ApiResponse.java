@@ -3,12 +3,14 @@ package com.healthCareService.healthCareServiceProject.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.healthCareService.healthCareServiceProject.entity.Doctor;
+
 public class ApiResponse<T> {
 	private LocalDateTime timestamp;
     private int status;
     private String message;
     private T data;
-    private List<T> objects;
+    private List<?> objects;
     private boolean condition;
 
     public ApiResponse(int status, String message, T data) {
@@ -18,19 +20,17 @@ public class ApiResponse<T> {
         this.data = data;
     }
     
-    
-    
-//	public ApiResponse( int status, String message, List<T> objects) {
-//		super();
-//		this.timestamp = LocalDateTime.now();
-//		this.status = status;
-//		this.message = message;
-//		this.objects = objects;
-//	}
+	public ApiResponse(LocalDateTime timestamp, int status, String message, T data, List<?> objects,
+			boolean condition) {
+		this.timestamp = timestamp;
+		this.status = status;
+		this.message = message;
+		this.data = data;
+		this.objects = objects;
+		this.condition = condition;
+	}
 
-	
-
-	public List<T> getObjects() {
+	public List<?> getObjects() {
 		return objects;
 	}
 
@@ -51,13 +51,6 @@ public class ApiResponse<T> {
 	public ApiResponse() {
 		
 	}
-
-
-
-	public void setObjects(List<T> objects) {
-		this.objects = objects;
-	}
-
 
 	public LocalDateTime getTimestamp() {
 		return timestamp;
@@ -89,6 +82,12 @@ public class ApiResponse<T> {
 
 	public void setData(T data) {
 		this.data = data;
+	}
+
+
+
+	public void setObjects(List<Doctor> list) {
+		this.objects = list;
 	}
 
     

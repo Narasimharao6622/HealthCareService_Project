@@ -45,8 +45,8 @@ public class Admin {
 		this.mobilenumber = mobilenumber;
 		this.password = password;
 		this.imageURLPath = imageURLPath;
-		this.adminid = genarateAdminID();
 		this.setHasRole(Roles.ADMIN);
+		this.adminid = genarateAdminID();
 	}
 	
 	private String genarateAdminID() {
