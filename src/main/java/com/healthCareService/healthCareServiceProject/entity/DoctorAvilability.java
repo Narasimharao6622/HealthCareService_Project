@@ -21,7 +21,6 @@ public class DoctorAvilability {
 	@JoinColumn(name = "doctorid")
 	private Doctor doctor;
 	
-	
 	private LocalTime starttime;
 	private LocalTime endtime;
 	

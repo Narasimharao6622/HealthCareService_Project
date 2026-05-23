@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Cacheable
@@ -44,6 +45,8 @@ public class Patient {
 	@Enumerated(EnumType.STRING)
 	private Roles hasRole;
 	
+	@OneToMany(mappedBy = "patient")
+	private List<Appointment> appointments;
 	
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(joinColumns = @JoinColumn(name = "patientid"),inverseJoinColumns = @JoinColumn(name = "doctorid"))
@@ -166,6 +169,7 @@ public class Patient {
 		this.hasRole = hasRole;
 	}
 
+	
 	@Override
 	public String toString() {
 		return "Patient [patientid=" + patientid + ", name=" + name + ", age=" + age + ", gender=" + gender

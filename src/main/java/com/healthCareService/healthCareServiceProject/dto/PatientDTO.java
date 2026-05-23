@@ -17,8 +17,6 @@ public class PatientDTO {
 	private String password;
 	private AddressDTO address;
 	
-	
-	
 	public AddressDTO getAddress() {
 		return address;
 	}

@@ -88,7 +88,7 @@ public class DoctorService {
 	}
 	
 	
-	public Doctor updateDoctorProfileImage(MultipartFile file,int id) {
+	public Doctor updateDoctorProfileImage(MultipartFile file,String id) {
 		Optional<Doctor> doctorIsPresent = repo.findById(id);
 		if(doctorIsPresent.isPresent()) {
 			Doctor doctor = doctorIsPresent.get();

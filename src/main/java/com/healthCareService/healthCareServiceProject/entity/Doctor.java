@@ -3,10 +3,12 @@ package com.healthCareService.healthCareServiceProject.entity;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -31,18 +33,24 @@ public class Doctor {
 	private int noofcasesaccepted;
 	private int noofcaseshold;
 	private double totalrating;
-	
-	@OneToMany(cascade = CascadeType.ALL)
-//	@JoinColumn(name = "date_id",nullable = false)
-	private List<WorkingDates> workingdates;
 
 	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "ratingid")
 	private List<Rating> rating;
 
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "consaltantdoctors")
 	private List<Patient> consaltentpatients;
+	
+	@OneToMany(mappedBy = "doctor")
+	private List<Appointment> appointments;
 
 	private String imagefilepath;
+	
+	
+	@OneToOne
+	@JoinColumn(name = "doctoravilabilityid")
+	private DoctorAvilability avilability;
+	
 	// Getters And Setters
 
 	public List<Patient> getConsaltentpatients() {
@@ -176,14 +184,6 @@ public class Doctor {
 		this.noofcaseshold = noofcaseshold;
 	}
 
-	
-	public List<WorkingDates> getWorkingdates() {
-		return workingdates;
-	}
-
-	public void setWorkingdates(List<WorkingDates> workingdates) {
-		this.workingdates = workingdates;
-	}
 
 //	@Override
 //	public String toString() {

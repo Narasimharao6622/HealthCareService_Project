@@ -39,7 +39,7 @@ public class DoctorController {
 	}
 	
 	@PutMapping("upadteDoctorProfileImage/{id}")
-	public ResponseEntity<?> updateDoctorProfileImage(@RequestPart("photo") MultipartFile file,@PathVariable int id) {
+	public ResponseEntity<?> updateDoctorProfileImage(@RequestPart("photo") MultipartFile file,@PathVariable String id) {
 		Doctor doctor = service.updateDoctorProfileImage(file, id);
 		if(doctor!=null) {
 			ApiResponse<?> response = new ApiResponse<>(200,"Profile Updated successful",null);

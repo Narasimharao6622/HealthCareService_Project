@@ -3,7 +3,6 @@ package com.healthCareService.healthCareServiceProject.dto;
 import java.util.List;
 
 import com.healthCareService.healthCareServiceProject.entity.Rating;
-import com.healthCareService.healthCareServiceProject.entity.WorkingDates;
 
 public class DoctorDTO {
 	private String doctorid;
@@ -21,8 +20,6 @@ public class DoctorDTO {
 	private int noofcasesaccepted;
 	private int noofcaseshold;
 	private double totalrating;
-
-	private List<WorkingDates> workingdates;
 
 	private List<Rating> rating;
 
@@ -133,14 +130,6 @@ public class DoctorDTO {
 		this.totalrating = totalrating;
 	}
 
-	public List<WorkingDates> getWorkingdates() {
-		return workingdates;
-	}
-
-	public void setWorkingdates(List<WorkingDates> workingdates) {
-		this.workingdates = workingdates;
-	}
-
 	public List<Rating> getRating() {
 		return rating;
 	}
@@ -162,7 +151,7 @@ public class DoctorDTO {
 		return "Doctor [doctorid=" + doctorid + ", name=" + name + ", specialization=" + specialization + ", age=" + age
 				+ ", gender=" + gender + ", number=" + number + ", email=" + email + ", address=" + address
 				+ ", salary=" + salary + ", noofcasesaccepted=" + noofcasesaccepted + ", noofcaseshold=" + noofcaseshold
-				+ ", totalrating=" + totalrating + ", workingdates=" + workingdates + ", rating=" + rating
+				+ ", totalrating=" + totalrating + ", rating=" + rating
 				+ " imagefilepath=" + imagefilepath + "]";
 	}
 

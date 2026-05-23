@@ -17,8 +17,6 @@ homePageSearch.addEventListener("input", (e) => {
 var profileContainer_PopUp = document.getElementById("profileContainer");
 
 document.getElementById("userHomeProfilePage").addEventListener("click", function () {
-
-
     profileContainer_PopUp.style.display = "flex";
     profileContainer_PopUp.style.width = "100%";
     profileContainer_PopUp.style.height = "100%";
@@ -39,18 +37,18 @@ document.getElementById("userHomeProfilePage").addEventListener("click", functio
 
 });
 document.getElementById("appointmentTab").addEventListener("click", () => {
+    let appointments = document.getElementById("appointments");
+    appointments.innerHTML = "";
     fetch("/userController/getDoctorAppoinments", {
         method: "GET",
         credentials: "include"
     }).then(async res => {
         var data = await res.json();
-        console.log(data)
         if (!res.ok) {
-            throw new Error(data);
+            throw data;
         }
         return data;
     }).then(data => {
-        console.log(data)
         data.data.forEach(doctor => {
             let div = document.createElement("div")
             setTimeout(() => {
@@ -70,10 +68,14 @@ document.getElementById("appointmentTab").addEventListener("click", () => {
 					</div>
 				</div>`
             }, 100)
-            document.getElementById("appointments").append(div);
+            appointments.append(div);
         })
     }).catch(async err => {
-        console.log(err.message);
+        let div = document.createElement("div")
+        div.classList.add("appointment")
+        div.classList.add("active")
+        div.innerHTML = err.message
+        appointments.append(div)
     })
 })
 
@@ -81,11 +83,9 @@ document.getElementById("appointmentTab").addEventListener("click", () => {
 document.getElementById("userHomeProfilePageBackButton").addEventListener("click", function () {
     profileContainer_PopUp.style.width = "0%";
     profileContainer_PopUp.style.height = "0%";
-
     setTimeout(() => {
         profileContainer_PopUp.style.display = "none";
     }, 100);
-
     history.back();
 });
 
@@ -99,21 +99,20 @@ function openTab(tabId, tabContent) {
 }
 
 var user = null;
-
 window.onload = async () => {
     try {
         let response = await fetch("/userController/userHomePage", {
             method: "GET",
             credentials: "include"
         })
-        if (!response.ok) {
-            throw new Error(response)
-        }
         var data = await response.json();
+        if (!response.ok) {
+            throw data
+        }
         user = data.data;
-        console.log(user)
         document.getElementById("userHomePagePhoto").src = user.imagefilepath;
         document.getElementById("homePageUserName").innerHTML = user.name;
+		
         history.pushState({ page: "homePage" }, "")
     } catch (err) {
         console.log(err.data)
@@ -214,9 +213,9 @@ specialization.forEach(span => {
     })
 })
 
-var noDoctorFound = document.getElementById("noDoctorFound");
 async function searchSpecializationDoctors() {
-    var doctors ="";
+    var noDoctorFound = document.getElementById("noDoctorFound");
+    var doctors = "";
     if (selectedSpecialization.length == 0) {
         alert("Please select Specialization")
         return;
@@ -234,21 +233,21 @@ async function searchSpecializationDoctors() {
         }
         doctors = data.data;
         noDoctorFound.innerHTML = "";
-        openspecializationListBoxDashboard(doctors,selectedSpecialization);
+        openspecializationListBoxDashboard(doctors, selectedSpecialization);
     } catch (err) {
         noDoctorFound.innerHTML = err.errors[0];
     }
-    
+
 }
 
 let specializationListBoxDashboard = document.getElementById("specializationListBoxDashboard");
-function openspecializationListBoxDashboard(data,selectedSpecialization) {
+function openspecializationListBoxDashboard(data, selectedSpecialization) {
     //Adds into history -- 2 --
     history.pushState({ page: "openspecializationListBoxDashboard" }, "")
     var doctors = data;
     document.getElementById("dashboardHeading").innerHTML = `${selectedSpecialization} Dashboard`
     specializationListBoxDashboard.style.display = "block";
-    document.querySelector(".doctor-section").innerHTML ="";
+    document.querySelector(".doctor-section").innerHTML = "";
     doctors.forEach(doctor => {
         let doctorCard = document.createElement("div");
         doctorCard.classList.add("doctor-card")
@@ -272,7 +271,7 @@ function openspecializationListBoxDashboard(data,selectedSpecialization) {
 			<p>
 				<b>Available Time:</b> 10:00 AM - 4:00 PM
 			</p>
-			<button onclick="bookAppointment('${id}')">Book Appointment</button>
+			<button onclick="bookAppointment('${doctor.doctorid}')">Book Appointment</button>
 		</div>
     `;
         document.querySelector(".doctor-section").append(doctorCard)
@@ -284,17 +283,229 @@ function specializationListBoxDashboard_BackButton() {
     specializationListBoxDashboard.style.display = "none";
     history.back();
 }
-function bookAppointment(name) {
-    alert("Alert name = " + name)
+
+var bookDoctorAppointmentContainer = document.querySelector(".bookDoctorAppointmentContainer")
+async function bookAppointment(doctorid) {
+    let doctor = null;
+    console.log(doctorid)
+    await fetch("/userController/getDoctorByDoctorid?doctorid=" + doctorid, {
+        method: "GET",
+        credentials: "include"
+    }).then(async res => {
+        var data = await res.json();
+        if (!res.ok) {
+            throw data;
+        }
+        return data.data;
+    }).then(data => {
+        if (data != null) {
+            history.pushState({ page: "bookDoctorAppointmentContainer" }, "")
+            bookDoctorAppointmentContainer.style.display = "flex"
+            doctor = data;
+            return;
+        }
+    })
+        .catch(err => {
+            console.log(err)
+            return;
+        })
+
+    bookDoctorAppointmentContainer.innerHTML = "";
+    var div = document.createElement("div")
+    div.classList.add(".appointment-container")
+    div.innerHTML = `
+        <div class="appointment-container">
+
+			<h1>Book Appointment</h1>
+
+			<!-- Doctor Details -->
+
+			<div class="doctor-info">
+
+				<h2 id="doctorName">Dr. ${doctor.name}</h2>
+
+				<p><b>Specialization: </b><span id="Specialization"> ${doctor.specialization}</span></p>
+
+				<p><b>Experience:</b> <span id="Experience">${doctor.experiance} years</span></p>
+
+				<p><b>Consultation Fee:</b> <span id="Fee">800 /-</span></p>
+
+				<p><b>Available Time:</b> <span id="AvailableTime">10:00AM - 1:00PA</span></p>
+
+			</div>
+
+			<!-- Appointment Form -->
+
+			<div class="form-group">
+
+				<label>Appointment Date</label>
+
+				<input type="date" id="appointment_container_appointmentDate">
+
+			</div>
+
+			<div class="form-group">
+
+				<label>Select Time</label>
+
+				<select id="appointment_container_appointmentTime">
+
+					<option>Select Time</option>
+					<option value="10:00">10:00 AM</option>
+
+				</select>
+
+			</div>
+
+			<div class="form-group">
+
+				<label>Symptoms</label>
+
+				<textarea id="appointment_container_symptoms" placeholder="Enter symptoms"></textarea>
+
+			</div>
+
+			<button class="book-btn" onclick="conformbookAppointment('${doctor.doctorid}')">
+				Confirm Appointment
+			</button>
+
+			<div class="success-message" id="successMessage">
+				
+			</div>
+
+		</div>
+    `
+    bookDoctorAppointmentContainer.append(div);
+
+}
+
+
+
+async function conformbookAppointment(doctorid) {
+	let successMessage =
+	       document.getElementById("successMessage");
+    let todayDate = new Date(new Date().toISOString().split("T")[0]);
+    var appointmentDateInput = document.getElementById("appointment_container_appointmentDate");
+    appointmentDateInput.addEventListener('input', async (e) => {
+
+        let appointment = new Date(appointmentDateInput.value);
+
+        // let appointmentDate;
+        function appointmentdata() {
+            // appointmentDate = appointmentDateInput.value;
+            // for (let i = 1; i <= 5; i++) {
+            //     let option = document.createElement("option");
+            //     option.text = `0${i}:00PM`;
+            //     option.value = i;
+            //     document.getElementById("appointment_container_appointmentTime").append(option);
+            // }
+        }
+
+        var count = 0;
+        var appointmentDateYear = appointment.getFullYear();
+        while (appointmentDateYear != 0) {
+            count++;
+            appointmentDateYear = Math.floor(appointmentDateYear / 10);
+            console.log(count)
+        }
+        if (count != 4) {
+            return;
+        }
+
+        if (appointment.getFullYear() > todayDate.getFullYear()) {
+            appointmentdata();
+            console.log("year doesn't less than today's year")
+        }
+
+        else if (appointment.getFullYear() == todayDate.getFullYear()) {
+            if (appointment.getMonth() + 1 >= todayDate.getMonth() + 1) {
+                if (appointment.getDay() == todayDate.getDay()) {
+                    alert('Today you cannot book appointment')
+                    return;
+                } else if (appointment.getDay() < todayDate.getDay()) {
+                    alert('please enter valid day')
+                    return;
+                } else {
+                    appointmentdata();
+                }
+            }
+            else {
+                alert('Cannot book the appointment because month is already over')
+                return;
+            }
+        } else {
+            alert('Year must be less than or equal to ' + todayDate.getFullYear())
+            return;
+        }
+    })
+
+    let appointmentDate = document.getElementById("appointment_container_appointmentDate").value;
+    let appointmentTime =
+        document.getElementById("appointment_container_appointmentTime").value;
+
+    let symptoms =
+        document.getElementById("appointment_container_symptoms").value;
+    if (
+        appointmentDate === "" ||
+        appointmentTime === "Select Time" ||
+        symptoms === ""
+    ) {
+
+        alert("Please fill all details");
+
+    }
+    else {
+        console.log("Appointment Date :", appointmentDate);
+        console.log("Appointment Time :", appointmentTime);
+        console.log("Symptoms :", symptoms);
+
+        var bookAppointment = {
+            "doctorid": doctorid,
+            "appointmentdate": appointmentDate,
+            "appointmenttime": appointmentTime,
+            "symptoms": symptoms
+        }
+
+    }
+
+    await fetch("/userController/conformbookAppointment", {
+        method: "POST",
+        credentials: "include",
+        headers : {
+            "Content-type" : "application/json"
+        },
+        body: JSON.stringify(bookAppointment)
+    }).then(async res => {
+        var data = await res.json();
+        if (!res.ok) {
+            throw data;
+        }
+        return data;
+    }).then(data => {
+        history.back();
+        history.back();
+        history.back();
+		history.replaceState({page : "homePage"},"")
+        console.log(data)
+		successMessage.style.display = "block";
+		successMessage.style.innerHTML = data.message;	
+		
+    }).catch(err=>{
+        console.log(err)
+		successMessage.style.display = "block";
+		successMessage.style.innerHTML = err.message;
+		successMessage.style.color = "red"
+    })
 }
 
 function hideAllPages() {
     openBookAppointment.style.display = "none";
     specializationListBoxDashboard.style.display = "none";
-
     profileContainer_PopUp.style.width = "0%";
     profileContainer_PopUp.style.height = "0%";
     profileContainer_PopUp.style.display = "none";
+
+    bookDoctorAppointmentContainer.style.display = "none"
 }
 
 window.addEventListener("popstate", function (event) {
@@ -320,6 +531,10 @@ window.addEventListener("popstate", function (event) {
         setTimeout(() => {
             profileContainer_PopUp.style.display = "flex";
         }, 100);
+    }
+
+    if (currentPage === "bookDoctorAppointmentContainer") {
+        bookDoctorAppointmentContainer.style.display = "flex"
     }
 
 });

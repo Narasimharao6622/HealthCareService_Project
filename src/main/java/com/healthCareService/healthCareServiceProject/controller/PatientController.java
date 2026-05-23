@@ -14,11 +14,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.healthCareService.healthCareServiceProject.dto.ApiResponse;
+import com.healthCareService.healthCareServiceProject.dto.BookAppointmentRequest;
 import com.healthCareService.healthCareServiceProject.dto.DoctorDTO;
 import com.healthCareService.healthCareServiceProject.dto.HomePagePatientResponse;
 import com.healthCareService.healthCareServiceProject.entity.Doctor;
@@ -83,7 +85,7 @@ public class PatientController {
 		String id = authentication.getName();
 		ApiResponse<?> apiResponse = null;
 		List<Doctor> list = service.getDoctorAppointments(id);
-		list.add(new Doctor());
+		// list.add(new Doctor());
 		if(list.isEmpty()) {
 			apiResponse = new ApiResponse<>(404, "No Appointments", null);
 			return ResponseEntity.status(404).body(apiResponse);
@@ -109,8 +111,24 @@ public class PatientController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
+	@GetMapping("/getDoctorByDoctorid")
+	public ResponseEntity<?> getDoctorByDoctorid(@RequestParam String doctorid) {
+		DoctorDTO dto = service.getDoctorByDoctorid(doctorid);
+		ApiResponse<?> apiResponse = new ApiResponse<>(200,"Doctor Found",dto);
+		return ResponseEntity.ok().body(apiResponse);
+				
+	}
 	
+	@PostMapping("/conformbookAppointment")
+	public ResponseEntity<?> bookAppointment(@RequestBody BookAppointmentRequest bookAppointment) {
+		System.out.println(bookAppointment);
+		String patientid = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		ApiResponse<?> apiResponse = new ApiResponse<>(200,service.bookAppointment(bookAppointment,patientid),null);
+		return ResponseEntity.ok().body(apiResponse);
+	}
 	
+
 	@GetMapping("/getAll")
 	public List<Patient> getAllUsers() {
 		System.out.println(repo.findAll());

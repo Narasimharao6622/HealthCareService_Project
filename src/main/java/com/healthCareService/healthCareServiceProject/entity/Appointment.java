@@ -39,6 +39,16 @@ public class Appointment {
 	
 	private LocalDateTime createdat;
 
+	private double consultencyfee;
+	
+	public double getConsultencyfee() {
+		return consultencyfee;
+	}
+
+	public void setConsultencyfee(double consultencyfee) {
+		this.consultencyfee = consultencyfee;
+	}
+
 	public String getAppointmentid() {
 		return appointmentid;
 	}

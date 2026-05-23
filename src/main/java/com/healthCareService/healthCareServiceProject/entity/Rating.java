@@ -12,30 +12,28 @@ import jakarta.persistence.Table;
 @Entity
 public class Rating {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)	
-	private int id;
-	private int rate;
+	@GeneratedValue(strategy = GenerationType.UUID)	
+	private String ratingid;
+	private double rate;
 	private String feedback;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "patientid")
-	private Patient patient;
+	private String patientname;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "doctorid")
 	private Doctor doctor;
 	
 	
-	public int getId() {
-		return id;
+	public String getRatingid() {
+		return ratingid;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setRatingid(String ratingid) {
+		this.ratingid = ratingid;
 	}
-	public int getRate() {
+	public double getRate() {
 		return rate;
 	}
-	public void setRate(int rate) {
+	public void setRate(double rate) {
 		this.rate = rate;
 	}
 	public String getFeedback() {
@@ -44,11 +42,11 @@ public class Rating {
 	public void setFeedback(String feedback) {
 		this.feedback = feedback;
 	}
-	public Patient getPatient() {
-		return patient;
+	public String getPatient() {
+		return patientname;
 	}
-	public void setPatient(Patient patient) {
-		this.patient = patient;
+	public void setPatient(String patientname) {
+		this.patientname = patientname;
 	}
 	public Doctor getDoctor() {
 		return doctor;
@@ -56,6 +54,12 @@ public class Rating {
 	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
 	}
+	@Override
+	public String toString() {
+		return "Rating [ratungid=" + ratingid + ", rate=" + rate + ", feedback=" + feedback + ", patientname="
+				+ patientname + ", doctor=" + doctor + "]";
+	}
+	
 	
 	
 }

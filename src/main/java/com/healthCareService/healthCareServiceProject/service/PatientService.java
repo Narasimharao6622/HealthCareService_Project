@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,17 +16,20 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.healthCareService.healthCareServiceProject.configuration.AppConfig;
 import com.healthCareService.healthCareServiceProject.dao.PatientDao;
 import com.healthCareService.healthCareServiceProject.dto.AddressDTO;
+import com.healthCareService.healthCareServiceProject.dto.BookAppointmentRequest;
 import com.healthCareService.healthCareServiceProject.dto.DoctorDTO;
 import com.healthCareService.healthCareServiceProject.dto.PatientDTO;
 import com.healthCareService.healthCareServiceProject.entity.Address;
+import com.healthCareService.healthCareServiceProject.entity.Appointment;
+import com.healthCareService.healthCareServiceProject.entity.AppointmentStatus;
 import com.healthCareService.healthCareServiceProject.entity.Doctor;
 import com.healthCareService.healthCareServiceProject.entity.Patient;
 import com.healthCareService.healthCareServiceProject.entity.Roles;
@@ -35,6 +40,7 @@ import com.healthCareService.healthCareServiceProject.exception.PasswordError;
 import com.healthCareService.healthCareServiceProject.exception.UserError;
 import com.healthCareService.healthCareServiceProject.exception.validation.EmailIdException;
 import com.healthCareService.healthCareServiceProject.exception.validation.MobileNumberExcetion;
+import com.healthCareService.healthCareServiceProject.repository.DoctorRepo;
 import com.healthCareService.healthCareServiceProject.repository.PatientRepo;
 
 @Service
@@ -44,6 +50,10 @@ public class PatientService {
 
 	@Autowired
 	private PatientRepo repo;
+	
+	@Autowired
+	private DoctorRepo doctorRepo;
+	
 	@Autowired
 	private BCryptPasswordEncoder encoder;
 	@Autowired
@@ -187,7 +197,6 @@ public class PatientService {
 						doctorDTO.setImagefilepath(doctor.getImagefilepath());
 						doctorDTO.setSpecialization(doctor.getSpecialization());
 						doctorDTO.setTotalrating(doctor.getTotalrating());
-						doctorDTO.setWorkingdates(doctor.getWorkingdates());
 
 						if (word1.equals("Dr.")) {
 							continue;
@@ -241,7 +250,6 @@ public class PatientService {
 				throw new NoDoctorsFoundError("No doctors found for " + specialization);
 			}
 			else {
-				System.out.println("Doc");
 				list.stream().forEach(doctor ->{
 					DoctorDTO doctorResponse = new DoctorDTO();
 					doctorResponse.setName(doctor.getName());
@@ -252,7 +260,6 @@ public class PatientService {
 					doctorResponse.setTotalrating(doctor.getTotalrating());
 					doctorResponse.setNoofcaseshold(doctor.getNoofcaseshold());
 					doctorResponse.setRating(doctor.getRating());
-					doctorResponse.setWorkingdates(doctor.getWorkingdates());
 					doctorResponse.setExperiance(doctor.getExperiance());
 					doctorResponse.setSpecialization(doctor.getSpecialization());
 					doctorResponse.setDoctorid(doctor.getDoctorid());
@@ -261,6 +268,49 @@ public class PatientService {
 			}
 			return responseList;
 		}
+	}
+
+	public DoctorDTO getDoctorByDoctorid(String doctorid) {
+		Doctor doctor = dao.getDoctorByDoctorid(doctorid);
+		DoctorDTO doctorResponse = new DoctorDTO();
+		doctorResponse.setName(doctor.getName());
+		doctorResponse.setAge(doctor.getAge());
+		doctorResponse.setGender(doctor.getGender());
+		doctorResponse.setImagefilepath(doctor.getImagefilepath());
+		doctorResponse.setNoofcasesaccepted(doctor.getNoofcasesaccepted());
+		doctorResponse.setTotalrating(doctor.getTotalrating());
+		doctorResponse.setNoofcaseshold(doctor.getNoofcaseshold());
+		doctorResponse.setRating(doctor.getRating());
+		doctorResponse.setExperiance(doctor.getExperiance());
+		doctorResponse.setSpecialization(doctor.getSpecialization());
+		doctorResponse.setDoctorid(doctor.getDoctorid());
+		
+		return doctorResponse;
+		
+	}
+
+	public String bookAppointment(BookAppointmentRequest request,String patientid) {
+		dao.checkPatientHaveAnyAppointmentAreBookedOrNot(request);
+		try {
+			Patient patient = repo.findById(patientid).orElseThrow(()->new UsernameNotFoundException("Patient not found"));
+			Doctor doctor = doctorRepo.findById(request.getDoctorid()).orElseThrow(()->new UsernameNotFoundException("Doctor not found"));
+			System.out.println("Patient has no appointments....");
+			
+			Appointment appointment = new Appointment();
+			appointment.setAppointmentdate(request.getAppointmentdate());
+			appointment.setAppointmenttime(request.getAppointmenttime());
+			appointment.setPatient(patient);
+			appointment.setDoctor(doctor);
+			appointment.setProblem(request.getSymptoms());
+			appointment.setCreatedat(LocalDateTime.now());
+			appointment.setConsultencyfee(800);
+			appointment.setStatus(AppointmentStatus.PENDING);
+			dao.bookAppointment(appointment);
+			return "appointmentBooked";
+		}catch(Exception e) {
+			return "Some thing went to worng";
+		}
+		
 	}
 
 }

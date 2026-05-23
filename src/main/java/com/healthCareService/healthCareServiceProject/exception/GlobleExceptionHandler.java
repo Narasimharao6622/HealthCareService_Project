@@ -95,17 +95,19 @@ public class GlobleExceptionHandler {
 	@ExceptionHandler(NoDoctorsFoundError.class)
 	public ResponseEntity<ErrorResponse<?>> noDoctorsFoundError(NoDoctorsFoundError ex,HttpServletRequest request){
 		ErrorResponse<?> errorResponse = new ErrorResponse<>(
-				409,
-				"USER_DETAILS_NOT_FOUND",
+				404,
+				"Doctor_Not_Found",
 				Arrays.asList(ex.getMessage()),
 				request.getRequestURI());
+		errorResponse.setMessage(ex.getMessage());
 		return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
 	}
 	@ExceptionHandler(MobileNumberExcetion.class)
 	public ResponseEntity<ErrorResponse<?>> handleMobileNumberException(MobileNumberExcetion ex,HttpServletRequest request){
 		ErrorResponse<?> errorResponse = new ErrorResponse<>();
 		errorResponse.setCondition(true);
-		
+		errorResponse.setMessage(ex.getMessage());
+		errorResponse.setStatus(403);
 		return new ResponseEntity<>(errorResponse,HttpStatus.OK);
 	}
 	@ExceptionHandler(EmailIdException.class)
@@ -144,6 +146,14 @@ public class GlobleExceptionHandler {
 		errorResponse.setStatus(404);
 		errorResponse.setMessage(ex.getMessage());
 		return new ResponseEntity<>(errorResponse,HttpStatus.valueOf(200));
+	}
+	@ExceptionHandler(AppointmentBookedException.class)
+	public ResponseEntity<ErrorResponse<?>> handledAppointmentBookedException(AppointmentBookedException ex,HttpServletRequest request){
+		ErrorResponse<?> errorResponse = new ErrorResponse<>();
+		errorResponse.setStatus(404);
+		errorResponse.setMessage(ex.getMessage());
+		errorResponse.setPath(request.getRequestURI());
+		return new ResponseEntity<>(errorResponse,HttpStatus.valueOf(404));
 	}
 }
 

@@ -43,6 +43,13 @@ public class AppConfig {
 	}
 	
 //	@Bean
+//    public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
+//        return builder -> {
+//            builder.simpleDateFormat("hh:mm a");
+//        };
+//    }
+	
+//	@Bean
 //	public AdminMapper getAdminMpper() {
 //		return new AdminMapper();
 //	}
