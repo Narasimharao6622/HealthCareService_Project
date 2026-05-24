@@ -12,6 +12,7 @@ public class ApiResponse<T> {
     private T data;
     private List<?> objects;
     private boolean condition;
+    List<TodayScheduledDoctor> todayScheduleDoctorsList;
 
     public ApiResponse(int status, String message, T data) {
         this.timestamp = LocalDateTime.now();
@@ -84,11 +85,14 @@ public class ApiResponse<T> {
 		this.data = data;
 	}
 
-
-
-	public void setObjects(List<Doctor> list) {
-		this.objects = list;
+	public List<TodayScheduledDoctor> getTodayScheduleDoctorsList() {
+		return todayScheduleDoctorsList;
 	}
+
+	public void setTodayScheduleDoctorsList(List<TodayScheduledDoctor> todayScheduleDoctorsList) {
+		this.todayScheduleDoctorsList = todayScheduleDoctorsList;
+	}
+
 
     
 }

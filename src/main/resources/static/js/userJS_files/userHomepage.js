@@ -16,7 +16,7 @@ homePageSearch.addEventListener("input", (e) => {
 })
 var profileContainer_PopUp = document.getElementById("profileContainer");
 
-document.getElementById("userHomeProfilePage").addEventListener("click", function () {
+document.getElementById("userHomeProfilePage").addEventListener("click", function() {
     profileContainer_PopUp.style.display = "flex";
     profileContainer_PopUp.style.width = "100%";
     profileContainer_PopUp.style.height = "100%";
@@ -80,7 +80,7 @@ document.getElementById("appointmentTab").addEventListener("click", () => {
 })
 
 // MANUAL BACK BUTTON
-document.getElementById("userHomeProfilePageBackButton").addEventListener("click", function () {
+document.getElementById("userHomeProfilePageBackButton").addEventListener("click", function() {
     profileContainer_PopUp.style.width = "0%";
     profileContainer_PopUp.style.height = "0%";
     setTimeout(() => {
@@ -112,7 +112,7 @@ window.onload = async () => {
         user = data.data;
         document.getElementById("userHomePagePhoto").src = user.imagefilepath;
         document.getElementById("homePageUserName").innerHTML = user.name;
-		
+
         history.pushState({ page: "homePage" }, "")
     } catch (err) {
         console.log(err.data)
@@ -151,6 +151,7 @@ document.getElementById("homePageSearch").addEventListener("input", (e) => {
         }
         return data;
     }).then(doctor => {
+			console.log(doctor)
         doctor.data.forEach(async doctorData => {
             let card = document.createElement("div")
             setTimeout(() => {
@@ -171,8 +172,8 @@ document.getElementById("homePageSearch").addEventListener("input", (e) => {
 							`;
             }, 300)
 
-            card.onclick = function () {
-                alert(doctorData.name);
+            card.onclick = function() {
+				bookAppointment(doctorData.doctorid);
             };
 
             searchedResult.appendChild(card);
@@ -226,7 +227,6 @@ async function searchSpecializationDoctors() {
             credentials: "include"
         })
         var data = await response.json();
-        console.log(data);
 
         if (!response.ok) {
             throw data;
@@ -352,6 +352,12 @@ async function bookAppointment(doctorid) {
 
 					<option>Select Time</option>
 					<option value="10:00">10:00 AM</option>
+					<option value="10:30">10:30 AM</option>
+					<option value="11:00">11:00 AM</option>
+					<option value="11:30">11:30 AM</option>
+					<option value="12:00">12:00 AM</option>
+					<option value="12:30">12:20 AM</option>
+					<option value="01:00">01:00 PM</option>
 
 				</select>
 
@@ -382,69 +388,9 @@ async function bookAppointment(doctorid) {
 
 
 async function conformbookAppointment(doctorid) {
-	let successMessage =
-	       document.getElementById("successMessage");
-    let todayDate = new Date(new Date().toISOString().split("T")[0]);
-    var appointmentDateInput = document.getElementById("appointment_container_appointmentDate");
-    appointmentDateInput.addEventListener('input', async (e) => {
-
-        let appointment = new Date(appointmentDateInput.value);
-
-        // let appointmentDate;
-        function appointmentdata() {
-            // appointmentDate = appointmentDateInput.value;
-            // for (let i = 1; i <= 5; i++) {
-            //     let option = document.createElement("option");
-            //     option.text = `0${i}:00PM`;
-            //     option.value = i;
-            //     document.getElementById("appointment_container_appointmentTime").append(option);
-            // }
-        }
-
-        var count = 0;
-        var appointmentDateYear = appointment.getFullYear();
-        while (appointmentDateYear != 0) {
-            count++;
-            appointmentDateYear = Math.floor(appointmentDateYear / 10);
-            console.log(count)
-        }
-        if (count != 4) {
-            return;
-        }
-
-        if (appointment.getFullYear() > todayDate.getFullYear()) {
-            appointmentdata();
-            console.log("year doesn't less than today's year")
-        }
-
-        else if (appointment.getFullYear() == todayDate.getFullYear()) {
-            if (appointment.getMonth() + 1 >= todayDate.getMonth() + 1) {
-                if (appointment.getDay() == todayDate.getDay()) {
-                    alert('Today you cannot book appointment')
-                    return;
-                } else if (appointment.getDay() < todayDate.getDay()) {
-                    alert('please enter valid day')
-                    return;
-                } else {
-                    appointmentdata();
-                }
-            }
-            else {
-                alert('Cannot book the appointment because month is already over')
-                return;
-            }
-        } else {
-            alert('Year must be less than or equal to ' + todayDate.getFullYear())
-            return;
-        }
-    })
-
     let appointmentDate = document.getElementById("appointment_container_appointmentDate").value;
-    let appointmentTime =
-        document.getElementById("appointment_container_appointmentTime").value;
-
-    let symptoms =
-        document.getElementById("appointment_container_symptoms").value;
+    let appointmentTime = document.getElementById("appointment_container_appointmentTime").value;
+    let symptoms = document.getElementById("appointment_container_symptoms").value;
     if (
         appointmentDate === "" ||
         appointmentTime === "Select Time" ||
@@ -452,27 +398,26 @@ async function conformbookAppointment(doctorid) {
     ) {
 
         alert("Please fill all details");
+        return;
 
     }
-    else {
-        console.log("Appointment Date :", appointmentDate);
-        console.log("Appointment Time :", appointmentTime);
-        console.log("Symptoms :", symptoms);
+    console.log("Appointment Date :", appointmentDate);
+    console.log("Appointment Time :", appointmentTime);
+    console.log("Symptoms :", symptoms);
 
-        var bookAppointment = {
-            "doctorid": doctorid,
-            "appointmentdate": appointmentDate,
-            "appointmenttime": appointmentTime,
-            "symptoms": symptoms
-        }
-
+    var bookAppointment = {
+        "doctorid": doctorid,
+        "appointmentdate": appointmentDate,
+        "appointmenttime": appointmentTime,
+        "symptoms": symptoms
     }
-
+	
+    let successMessage = document.getElementById("successMessage");
     await fetch("/userController/conformbookAppointment", {
         method: "POST",
         credentials: "include",
-        headers : {
-            "Content-type" : "application/json"
+        headers: {
+            "Content-type": "application/json"
         },
         body: JSON.stringify(bookAppointment)
     }).then(async res => {
@@ -485,16 +430,14 @@ async function conformbookAppointment(doctorid) {
         history.back();
         history.back();
         history.back();
-		history.replaceState({page : "homePage"},"")
-        console.log(data)
-		successMessage.style.display = "block";
-		successMessage.style.innerHTML = data.message;	
-		
-    }).catch(err=>{
-        console.log(err)
-		successMessage.style.display = "block";
-		successMessage.style.innerHTML = err.message;
-		successMessage.style.color = "red"
+        history.replaceState({ page: "homePage" }, "")
+        successMessage.style.display = "block";
+        successMessage.innerHTML = data.message;
+
+    }).catch(err => {
+        successMessage.style.display = "block";
+        successMessage.innerHTML = err.message;
+        successMessage.style.color = "red"
     })
 }
 
@@ -508,7 +451,7 @@ function hideAllPages() {
     bookDoctorAppointmentContainer.style.display = "none"
 }
 
-window.addEventListener("popstate", function (event) {
+window.addEventListener("popstate", function(event) {
     if (!event.state) {
         return;
     }

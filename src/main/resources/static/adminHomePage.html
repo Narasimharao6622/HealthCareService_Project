@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/css/adminCSS_files/adminHomePage.css">
+    <link rel="stylesheet" href="./css/userCSS_files/cropper.min.css" />
 </head>
 
 <body>
@@ -174,17 +175,43 @@
                 <div class="popupContainer" id="addDoctorPopup">
                     <div class="popupBox">
                         <h2 style="color:black">Add Doctor</h2>
-                        <input type="file" name="" id="doctorImageInput" accept="image/*"
-                            onchange="previewDoctorImage(event)">
+                        <input type="file" name="" id="doctorImageInput" accept="image/*" onchange="previewDoctorImage(event)">
+                        <div id="cropImagePopUp">
+							<div class="image-container"><img id="cropImage"></div>
+							<button type="button" class="crop-btn" id="cropButton">Crop Image</button>
+						</div>
+						<img id="previewDoctorImage" class="image-preview">
                         <input type="text" placeholder="Doctor Name" required id="doctorName">
-                        <input type="text" placeholder="Specialization" required id="doctorSpecialization">
+                        <input type="date" placeholder="Date of Birth" required id="doctorDateOfBirth">
+                        <select name="gender" id="gender">
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <select name="Specialization" id="doctorSpecialization">
+                            <option value="">Select Specialization</option>
+                            <option value="Cardiology">Cardiology</option>
+                            <option value="Dermatology">Dermatology</option>
+                            <option value="Neurology">Neurology</option>
+                            <option value="Pediatrics">Pediatrics</option>
+                            <option value="Oncology">Oncology</option>
+                            <option value="Orthopedics">Orthopedics</option>
+                            <option value="Dentist">Dentist</option>
+                            <option value="Pulmonology">Pulmonology</option>
+                            <option value="Rheumatology">Rheumatology</option>
+                            <option value="Gastroenterology">Gastroenterology</option>
+                            <option value="Endocrinology">Endocrinology</option>
+                            <option value="Medico">Medico</option>
+                        </select>
                         <input type="email" placeholder="Email" required id="doctorEmail">
                         <input type="text" placeholder="Phone Number" required id="doctorPhone">
-                        <input type="text" placeholder="Timing" required id="doctorTiming">
+                        <input type="date" placeholder="Doctor Join Date" required id="doctorJoinDate">
+                        <!-- <input type="text" placeholder="Timing" required id="doctorTiming"> -->
                         <input type="text" placeholder="Experience" required id="doctorExperience">
                         <div class="popupButtons">
-                            <button onclick="addDoctor()">
-                                Save
+                            <button style="background-color: skyblue;" onclick="addDoctor()">
+                                Verify
                             </button>
                             <button onclick="closeAddDoctorPopup()">
                                 Cancel
@@ -285,6 +312,7 @@
         © 2026 Hospital Management System | Admin Dashboard
     </footer>
     <script src="/js/adminJS_files/adminHomePage.js"></script>
+    <script src="./js/userJS_files/cropper.min.js"></script>
 </body>
 
 </html>

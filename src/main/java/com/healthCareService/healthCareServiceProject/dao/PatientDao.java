@@ -1,13 +1,11 @@
 package com.healthCareService.healthCareServiceProject.dao;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import com.healthCareService.healthCareServiceProject.dto.BookAppointmentRequest;
 import com.healthCareService.healthCareServiceProject.entity.Appointment;
@@ -18,7 +16,7 @@ import com.healthCareService.healthCareServiceProject.exception.NoDoctorsFoundEr
 import com.healthCareService.healthCareServiceProject.repository.AppointmentRepo;
 import com.healthCareService.healthCareServiceProject.repository.DoctorRepo;
 
-@Repository
+@Component	
 public class PatientDao {
 	
 	@Autowired
@@ -44,17 +42,18 @@ public class PatientDao {
 	}
 
 	public void checkPatientHaveAnyAppointmentAreBookedOrNot(BookAppointmentRequest request) {
-		Optional<Appointment> dbappointment = appointmentRepo.getAppointmentByDate(request.getAppointmentdate());
+		List<Appointment> dbappointment = appointmentRepo.getAppointmentByDate(request.getAppointmentdate());
+		if(!dbappointment.isEmpty()) {
+			dbappointment.stream().forEach(data -> {
+				System.out.println("\"Appointment Already Booked...\"");
+				if(data.getAppointmenttime().equals(request.getAppointmenttime()) && data.getDoctor().getDoctorid().equals(request.getDoctorid())){
+					throw new AppointmentBookedException("Appointment Already Booked...");
+				}else if(data.getAppointmenttime().equals(request.getAppointmenttime()) && !(data.getDoctor().getDoctorid().equals(request.getDoctorid()))) {
+					throw new AppointmentBookedException("You Already have an another appointment at this time - "+data.getAppointmenttime());
+				}
+			});
+		}
 		
-		dbappointment.ifPresent(data->{
-			System.out.println("\"Appointment Already Booked...\"");
-			if(data.getAppointmenttime().equals(request.getAppointmenttime()) && data.getDoctor().getDoctorid().equals(request.getDoctorid())){
-				throw new AppointmentBookedException("Appointment Already Booked...");
-			}		
-		});
-//		if(dbappointment.isPresent()) {
-//			throw new AppointmentBookedException("Appointment Already Booked...");
-//		}
 	}
 
 	public void bookAppointment(Appointment appointment) {

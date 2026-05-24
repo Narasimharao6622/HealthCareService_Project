@@ -6,20 +6,20 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Rating {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)	
 	private String ratingid;
+	
 	private double rate;
 	private String feedback;
 	
 	private String patientname;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "doctorid")
 	private Doctor doctor;
 	

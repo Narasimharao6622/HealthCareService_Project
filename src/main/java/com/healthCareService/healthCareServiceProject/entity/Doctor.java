@@ -1,5 +1,6 @@
 package com.healthCareService.healthCareServiceProject.entity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -21,6 +22,7 @@ public class Doctor {
 	private String name;
 	private String specialization;
 	private int age;
+	private LocalDate dateofbirth;
 	private String gender;
 	private long number;
 	private String email;
@@ -29,7 +31,8 @@ public class Doctor {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Address address;
 
-	private int salary;
+	private LocalDate joindate;
+	private double salary;
 	private int noofcasesaccepted;
 	private int noofcaseshold;
 	private double totalrating;
@@ -60,6 +63,46 @@ public class Doctor {
 	
 	public int getExperiance() {
 		return experiance;
+	}
+
+
+	public LocalDate getDateofbirth() {
+		return dateofbirth;
+	}
+
+
+	public void setDateofbirth(LocalDate dateofbirth) {
+		this.dateofbirth = dateofbirth;
+	}
+
+
+	public LocalDate getJoindate() {
+		return joindate;
+	}
+
+
+	public void setJoindate(LocalDate joindate) {
+		this.joindate = joindate;
+	}
+
+
+	public List<Appointment> getAppointments() {
+		return appointments;
+	}
+
+
+	public void setAppointments(List<Appointment> appointments) {
+		this.appointments = appointments;
+	}
+
+
+	public DoctorAvilability getAvilability() {
+		return avilability;
+	}
+
+
+	public void setAvilability(DoctorAvilability avilability) {
+		this.avilability = avilability;
 	}
 
 
@@ -160,11 +203,11 @@ public class Doctor {
 		this.address = address;
 	}
 
-	public int getSalary() {
+	public double getSalary() {
 		return salary;
 	}
 
-	public void setSalary(int salary) {
+	public void setSalary(double salary) {
 		this.salary = salary;
 	}
 

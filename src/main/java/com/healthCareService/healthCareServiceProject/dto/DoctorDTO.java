@@ -1,7 +1,9 @@
 package com.healthCareService.healthCareServiceProject.dto;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import com.healthCareService.healthCareServiceProject.entity.Appointment;
 import com.healthCareService.healthCareServiceProject.entity.Rating;
 
 public class DoctorDTO {
@@ -9,6 +11,7 @@ public class DoctorDTO {
 	private String name;
 	private String specialization;
 	private int age;
+	private LocalDate dateofbirth;
 	private String gender;
 	private long number;
 	private String email;
@@ -16,16 +19,43 @@ public class DoctorDTO {
 
 	private AddressDTO address;
 
-	private int salary;
+	private LocalDate joindate;
+	private double salary;
 	private int noofcasesaccepted;
 	private int noofcaseshold;
 	private double totalrating;
 
 	private List<Rating> rating;
+	private List<Appointment> appointments;
 
 	private String imagefilepath;
 
 	
+	
+	public List<Appointment> getAppointments() {
+		return appointments;
+	}
+
+	public void setAppointments(List<Appointment> appointments) {
+		this.appointments = appointments;
+	}
+
+	public LocalDate getDateofbirth() {
+		return dateofbirth;
+	}
+
+	public void setDateofbirth(LocalDate dateofbirth) {
+		this.dateofbirth = dateofbirth;
+	}
+
+	public LocalDate getJoindate() {
+		return joindate;
+	}
+
+	public void setJoindate(LocalDate joindate) {
+		this.joindate = joindate;
+	}
+
 	public int getExperiance() {
 		return experiance;
 	}
@@ -98,11 +128,11 @@ public class DoctorDTO {
 		this.address = address;
 	}
 
-	public int getSalary() {
+	public double getSalary() {
 		return salary;
 	}
 
-	public void setSalary(int salary) {
+	public void setSalary(double salary) {
 		this.salary = salary;
 	}
 

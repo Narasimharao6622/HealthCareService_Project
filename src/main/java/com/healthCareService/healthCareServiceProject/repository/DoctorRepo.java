@@ -1,5 +1,6 @@
 package com.healthCareService.healthCareServiceProject.repository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,4 +20,5 @@ public interface DoctorRepo extends JpaRepository<Doctor, String>{
 	@Query("SELECT d.consaltentpatients FROM Doctor d")
 	public List<Patient> getPatientAppoinments();
 
+	public Doctor findByEmail(String email);
 }

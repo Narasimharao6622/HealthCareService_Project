@@ -4,6 +4,7 @@ function showMessage(message) {
 var profileContainer = document.getElementById("profileContainer");
 var backButton = document.getElementById("profileContainerBack");
 function showProfile() {
+    history.pushState({ page: "profilePage" }, "")
     profileContainer.style.transform = "translateY(0px)"
     profileContainer.style.height = "100vh";
     profileInputs(adminData);
@@ -24,6 +25,7 @@ function profileInputs(data) {
 }
 
 function backToHomePageFromProfileContainer() {
+    history.back();
     setTimeout(() => {
         profileContainer.style.height = "0vh";
         profileContainer.style.transform = "translateY(-730px)"
@@ -55,7 +57,9 @@ setInterval(() => {
 
 
 let adminData = null;
-window.onload = function() {
+window.onload =async function() {
+    history.pushState({ page: "homepage" }, "")
+
     fetch("/adminController/adminHomePage", {
         method: "GET",
         credentials: "include"
@@ -71,9 +75,27 @@ window.onload = function() {
         document.getElementById("homePageAdminName").innerText = adminData.name;
         document.getElementById("adminProfileImage").src = adminData.imageURLPath;
         document.getElementById("adminRole").innerText = "Admin";
+		
+		
+		fetch("/adminController/getTodayScheduleDoctorsList",{
+			method : "GET",
+			credentials : "include"
+		}).then(async res=>{
+			let data =await res.json();
+			if(!res.ok){
+				throw data;
+			}
+			return data;
+		}).then(data=>{
+			console.log(data);
+		}).catch(err=>{
+			console.log(err);
+		})
+		
+		
     }).catch(err => {
         console.log(err);
-		window.location.replace("adminLoginPage.html");
+        window.location.replace("adminLoginPage.html");
     })
 }
 
@@ -174,7 +196,6 @@ function changeProfile() {
 function updateProfileImage(event) {
     let file = event.target.files[0];
     console.log(file);
-
 }
 
 async function logoutAdmin() {
@@ -194,7 +215,7 @@ async function logoutAdmin() {
             }
         } catch (err) {
             console.log(err)
-			window.location.replace("adminLoginPage.html");
+            window.location.replace("adminLoginPage.html");
         }
     }
 }
@@ -213,16 +234,19 @@ function openDoctorManagement() {
             document.getElementById("doctorManagementBlock").style.opacity = "0";
         }, 210);
         openDoctorManagementclicked = true;
+        history.back();
         return;
     }
-    document.getElementById("doctorManagementBlock").style.display = "block";
+    history.pushState({ page: "openDoctorManagement" }, "")
+    document.getElementById("doctorManagementBlock").style.width = "83%";
+    document.getElementById("doctorManagementBlock").style.height = "auto";
     setTimeout(() => {
-        document.getElementById("doctorManagementBlock").style.width = "83%";
-        document.getElementById("doctorManagementBlock").style.height = "auto";
+        document.getElementById("doctorManagementBlock").style.display = "block";
         document.getElementById("doctorManagementBlock").style.opacity = "1";
-    }, 100);
+    }, 210);
     openDoctorManagementclicked = false;
 }
+
 var openPatientManagementclicked = true;
 function openPatientManagement() {
     if (!openDoctorManagementclicked) {
@@ -236,39 +260,191 @@ function openPatientManagement() {
             document.getElementById("patientManagementBlock").style.opacity = "0";
         }, 210);
         openPatientManagementclicked = true;
+        history.back();
         return;
     }
-    document.getElementById("patientManagementBlock").style.display = "block";
+    history.pushState({ page: "openPatientManagement" }, "")
+    document.getElementById("patientManagementBlock").style.width = "83%";
+    document.getElementById("patientManagementBlock").style.height = "auto";
     setTimeout(() => {
-        document.getElementById("patientManagementBlock").style.width = "83%";
-        document.getElementById("patientManagementBlock").style.height = "auto";
+        document.getElementById("patientManagementBlock").style.display = "block";
         document.getElementById("patientManagementBlock").style.opacity = "1";
-    }, 100);
+    }, 210);
     openPatientManagementclicked = false;
 }
 
+var addDoctorDashboard = document.getElementById("addDoctorPopup");
 function openAddDoctorPopup() {
-    document.getElementById("addDoctorPopup").style.display = "flex";
+    addDoctorDashboard.style.display = "flex";
+    history.pushState({ page: "addDoctorDashboard" }, "")
 }
 
 function closeAddDoctorPopup() {
     document.getElementById("addDoctorPopup").style.display = "none";
 }
 
-function addDoctor() {
+/* Upload doctors image and adject the size*/
+
+var imageInput = document.getElementById("doctorImageInput")
+
+const previewImage = document.getElementById("previewDoctorImage");
+
+function previewDoctorImage() {
+    document.getElementById("cropImagePopUp").style.display = "flex";
+}
+
+imageInput.addEventListener("change", function() {
+
+    const file = this.files[0];
+
+    if (file) {
+
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            previewImage.style.display = "block";
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
+const cropImage = document.getElementById("cropImage");
+const cropButton = document.getElementById("cropButton");
+
+let cropper;
+let croppedFile;
+
+// Upload Image
+imageInput.addEventListener("change", function(e) {
+
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+
+        cropImage.src = event.target.result;
+        cropImage.style.display = "block";
+
+        // Destroy previous cropper
+        if (cropper) {
+            cropper.destroy();
+        }
+
+        // Create Cropper
+        cropper = new Cropper(cropImage, {
+
+            aspectRatio: 1, // square crop
+
+            viewMode: 1,
+
+            dragMode: "move",
+
+            autoCropArea: 1,
+
+            responsive: true,
+
+            background: false,
+
+            movable: true,
+
+            zoomable: true,
+
+            scalable: true,
+
+            rotatable: false
+        });
+    };
+
+    reader.readAsDataURL(file);
+    document.getElementById("cropImagePopUp").style.display = "flex";
+});
+
+
+// Crop Image
+cropButton.addEventListener("click", function() {
+    if (!cropper) return;
+    const canvas = cropper.getCroppedCanvas({
+
+        width: 500,
+        height: 500
+    });
+    // Preview
+    previewImage.src = canvas.toDataURL("image/jpeg");
+
+    // Convert canvas to file
+    canvas.toBlob(function(blob) {
+        croppedFile = new File(
+            [blob],
+            "doctorupload_image.jpeg",
+            {
+                type: "image/jpeg"
+            }
+        );
+    }, "image/jpeg", 0.9);
+    document.getElementById("cropImagePopUp").style.display = "none";
+});
+
+
+async function addDoctor() {
+
+    history.pushState({ page: "addDoctorPage" }, "")
 
     let name = document.getElementById("doctorName").value;
+    let dateofbirth = document.getElementById("doctorDateOfBirth").value;
+    let gender = document.getElementById("gender").value;
     let specialization = document.getElementById("doctorSpecialization").value;
     let email = document.getElementById("doctorEmail").value;
     let phone = document.getElementById("doctorPhone").value;
-    let timing = document.getElementById("doctorTiming").value;
+    let joindate = document.getElementById("doctorJoinDate").value;
     let experience = document.getElementById("doctorExperience").value;
 
-    let card = document.createElement("div");
+    /*if(name!="" && gender != "" && specialization != "" && email != "" && phone != "" && experience != ""){
+        alert("Fields are connot be empty");
+        return;
+    }*/
+    const doctor = {
+        "name": name,
+        "dateofbirth": dateofbirth,
+        "gender": gender,
+        "specialization": specialization,
+        "email": email,
+        "number": phone,
+        "joindate": joindate,
+        "experiance": experience
+    }
 
-    card.classList.add("doctorCard");
+    var formData = new FormData();
 
-    card.innerHTML = `
+    formData.append("doctor",
+        new Blob([JSON.stringify(doctor)],
+            { type: "application/json" }
+        )
+    );
+    formData.append("doctorImage", croppedFile);
+
+    await fetch("/adminController/addDoctor", {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+        credentials: "include"
+
+    }).then(async res => {
+        var data = await res.json();
+        if (!res.ok) {
+            throw data;
+        }
+        return data;
+    }).then(data => {
+        console.log(data)
+        let card = document.createElement("div");
+
+        card.classList.add("doctorCard");
+
+        card.innerHTML = `
     
         <div class="doctorTopSection">
 
@@ -291,11 +467,6 @@ function addDoctor() {
             <div class="doctorInfo">
                 <span>Phone</span>
                 <p>${phone}</p>
-            </div>
-
-            <div class="doctorInfo">
-                <span>Timing</span>
-                <p>${timing}</p>
             </div>
 
             <div class="doctorInfo">
@@ -322,12 +493,116 @@ function addDoctor() {
         </div>
     
     `;
+        document.getElementById("doctorCardsContainer").appendChild(card);
+        history.pushState({ page: "doctorCardsContainer" }, "")
+        closeAddDoctorPopup();
+    }).catch(err => {
+        console.log(err)
+    })
 
-    document.getElementById("doctorCardsContainer").appendChild(card);
-
-    closeAddDoctorPopup();
 }
 
 function deleteDoctor(button) {
     button.parentElement.parentElement.remove();
+    history.back();
 }
+
+function hidePages() {
+    addDoctorDashboard.display = "none";
+
+    /*profile Page*/
+    profileContainer.style.transform = "translateY(-730px)"
+    profileContainer.style.height = "0vh";
+
+    document.getElementById("doctorManagementBlock").style.width = "0%";
+    document.getElementById("doctorManagementBlock").style.height = "0%";
+    setTimeout(() => {
+        document.getElementById("doctorManagementBlock").style.display = "none";
+        document.getElementById("doctorManagementBlock").style.opacity = "0";
+    }, 210);
+    openDoctorManagementclicked = true;
+
+    document.getElementById("patientManagementBlock").style.width = "0%";
+    document.getElementById("patientManagementBlock").style.height = "0%";
+    setTimeout(() => {
+        document.getElementById("patientManagementBlock").style.display = "none";
+        document.getElementById("patientManagementBlock").style.opacity = "0";
+    }, 210);
+    openPatientManagementclicked = true;
+
+}
+
+window.addEventListener("popstate", (e) => {
+    if (!e.state) {
+        return;
+    }
+
+    hidePages();
+    var currentPage = e.state.page;
+
+    if (currentPage === "addDoctorDashboard") {
+        addDoctorDashboard.style.display = "flex";
+    }
+    if (currentPage === "doctorCardsContainer") {
+        document.getElementById("doctorCardsContainer").style.display = "flex";
+    }
+
+    if (currentPage === "openDoctorManagement") {
+        console.log("openDoctorManagement")
+        document.getElementById("doctorManagementBlock").style.width = "83%";
+        document.getElementById("doctorManagementBlock").style.height = "auto";
+        setTimeout(() => {
+            document.getElementById("doctorManagementBlock").style.display = "block";
+            document.getElementById("doctorManagementBlock").style.opacity = "1";
+        }, 210);
+        openDoctorManagementclicked = false;
+    }
+
+    if (currentPage === "openPatientManagement") {
+        console.log("openPatientManagement")
+            document.getElementById("patientManagementBlock").style.width = "83%";
+            document.getElementById("patientManagementBlock").style.height = "auto";
+        setTimeout(() => {
+            document.getElementById("patientManagementBlock").style.display = "block";
+            document.getElementById("patientManagementBlock").style.opacity = "1";
+        }, 210);
+        openPatientManagementclicked = false;
+
+    }
+
+
+    if (currentPage === "profilePage") {
+        console.log("profilePage");
+        profileContainer.style.transform = "translateY(0px)"
+        profileContainer.style.height = "100vh";
+    }
+
+    if (currentPage === "homepage") {
+        console.log("homepage")
+    }
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

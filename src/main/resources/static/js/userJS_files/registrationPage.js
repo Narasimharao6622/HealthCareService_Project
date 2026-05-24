@@ -89,15 +89,13 @@ function inputText(text) {
 //     element.innerHTML = "Verify";
 // });
 
-
-
-
 var imageInput = document.getElementById("photo")
 
 const previewImage = document.getElementById("previewImage");
 previewImage.addEventListener("click", () => {
     document.getElementById("cropImagePopUp").style.display = "flex";
 })
+
 imageInput.addEventListener("change", function() {
 
     const file = this.files[0];

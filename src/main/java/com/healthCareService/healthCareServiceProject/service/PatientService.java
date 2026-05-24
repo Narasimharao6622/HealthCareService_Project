@@ -33,6 +33,7 @@ import com.healthCareService.healthCareServiceProject.entity.AppointmentStatus;
 import com.healthCareService.healthCareServiceProject.entity.Doctor;
 import com.healthCareService.healthCareServiceProject.entity.Patient;
 import com.healthCareService.healthCareServiceProject.entity.Roles;
+import com.healthCareService.healthCareServiceProject.exception.DateAndTimeException;
 import com.healthCareService.healthCareServiceProject.exception.FileException;
 import com.healthCareService.healthCareServiceProject.exception.NameNotFound;
 import com.healthCareService.healthCareServiceProject.exception.NoDoctorsFoundError;
@@ -105,7 +106,6 @@ public class PatientService {
 				throw new FileException(e.getMessage());
 			}
 			Patient response = repo.save(patient);
-			System.out.println(response);
 			if (response == null) {
 				try {
 					Path path = Paths.get(uploadDir + fileName);
@@ -190,7 +190,7 @@ public class PatientService {
 					for (int i = 0; i <= splitDBNameToWords.length - 1; i++) {
 						String word1 = splitDBNameToWords[i];
 						DoctorDTO doctorDTO = new DoctorDTO();
-
+						doctorDTO.setDoctorid(doctor.getDoctorid());
 						doctorDTO.setName(doctor.getName());
 						doctorDTO.setAge(doctor.getAge());
 						doctorDTO.setGender(doctor.getGender());
@@ -290,6 +290,12 @@ public class PatientService {
 	}
 
 	public String bookAppointment(BookAppointmentRequest request,String patientid) {
+		
+		LocalDate appointmentdate = request.getAppointmentdate();
+		if(appointmentdate.isBefore(LocalDate.now())) {
+			throw new DateAndTimeException("Past dates are not allowed");
+		}
+		
 		dao.checkPatientHaveAnyAppointmentAreBookedOrNot(request);
 		try {
 			Patient patient = repo.findById(patientid).orElseThrow(()->new UsernameNotFoundException("Patient not found"));
