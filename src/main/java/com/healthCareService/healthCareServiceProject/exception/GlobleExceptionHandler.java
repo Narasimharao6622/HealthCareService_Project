@@ -78,7 +78,6 @@ public class GlobleExceptionHandler {
 				ex.getMessage(),
 				null,
 				request.getRequestURI());
-		
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
 	}
 	@ExceptionHandler(VerificationException.class)
@@ -113,7 +112,7 @@ public class GlobleExceptionHandler {
 	@ExceptionHandler(EmailIdException.class)
 	public ResponseEntity<ErrorResponse<?>> handledEmailIdException(EmailIdException ex,HttpServletRequest request){
 		ErrorResponse<?> errorResponse = new ErrorResponse<>();
-		errorResponse.setCondition(true);
+		errorResponse.setCondition(false);
 		errorResponse.setStatus(403);
 		errorResponse.setMessage(ex.getMessage());
 		return new ResponseEntity<>(errorResponse,HttpStatus.OK);

@@ -1,13 +1,14 @@
 package com.healthCareService.healthCareServiceProject.repository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.healthCareService.healthCareServiceProject.entity.Doctor;
 import com.healthCareService.healthCareServiceProject.entity.Patient;
@@ -30,5 +31,10 @@ public interface PatientRepo extends JpaRepository<Patient, String>{
 	
 	@Query("SELECT d FROM Patient p JOIN p.appointments d WHERE p.patientid = :id")
 	public List<Doctor> getDoctorAppointments(String id);
+
+	@Modifying
+	@Transactional
+	@Query("UPDATE Patient p SET p.password = :password WHERE p.emailid = :email")
+	public int updatePasswordUsingEmail(@Param("email") String email,@Param("password") String password);
 
 }

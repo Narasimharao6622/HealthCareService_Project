@@ -319,6 +319,21 @@ public class PatientService {
 		
 	}
 
+	public void checkEmailidRegistredOrNot(String email) {
+		Optional<Patient> patient=repo.findByEmail(email);
+		if(patient.isEmpty()) {
+			throw new EmailIdException("Email not Registred Please Enter registred Email id");
+		}
+	}
+
+	public boolean updatePasswordUsingEmail(String email, String userpassword) {
+		String password = encoder.encode(userpassword);
+		if(repo.updatePasswordUsingEmail(email,password)!=0) {
+			return true;
+		}
+		return false;
+	}
+
 }
 
 

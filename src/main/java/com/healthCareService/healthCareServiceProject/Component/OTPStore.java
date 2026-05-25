@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.healthCareService.healthCareServiceProject.dto.OTPdto;
+import com.healthCareService.healthCareServiceProject.exception.OTPError;
 
 @Component
 public class OTPStore {
@@ -22,6 +23,9 @@ public class OTPStore {
     }
 
     public OTPdto getOtp(String domine) {
+    	if(otpMap.get(domine)==null) {
+    		throw new OTPError("OTP Expired..");
+    	}
         return otpMap.get(domine);
     }
 
