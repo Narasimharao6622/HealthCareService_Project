@@ -469,7 +469,7 @@ mobileOTP.addEventListener("input", async function() {
             mobileOTP.value = "";
             mobileOTP.placeholder = "Invalid OTP, try again";
             mobileOTP.style.display = "flex";
-            console.log(err);
+            mobileNumberInput.disabled = false;
         })
     }
     else if (mobileOTP.value.length > 6) {
@@ -520,10 +520,6 @@ emailOTP.addEventListener("input", async function() {
     }
 });
 
-
-
-
-
 var conformAggrement = document.getElementById("conformAggrement");
 conformAggrement.addEventListener("change", function() {
     if (conformAggrement.checked) {
@@ -532,10 +528,6 @@ conformAggrement.addEventListener("change", function() {
         submit.disabled = true;
     }
 });
-
-
-
-
 document.forms[0].addEventListener('submit', function(event) {
     event.preventDefault();
 
