@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.healthCareService.healthCareServiceProject.Component.OTPStore;
 import com.healthCareService.healthCareServiceProject.dto.OTPdto;
-import com.healthCareService.healthCareServiceProject.exception.OTPError;
+
 
 @Service
 public class AppService {

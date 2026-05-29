@@ -187,8 +187,159 @@ document.getElementById("homePageSearch").addEventListener("input", (e) => {
 
 })
 
-var openBookAppointment = document.querySelector(".openBookAppointmentPage");
 
+var bookDoctorAppointmentContainer = document.querySelector(".bookDoctorAppointmentContainer")
+async function bookAppointment(doctorid) {
+    let doctor = null;
+    console.log(doctorid)
+    await fetch("/userController/getDoctorByDoctorid?doctorid=" + doctorid, {
+        method: "GET",
+        credentials: "include"
+    }).then(async res => {
+        var data = await res.json();
+        if (!res.ok) {
+            throw data;
+        }
+        return data.data;
+    }).then(data => {
+        if (data != null) {
+            history.pushState({ page: "bookDoctorAppointmentContainer" }, "")
+            bookDoctorAppointmentContainer.style.display = "flex"
+            doctor = data;
+            return;
+        }
+    }).catch(err => {
+            console.log(err)
+            return;
+    })
+
+    bookDoctorAppointmentContainer.innerHTML = "";
+    var div = document.createElement("div")
+    div.classList.add("appointment-container")
+    div.innerHTML = `
+	<h1>Book Appointment</h1>
+
+				<!-- Doctor Details -->
+
+				<div class="doctor-info">
+
+					<h2 id="doctorName">Dr. ${doctor.name}</h2>
+
+					<p><b>Specialization: </b><span id="Specialization"> ${doctor.specialization}</span></p>
+
+					<p><b>Experience:</b> <span id="Experience">${doctor.experiance} years</span></p>
+
+					<p><b>Consultation Fee:</b> <span id="Fee">800 /-</span></p>
+
+					<p><b>Available Time:</b> <span id="AvailableTime">10:00AM - 1:00PA</span></p>
+
+				</div>
+
+				<!-- Appointment Form -->
+
+				<div class="form-group">
+
+					<label>Appointment Date</label>
+
+					<input type="date" id="appointment_container_appointmentDate">
+
+				</div>
+
+				<div class="form-group">
+
+					<label>Select Time</label>
+
+					<select id="appointment_container_appointmentTime">
+
+						<option>Select Time</option>
+						<option value="10:00">10:00 AM</option>
+						<option value="10:30">10:30 AM</option>
+						<option value="11:00">11:00 AM</option>
+						<option value="11:30">11:30 AM</option>
+						<option value="12:00">12:00 AM</option>
+						<option value="12:30">12:20 AM</option>
+						<option value="01:00">01:00 PM</option>
+
+					</select>
+
+				</div>
+
+				<div class="form-group">
+
+					<label>Symptoms</label>
+
+					<textarea id="appointment_container_symptoms" placeholder="Enter symptoms"></textarea>
+
+				</div>
+
+				<button class="book-btn" onclick="conformbookAppointment('${doctor.doctorid}')">
+					Confirm Appointment
+				</button>
+
+				<div class="success-message" id="successMessage">
+					
+				</div>
+    `
+    bookDoctorAppointmentContainer.append(div);
+
+}
+
+async function conformbookAppointment(doctorid) {
+    let appointmentDate = document.getElementById("appointment_container_appointmentDate").value;
+    let appointmentTime = document.getElementById("appointment_container_appointmentTime").value;
+    let symptoms = document.getElementById("appointment_container_symptoms").value;
+    if (
+        appointmentDate === "" ||
+        appointmentTime === "Select Time" ||
+        symptoms === ""
+    ) {
+
+        alert("Please fill all details");
+        return;
+
+    }
+    console.log("Appointment Date :", appointmentDate);
+    console.log("Appointment Time :", appointmentTime);
+    console.log("Symptoms :", symptoms);
+
+    var bookAppointment = {
+        "doctorid": doctorid,
+        "appointmentdate": appointmentDate,
+        "appointmenttime": appointmentTime,
+        "symptoms": symptoms
+    }
+	
+    let successMessage = document.getElementById("successMessage");
+    await fetch("/userController/conformbookAppointment", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-type": "application/json"
+        },
+        body: JSON.stringify(bookAppointment)
+    }).then(async res => {
+        var data = await res.json();
+        if (!res.ok) {
+            throw data;
+        }
+        return data;
+    }).then(data => {
+        history.back();
+        history.back();
+        history.back();
+        history.replaceState({ page: "homePage" }, "")
+        successMessage.style.display = "block";
+        successMessage.innerHTML = data.message;
+
+    }).catch(err => {
+        successMessage.style.display = "block";
+        successMessage.innerHTML = err.message;
+        successMessage.style.color = "red"
+    })
+}
+
+
+var openBookAppointment = document.querySelector(".openBookAppointmentPage");
 function openBookAppointmentPage() {
     //adds into history
     history.pushState({ page: "openBookAppointmentPage" }, "")
@@ -284,162 +435,11 @@ function specializationListBoxDashboard_BackButton() {
     history.back();
 }
 
-var bookDoctorAppointmentContainer = document.querySelector(".bookDoctorAppointmentContainer")
-async function bookAppointment(doctorid) {
-    let doctor = null;
-    console.log(doctorid)
-    await fetch("/userController/getDoctorByDoctorid?doctorid=" + doctorid, {
-        method: "GET",
-        credentials: "include"
-    }).then(async res => {
-        var data = await res.json();
-        if (!res.ok) {
-            throw data;
-        }
-        return data.data;
-    }).then(data => {
-        if (data != null) {
-            history.pushState({ page: "bookDoctorAppointmentContainer" }, "")
-            bookDoctorAppointmentContainer.style.display = "flex"
-            doctor = data;
-            return;
-        }
-    })
-        .catch(err => {
-            console.log(err)
-            return;
-        })
-
-    bookDoctorAppointmentContainer.innerHTML = "";
-    var div = document.createElement("div")
-    div.classList.add(".appointment-container")
-    div.innerHTML = `
-        <div class="appointment-container">
-
-			<h1>Book Appointment</h1>
-
-			<!-- Doctor Details -->
-
-			<div class="doctor-info">
-
-				<h2 id="doctorName">Dr. ${doctor.name}</h2>
-
-				<p><b>Specialization: </b><span id="Specialization"> ${doctor.specialization}</span></p>
-
-				<p><b>Experience:</b> <span id="Experience">${doctor.experiance} years</span></p>
-
-				<p><b>Consultation Fee:</b> <span id="Fee">800 /-</span></p>
-
-				<p><b>Available Time:</b> <span id="AvailableTime">10:00AM - 1:00PA</span></p>
-
-			</div>
-
-			<!-- Appointment Form -->
-
-			<div class="form-group">
-
-				<label>Appointment Date</label>
-
-				<input type="date" id="appointment_container_appointmentDate">
-
-			</div>
-
-			<div class="form-group">
-
-				<label>Select Time</label>
-
-				<select id="appointment_container_appointmentTime">
-
-					<option>Select Time</option>
-					<option value="10:00">10:00 AM</option>
-					<option value="10:30">10:30 AM</option>
-					<option value="11:00">11:00 AM</option>
-					<option value="11:30">11:30 AM</option>
-					<option value="12:00">12:00 AM</option>
-					<option value="12:30">12:20 AM</option>
-					<option value="01:00">01:00 PM</option>
-
-				</select>
-
-			</div>
-
-			<div class="form-group">
-
-				<label>Symptoms</label>
-
-				<textarea id="appointment_container_symptoms" placeholder="Enter symptoms"></textarea>
-
-			</div>
-
-			<button class="book-btn" onclick="conformbookAppointment('${doctor.doctorid}')">
-				Confirm Appointment
-			</button>
-
-			<div class="success-message" id="successMessage">
-				
-			</div>
-
-		</div>
-    `
-    bookDoctorAppointmentContainer.append(div);
-
-}
 
 
 
-async function conformbookAppointment(doctorid) {
-    let appointmentDate = document.getElementById("appointment_container_appointmentDate").value;
-    let appointmentTime = document.getElementById("appointment_container_appointmentTime").value;
-    let symptoms = document.getElementById("appointment_container_symptoms").value;
-    if (
-        appointmentDate === "" ||
-        appointmentTime === "Select Time" ||
-        symptoms === ""
-    ) {
 
-        alert("Please fill all details");
-        return;
 
-    }
-    console.log("Appointment Date :", appointmentDate);
-    console.log("Appointment Time :", appointmentTime);
-    console.log("Symptoms :", symptoms);
-
-    var bookAppointment = {
-        "doctorid": doctorid,
-        "appointmentdate": appointmentDate,
-        "appointmenttime": appointmentTime,
-        "symptoms": symptoms
-    }
-	
-    let successMessage = document.getElementById("successMessage");
-    await fetch("/userController/conformbookAppointment", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-            "Content-type": "application/json"
-        },
-        body: JSON.stringify(bookAppointment)
-    }).then(async res => {
-        var data = await res.json();
-        if (!res.ok) {
-            throw data;
-        }
-        return data;
-    }).then(data => {
-        history.back();
-        history.back();
-        history.back();
-        history.replaceState({ page: "homePage" }, "")
-        successMessage.style.display = "block";
-        successMessage.innerHTML = data.message;
-
-    }).catch(err => {
-        successMessage.style.display = "block";
-        successMessage.innerHTML = err.message;
-        successMessage.style.color = "red"
-    })
-}
 
 function hideAllPages() {
     openBookAppointment.style.display = "none";
