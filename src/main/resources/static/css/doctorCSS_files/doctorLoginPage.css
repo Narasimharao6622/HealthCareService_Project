@@ -1,0 +1,52 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+:root{
+    font-size: 16px;
+}
+body{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.LoginPage{
+    width: 90%;
+    max-width: 700px;
+    display: grid;
+    grid-template-columns: 1fr;
+}
+header{
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+header h1{
+    font-size: clamp(1.3rem,3vw,2.5rem);
+}
+section{
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#loginForm{
+    display: flex;
+    /* width: 90%; */
+    padding: 20px;
+    gap:10px;
+    flex-direction: column;
+    /* background-color: red; */
+}
+.userInputContainer{
+    background-color: red;
+    position: relative;
+    width: 90%;
+}
+#usernameHeading{
+    position: absolute;
+}

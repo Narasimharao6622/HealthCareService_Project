@@ -2,8 +2,7 @@ package com.healthCareService.healthCareServiceProject.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import com.healthCareService.healthCareServiceProject.entity.Doctor;
+import java.util.Map;
 
 public class ApiResponse<T> {
 	private LocalDateTime timestamp;
@@ -13,6 +12,7 @@ public class ApiResponse<T> {
     private List<?> objects;
     private boolean condition;
     List<TodayScheduledDoctor> todayScheduleDoctorsList;
+    
 
     public ApiResponse(int status, String message, T data) {
         this.timestamp = LocalDateTime.now();
@@ -29,6 +29,10 @@ public class ApiResponse<T> {
 		this.data = data;
 		this.objects = objects;
 		this.condition = condition;
+	}
+
+	public void setObjects(List<?> objects) {
+		this.objects = objects;
 	}
 
 	public List<?> getObjects() {

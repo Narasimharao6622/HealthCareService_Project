@@ -16,7 +16,7 @@ homePageSearch.addEventListener("input", (e) => {
 })
 var profileContainer_PopUp = document.getElementById("profileContainer");
 
-document.getElementById("userHomeProfilePage").addEventListener("click", function() {
+document.getElementById("userHomeProfilePage").addEventListener("click", function () {
     profileContainer_PopUp.style.display = "flex";
     profileContainer_PopUp.style.width = "100%";
     profileContainer_PopUp.style.height = "100%";
@@ -80,7 +80,7 @@ document.getElementById("appointmentTab").addEventListener("click", () => {
 })
 
 // MANUAL BACK BUTTON
-document.getElementById("userHomeProfilePageBackButton").addEventListener("click", function() {
+document.getElementById("userHomeProfilePageBackButton").addEventListener("click", function () {
     profileContainer_PopUp.style.width = "0%";
     profileContainer_PopUp.style.height = "0%";
     setTimeout(() => {
@@ -151,7 +151,7 @@ document.getElementById("homePageSearch").addEventListener("input", (e) => {
         }
         return data;
     }).then(doctor => {
-			console.log(doctor)
+        console.log(doctor)
         doctor.data.forEach(async doctorData => {
             let card = document.createElement("div")
             setTimeout(() => {
@@ -172,8 +172,8 @@ document.getElementById("homePageSearch").addEventListener("input", (e) => {
 							`;
             }, 300)
 
-            card.onclick = function() {
-				bookAppointment(doctorData.doctorid);
+            card.onclick = function () {
+                bookAppointment(doctorData.doctorid);
             };
 
             searchedResult.appendChild(card);
@@ -209,8 +209,8 @@ async function bookAppointment(doctorid) {
             return;
         }
     }).catch(err => {
-            console.log(err)
-            return;
+        console.log(err)
+        return;
     })
 
     bookDoctorAppointmentContainer.innerHTML = "";
@@ -229,9 +229,9 @@ async function bookAppointment(doctorid) {
 
 					<p><b>Experience:</b> <span id="Experience">${doctor.experiance} years</span></p>
 
-					<p><b>Consultation Fee:</b> <span id="Fee">800 /-</span></p>
+					<p><b>Consultation Fee:</b> <span id="Fee">800 /-<input type="hidden" id="consultationFee" value="800"></span></p>
 
-					<p><b>Available Time:</b> <span id="AvailableTime">10:00AM - 1:00PA</span></p>
+					<p><b>Available Time:</b> <span id="AvailableTime">10:00AM to 10:30PM, 11:00AM to 11:30AM, 12:00AM to 12:30AM, 03:00PM to 03:30PM, 02:00PM to 02:30PM</span></p>
 
 				</div>
 
@@ -249,18 +249,9 @@ async function bookAppointment(doctorid) {
 
 					<label>Select Time</label>
 
-					<select id="appointment_container_appointmentTime">
-
-						<option>Select Time</option>
-						<option value="10:00">10:00 AM</option>
-						<option value="10:30">10:30 AM</option>
-						<option value="11:00">11:00 AM</option>
-						<option value="11:30">11:30 AM</option>
-						<option value="12:00">12:00 AM</option>
-						<option value="12:30">12:20 AM</option>
-						<option value="01:00">01:00 PM</option>
-
-					</select>
+					<select id="appointment_container_appointmentTime" onclick="getDoctorAvailableTimings(appointment_container_appointmentDate.value,'${doctor.doctorid}')">
+                        <option>Select Time</option>
+                    </select>
 
 				</div>
 
@@ -276,39 +267,75 @@ async function bookAppointment(doctorid) {
 					Confirm Appointment
 				</button>
 
-				<div class="success-message" id="successMessage">
+				<div class="success-message responseMessage" id="successMessage">
 					
 				</div>
     `
     bookDoctorAppointmentContainer.append(div);
 
 }
+function getDoctorAvailableTimings(value,doctor_id) {
+    let successMessage = document.getElementById("successMessage");
+    successMessage.innerHTML = "";
+    let appointment_container_appointmentTime = document.getElementById("appointment_container_appointmentTime")
+    appointment_container_appointmentTime.innerHTML="";
+    if (value.length === 0) {
+        alert("please enter appointment date")
+    } else {
+        fetch(`/userController/getDoctorAppointmentTimingByUsingDate?date=${value}&doctorid=${doctor_id}`, {
+            method: "GET",
+            credentials: "include"
+        }).then(async res => {
+            var data = await res.json();
+            if (!res.ok) {
+                throw data;
+            }
+            return data;
+        }).then(data => {
+            let availableSlots = data.data;
+            let select_option = document.createElement("option");
+            select_option.innerHTML = "Select Time"
+            appointment_container_appointmentTime.append(select_option);
 
+            Object.entries(availableSlots).forEach(([key,value]) =>{
+                console.log(key +" - "+value);
+                let option = document.createElement("option")
+                option.value = key;
+                option.innerHTML = value;
+                appointment_container_appointmentTime.append(option);
+            })
+        }).catch(err => {
+            console.log(err)
+            successMessage.style.display = "block";
+            successMessage.style.color = "red"
+            successMessage.innerHTML = err.message;
+            // appointment_container_appointmentTime.append(document.createElement("option").innerHTML=err.message);
+            document.getElementById("appointment_container_appointmentDate").value = ""
+        })
+    }
+}
 async function conformbookAppointment(doctorid) {
     let appointmentDate = document.getElementById("appointment_container_appointmentDate").value;
     let appointmentTime = document.getElementById("appointment_container_appointmentTime").value;
     let symptoms = document.getElementById("appointment_container_symptoms").value;
+    let consultationFee = document.getElementById("consultationFee").value;
     if (
         appointmentDate === "" ||
         appointmentTime === "Select Time" ||
         symptoms === ""
     ) {
-
         alert("Please fill all details");
         return;
-
     }
-    console.log("Appointment Date :", appointmentDate);
-    console.log("Appointment Time :", appointmentTime);
-    console.log("Symptoms :", symptoms);
 
     var bookAppointment = {
         "doctorid": doctorid,
         "appointmentdate": appointmentDate,
-        "appointmenttime": appointmentTime,
-        "symptoms": symptoms
+        "slot": appointmentTime,
+        "symptoms": symptoms,
+        "consultantionFee": consultationFee
     }
-	
+
     let successMessage = document.getElementById("successMessage");
     await fetch("/userController/conformbookAppointment", {
         method: "POST",
@@ -327,11 +354,13 @@ async function conformbookAppointment(doctorid) {
         history.back();
         history.back();
         history.back();
+        console.log(data)
         history.replaceState({ page: "homePage" }, "")
         successMessage.style.display = "block";
         successMessage.innerHTML = data.message;
 
     }).catch(err => {
+        console.log(err)
         successMessage.style.display = "block";
         successMessage.innerHTML = err.message;
         successMessage.style.color = "red"
@@ -451,7 +480,7 @@ function hideAllPages() {
     bookDoctorAppointmentContainer.style.display = "none"
 }
 
-window.addEventListener("popstate", function(event) {
+window.addEventListener("popstate", function (event) {
     if (!event.state) {
         return;
     }

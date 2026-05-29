@@ -8,9 +8,12 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +33,11 @@ import com.healthCareService.healthCareServiceProject.dto.PatientDTO;
 import com.healthCareService.healthCareServiceProject.entity.Address;
 import com.healthCareService.healthCareServiceProject.entity.Appointment;
 import com.healthCareService.healthCareServiceProject.entity.AppointmentStatus;
+import com.healthCareService.healthCareServiceProject.entity.AppointmentTimings;
 import com.healthCareService.healthCareServiceProject.entity.Doctor;
 import com.healthCareService.healthCareServiceProject.entity.Patient;
 import com.healthCareService.healthCareServiceProject.entity.Roles;
+import com.healthCareService.healthCareServiceProject.exception.AppointmentBookedException;
 import com.healthCareService.healthCareServiceProject.exception.DateAndTimeException;
 import com.healthCareService.healthCareServiceProject.exception.FileException;
 import com.healthCareService.healthCareServiceProject.exception.NameNotFound;
@@ -51,10 +56,10 @@ public class PatientService {
 
 	@Autowired
 	private PatientRepo repo;
-	
+
 	@Autowired
 	private DoctorRepo doctorRepo;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder encoder;
 	@Autowired
@@ -128,9 +133,10 @@ public class PatientService {
 			} else {
 				throw new PasswordError("Incorrect Password");
 			}
-		} 
+		}
 		throw new EmailIdException("Incorrect Email id");
 	}
+
 	public String checkEmailidPresentInDB(String emailid) {
 		Optional<Patient> user = repo.findByEmail(emailid);
 		if (user.isPresent()) {
@@ -138,13 +144,15 @@ public class PatientService {
 		}
 		return emailid;
 	}
+
 	public long checkMobileIsPresentInDB(long verifyMobilenumber) {
 		Optional<Patient> patient = repo.checkMobileNumber(verifyMobilenumber);
 		if (patient.isPresent()) {
 			throw new MobileNumberExcetion("Mobile number is already exist..");
 		}
 		return verifyMobilenumber;
-	} 
+	}
+
 	public List<Doctor> getUserConsultedDoctersDetails(String patientid) {
 		Optional<Patient> findPatient = repo.findById(patientid);
 		ArrayList<Doctor> consultentDoctors = new ArrayList<Doctor>();
@@ -240,16 +248,14 @@ public class PatientService {
 		List<Doctor> doctorsList = dao.getAllDoctors();
 		if (doctorsList.isEmpty()) {
 			throw new NoDoctorsFoundError("DB is empty, No doctors are found...");
-		} 
-		else {
+		} else {
 			List<DoctorDTO> responseList = new LinkedList<DoctorDTO>();
 			List<Doctor> list = doctorsList.stream()
 					.filter(doctor -> doctor.getSpecialization().equalsIgnoreCase(specialization)).toList();
-			if(list.isEmpty()) {
+			if (list.isEmpty()) {
 				throw new NoDoctorsFoundError("No doctors found for " + specialization);
-			}
-			else {
-				list.stream().forEach(doctor ->{
+			} else {
+				list.stream().forEach(doctor -> {
 					DoctorDTO doctorResponse = new DoctorDTO();
 					doctorResponse.setName(doctor.getName());
 					doctorResponse.setAge(doctor.getAge());
@@ -283,75 +289,101 @@ public class PatientService {
 		doctorResponse.setExperiance(doctor.getExperiance());
 		doctorResponse.setSpecialization(doctor.getSpecialization());
 		doctorResponse.setDoctorid(doctor.getDoctorid());
-		
+
 		return doctorResponse;
-		
+
 	}
 
-	public String bookAppointment(BookAppointmentRequest request,String patientid) {
+	public String bookAppointment(BookAppointmentRequest request, String patientid) {
+		System.out.println(request);
+		Patient patient = repo.findById(patientid)
+				.orElseThrow(() -> new UsernameNotFoundException("Patient not found"));
+		Doctor doctor = doctorRepo.findById(request.getDoctorid())
+				.orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
+
+//		dao.existsByDoctorAndAppointmentDateAndSlotAndStatus(doctor, request);
+//		dao.existsByPatientAndAppointmentDateAndSlotAndStatus(patient, request);
 		
-		LocalDate appointmentdate = request.getAppointmentdate();
-		if(appointmentdate.isBefore(LocalDate.now())) {
-			throw new DateAndTimeException("Past dates are not allowed");
-		}
-		
-		dao.checkPatientHaveAnyAppointmentAreBookedOrNot(request);
 		try {
-			Patient patient = repo.findById(patientid).orElseThrow(()->new UsernameNotFoundException("Patient not found"));
-			Doctor doctor = doctorRepo.findById(request.getDoctorid()).orElseThrow(()->new UsernameNotFoundException("Doctor not found"));
-			System.out.println("Patient has no appointments....");
-			
 			Appointment appointment = new Appointment();
 			appointment.setAppointmentdate(request.getAppointmentdate());
-			appointment.setAppointmenttime(request.getAppointmenttime());
+			appointment.setSlots(request.getSlot());
 			appointment.setPatient(patient);
 			appointment.setDoctor(doctor);
 			appointment.setProblem(request.getSymptoms());
 			appointment.setCreatedat(LocalDateTime.now());
-			appointment.setConsultencyfee(800);
+			appointment.setConsultencyfee(request.getConsultancyFee());
 			appointment.setStatus(AppointmentStatus.PENDING);
+System.out.println(appointment);
 			dao.bookAppointment(appointment);
 			return "appointmentBooked";
-		}catch(Exception e) {
+		} catch (Exception e) {
 			return "Some thing went to worng";
 		}
-		
+
 	}
 
 	public void checkEmailidRegistredOrNot(String email) {
-		Optional<Patient> patient=repo.findByEmail(email);
-		if(patient.isEmpty()) {
+		Optional<Patient> patient = repo.findByEmail(email);
+		if (patient.isEmpty()) {
 			throw new EmailIdException("Email not Registred Please Enter registred Email id");
 		}
 	}
 
 	public boolean updatePasswordUsingEmail(String email, String userpassword) {
 		String password = encoder.encode(userpassword);
-		if(repo.updatePasswordUsingEmail(email,password)!=0) {
+		if (repo.updatePasswordUsingEmail(email, password) != 0) {
 			return true;
 		}
 		return false;
 	}
 
+	public Map<String, String> getDoctorAppointmentTimingByUsingDate(LocalDate date, String doctorid,Patient patient) {
+		if (date.isBefore(LocalDate.now())) {
+			throw new DateAndTimeException("Past dates are not allowed");
+		}
+
+		Doctor doctor = doctorRepo.findById(doctorid)
+				.orElseThrow(() -> new UsernameNotFoundException("No Doctor Found"));
+		
+		List<AppointmentStatus> statuses = List.of(
+				AppointmentStatus.APPROVED,
+				AppointmentStatus.PENDING
+				);
+		
+		List<Appointment> bookedAppointments = dao.getDoctorAppointmentTimingByUsingDate(doctor, date, statuses);
+		List<AppointmentTimings> bookedTiming = bookedAppointments.stream().map(appointment -> appointment.getSlots())
+				.toList();
+
+		List<AppointmentTimings> availableTimings = Arrays.stream(AppointmentTimings.values())
+				.filter(slot -> !bookedTiming.contains(slot)).toList();
+		if(availableTimings.isEmpty()) {
+			throw new AppointmentBookedException("Today Doctor have no appointment times...");
+		}
+System.out.println(availableTimings+"===============================");
+		Map<String, String> availableSlotTimes = new HashMap<String, String>();
+		availableTimings.stream().forEach(slot -> {
+			switch (slot.toString()) {
+			case "SLOT_10_00": {
+				availableSlotTimes.put(slot.toString(), "10:00AM to 10:30AM");
+			}break;
+			case "SLOT_11_00": {
+				availableSlotTimes.put(slot.toString(), "11:00AM to 11:30AM");
+			}break;
+			case "SLOT_12_00": {
+				availableSlotTimes.put(slot.toString(), "12:00AM to 12:30AM");
+			}break;
+			case "SLOT_02_00": {
+				availableSlotTimes.put(slot.toString(), "02:00PM to 02:30PM");
+			}break;
+			case "SLOT_03_00": {
+				availableSlotTimes.put(slot.toString(), "03:00PM to 03:30PM");
+			}break;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + slot.toString());
+			}
+		});
+		return availableSlotTimes;
+	}
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

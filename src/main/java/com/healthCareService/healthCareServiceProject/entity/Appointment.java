@@ -3,6 +3,7 @@ package com.healthCareService.healthCareServiceProject.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Appointment {
@@ -30,7 +32,8 @@ public class Appointment {
 	
 	private LocalDate appointmentdate;
 	
-	private LocalTime appointmenttime;
+	@Enumerated(EnumType.STRING)
+	private AppointmentTimings slots;
 	
 	private String problem;
 	
@@ -81,12 +84,13 @@ public class Appointment {
 		this.appointmentdate = appointmentdate;
 	}
 
-	public LocalTime getAppointmenttime() {
-		return appointmenttime;
+
+	public AppointmentTimings getSlots() {
+		return slots;
 	}
 
-	public void setAppointmenttime(LocalTime appointmenttime) {
-		this.appointmenttime = appointmenttime;
+	public void setSlots(AppointmentTimings slots) {
+		this.slots = slots;
 	}
 
 	public String getProblem() {
@@ -111,6 +115,12 @@ public class Appointment {
 
 	public void setCreatedat(LocalDateTime createdat) {
 		this.createdat = createdat;
+	}
+
+	@Override
+	public String toString() {
+		return "Appointment [appointmentid=" + appointmentid + " appointmentdate=" + appointmentdate + ", slots=" + slots + ", problem=" + problem + ", status="
+				+ status + ", createdat=" + createdat + ", consultencyfee=" + consultencyfee + "]";
 	}
 	
 	

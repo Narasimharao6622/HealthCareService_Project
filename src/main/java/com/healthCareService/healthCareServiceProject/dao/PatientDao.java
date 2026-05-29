@@ -1,5 +1,6 @@
 package com.healthCareService.healthCareServiceProject.dao;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import com.healthCareService.healthCareServiceProject.dto.BookAppointmentRequest;
 import com.healthCareService.healthCareServiceProject.entity.Appointment;
+import com.healthCareService.healthCareServiceProject.entity.AppointmentStatus;
+import com.healthCareService.healthCareServiceProject.entity.AppointmentTimings;
 import com.healthCareService.healthCareServiceProject.entity.Doctor;
 import com.healthCareService.healthCareServiceProject.entity.Patient;
 import com.healthCareService.healthCareServiceProject.exception.AppointmentBookedException;
@@ -41,22 +44,61 @@ public class PatientDao {
 		throw new NoDoctorsFoundError("No Doctor Found...");
 	}
 
-	public void checkPatientHaveAnyAppointmentAreBookedOrNot(BookAppointmentRequest request) {
-		List<Appointment> dbappointment = appointmentRepo.getAppointmentByDate(request.getAppointmentdate());
-		if(!dbappointment.isEmpty()) {
-			dbappointment.stream().forEach(data -> {
-				System.out.println("\"Appointment Already Booked...\"");
-				if(data.getAppointmenttime().equals(request.getAppointmenttime()) && data.getDoctor().getDoctorid().equals(request.getDoctorid())){
-					throw new AppointmentBookedException("Appointment Already Booked...");
-				}else if(data.getAppointmenttime().equals(request.getAppointmenttime()) && !(data.getDoctor().getDoctorid().equals(request.getDoctorid()))) {
-					throw new AppointmentBookedException("You Already have an another appointment at this time - "+data.getAppointmenttime());
-				}
-			});
+	public void bookAppointment(Appointment appointment) {
+		appointmentRepo.save(appointment);
+	}
+
+	public List<Appointment> getDoctorAppointmentTimingByUsingDate(Doctor doctor, LocalDate date, List<AppointmentStatus> statuses) {
+		return appointmentRepo.findByDoctorAndAppointmentdateAndStatusIn(doctor,date,statuses);
+	}
+
+	public void existsByDoctorAndAppointmentDateAndSlotAndStatus(Doctor doctor,BookAppointmentRequest request) {
+		Appointment getDoctorAppointment = appointmentRepo.findByDoctorAndAppointmentdateAndSlots(
+				doctor,
+				request.getAppointmentdate(),
+				request.getSlot()
+				);
+		if(getDoctorAppointment.getStatus() == AppointmentStatus.PENDING) {
+			throw new AppointmentBookedException("In this time Doctor has having one appointment is Pending");
+		}else if(getDoctorAppointment.getStatus() == AppointmentStatus.APPROVED) {
+			throw new AppointmentBookedException("In this time Doctor having one appointment is Approved");
+			
 		}
+		
+//		boolean slotAlreadyBooked= appointmentRepo.existsByDoctorAndAppointmentdateAndSlotsAndStatus(
+//				doctor,
+//				request.getAppointmentdate(),
+//				request.getSlot(),
+//				"Booked"
+//				);
+//		if(!slotAlreadyBooked) {
+//			throw new AppointmentBookedException("Doctor has having an appointment at this time ");
+//		}
+//		System.out.println(slotAlreadyBooked);
 		
 	}
 
-	public void bookAppointment(Appointment appointment) {
-		appointmentRepo.save(appointment);
+	public void existsByPatientAndAppointmentDateAndSlotAndStatus(Patient patient, BookAppointmentRequest request) {
+		
+		Appointment getDoctorAppointment = appointmentRepo.findByPatientAndAppointmentdateAndSlots(patient,request.getAppointmentdate(),request.getSlot());
+		
+		System.out.println(getDoctorAppointment);
+		if(getDoctorAppointment.getStatus() == AppointmentStatus.PENDING) {
+			throw new AppointmentBookedException("In this time Doctor has having one appointment is Pending");
+		}else if(getDoctorAppointment.getStatus() == AppointmentStatus.APPROVED) {
+			throw new AppointmentBookedException("In this time Doctor having one appointment is Approved");
+			
+		}
+		
+//		boolean slotAlreadyBooked= appointmentRepo.existsByPatientAndAppointmentdateAndSlotsAndStatus(
+//				patient,
+//				request.getAppointmentdate(),
+//				request.getSlot(),
+//				"Booked"
+//				);
+//		if(!slotAlreadyBooked) {
+//			throw new AppointmentBookedException("You having an appointment at this time ");
+//		}
+//		System.out.println(slotAlreadyBooked);
 	}
 }

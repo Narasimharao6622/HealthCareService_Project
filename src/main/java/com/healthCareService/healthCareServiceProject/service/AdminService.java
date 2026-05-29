@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -194,11 +195,6 @@ public class AdminService {
 			newDoctor.setName(doctor.getName());
 			newDoctor.setDepartment(doctor.getSpecialization());
 			newDoctor.setTodayDate(LocalDate.now());
-			List<LocalTime> doctorTiming = new LinkedList<LocalTime>();
-			doctor.getAppointments().stream().forEach(data -> {
-				doctorTiming.add(data.getAppointmenttime());
-			});
-			newDoctor.setTiming(doctorTiming);
 			
 			responseDoctor.add(newDoctor);
 		});

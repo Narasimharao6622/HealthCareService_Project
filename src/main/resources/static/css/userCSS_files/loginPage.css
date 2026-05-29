@@ -118,7 +118,7 @@ html {
     outline: none;
     width: 90%;
     height: 50%;
-    font-size: clamp(.1rem, 4vw, 1.7rem);
+    font-size: clamp(.8rem, 4vw, 1.4rem);
     padding-left: 1.1rem;
     letter-spacing: .07rem;
 }
@@ -145,7 +145,7 @@ html {
     outline: none;
     width: 92%;
     height: 100%;
-    font-size: clamp(.1rem, 4vw, 1.7rem);
+    font-size: clamp(.8rem, 4vw, 1.4rem);
     letter-spacing: .07rem;
     padding-left: .7rem;
     background-color: transparent;

@@ -1,12 +1,16 @@
 var emailidInputHeading = document.getElementById("emailidInputHeading")
 var passwordInputHeading = document.getElementById("passwordInputHeading")
 
+var rememberMeBox = document.getElementById("remember")
+var emailInput = document.getElementById("email")
+var passwordInput = document.getElementById("password")
+
 document.getElementById("formPage").addEventListener("submit", async (e) => {
     e.preventDefault();
     const userDetails = {
         emailid: emailInput.value,
         password: passwordInput.value,
-        rememberme: document.getElementById('remember').checked
+        rememberme: rememberMeBox.checked
     };
     await fetch("/appController/user_login", {
         method: 'POST',
@@ -26,10 +30,8 @@ document.getElementById("formPage").addEventListener("submit", async (e) => {
 			window.location.replace("userHomePage.html");
         }else if (data.status === 406) {
             emailidInputHeading.style.background = "red"
-            emailidInputHeading.style.borderBottom = "3px solid red"
         } else {
             passwordInputHeading.style.background = "red"
-            passwordInputHeading.style.borderBottom = "3px solid red"
         }
     }).catch(err => {
         alert("Something went to wrong! Please try again later.");

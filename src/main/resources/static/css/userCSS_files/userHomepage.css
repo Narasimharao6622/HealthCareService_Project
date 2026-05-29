@@ -594,7 +594,6 @@ body {
 	overflow-y: auto;
 	padding: 0px
 }
-
 .appointment-container {
 	display:flex;
 	flex-direction:column;
@@ -649,6 +648,11 @@ body {
 	border-radius: 8px;
 	outline: none;
 	font-size: 15px;
+}
+
+.form-group select:picker-icon{
+	border-radius: 10px;
+	background-color: red;
 }
 
 .form-group textarea {

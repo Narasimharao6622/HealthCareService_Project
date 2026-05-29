@@ -4,12 +4,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.healthCareService.healthCareServiceProject.entity.AppointmentTimings;
 
 public class BookAppointmentRequest {
 	private String doctorid;
 	private LocalDate appointmentdate;
-	private LocalTime appointmenttime;
+	private AppointmentTimings slot;
 	private String symptoms;
+	private double consultantionFee;
 	
 	public String getDoctorid() {
 		return doctorid;
@@ -24,11 +26,18 @@ public class BookAppointmentRequest {
 	public void setAppointmentdate(LocalDate appointmentdate) {
 		this.appointmentdate = appointmentdate;
 	}
-	public LocalTime getAppointmenttime() {
-		return appointmenttime;
+	
+	public double getConsultancyFee() {
+		return consultantionFee;
 	}
-	public void setAppointmenttime(LocalTime appointmenttime) {
-		this.appointmenttime = appointmenttime;
+	public void setConsultancyFee(double consultantionFee) {
+		this.consultantionFee = consultantionFee;
+	}
+	public AppointmentTimings getSlot() {
+		return slot;
+	}
+	public void setSlot(AppointmentTimings slot) {
+		this.slot = slot;
 	}
 	public String getSymptoms() {
 		return symptoms;
@@ -38,9 +47,11 @@ public class BookAppointmentRequest {
 	}
 	@Override
 	public String toString() {
-		return "BookAppointmentRequest [doctorid=" + doctorid + ", appointmentdate=" + appointmentdate
-				+ ", appointmenttime=" + appointmenttime + ", symptoms=" + symptoms + "]";
+		return "BookAppointmentRequest [ appointmentdate=" + appointmentdate + ", slot="
+				+ slot + ", symptoms=" + symptoms + ", consultantionFee=" + consultantionFee + "]";
 	}
+
+
 	
 	
 	

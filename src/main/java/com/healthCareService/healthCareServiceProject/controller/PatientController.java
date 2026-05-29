@@ -1,7 +1,10 @@
 package com.healthCareService.healthCareServiceProject.controller;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
@@ -94,6 +97,21 @@ public class PatientController {
 		return ResponseEntity.status(200).body(apiResponse);
 	}
 	
+	@GetMapping("/getDoctorAppointmentTimingByUsingDate")
+	public ResponseEntity<?> getDoctorAppointmentTimingByUsingDate(@RequestParam LocalDate date,@RequestParam String doctorid) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Patient patient = repo.findById(auth.getName()).orElseThrow(()->new UsernameNotFoundException("Auth exception"));
+		ApiResponse<?> apiResponse = new ApiResponse<>(200,"time slots",service.getDoctorAppointmentTimingByUsingDate(date,doctorid,patient)); 
+		return ResponseEntity.ok().body(apiResponse);	
+	}
+	@PostMapping("/conformbookAppointment")
+	public ResponseEntity<?> bookAppointment(@RequestBody BookAppointmentRequest bookAppointment) {
+		System.out.println(bookAppointment);
+		String patientid = SecurityContextHolder.getContext().getAuthentication().getName();
+		ApiResponse<?> apiResponse = new ApiResponse<>(200,service.bookAppointment(bookAppointment,patientid),null);
+		return ResponseEntity.ok().body(apiResponse);
+	}
+	
 	@GetMapping("/getSpecialiazation")
 	public ResponseEntity<?> getSpecialiazatioDoctors(@RequestParam String specialization) {
 		List<DoctorDTO> getSpecializationDoctors = service.getSpecialiazatioDoctors(specialization);
@@ -117,15 +135,6 @@ public class PatientController {
 		ApiResponse<?> apiResponse = new ApiResponse<>(200,"Doctor Found",dto);
 		return ResponseEntity.ok().body(apiResponse);
 				
-	}
-	
-	@PostMapping("/conformbookAppointment")
-	public ResponseEntity<?> bookAppointment(@RequestBody BookAppointmentRequest bookAppointment) {
-		System.out.println(bookAppointment);
-		String patientid = SecurityContextHolder.getContext().getAuthentication().getName();
-		
-		ApiResponse<?> apiResponse = new ApiResponse<>(200,service.bookAppointment(bookAppointment,patientid),null);
-		return ResponseEntity.ok().body(apiResponse);
 	}
 	
 
