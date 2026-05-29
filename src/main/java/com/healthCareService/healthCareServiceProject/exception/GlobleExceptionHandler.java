@@ -113,7 +113,7 @@ public class GlobleExceptionHandler {
 	public ResponseEntity<ErrorResponse<?>> handledEmailIdException(EmailIdException ex,HttpServletRequest request){
 		ErrorResponse<?> errorResponse = new ErrorResponse<>();
 		errorResponse.setCondition(false);
-		errorResponse.setStatus(403);
+		errorResponse.setStatus(406);
 		errorResponse.setMessage(ex.getMessage());
 		return new ResponseEntity<>(errorResponse,HttpStatus.OK);
 	}
@@ -121,7 +121,7 @@ public class GlobleExceptionHandler {
 	@ExceptionHandler(PasswordError.class)
 	public ResponseEntity<ErrorResponse<?>> handledPasswordException(PasswordError ex,HttpServletRequest request){
 		ErrorResponse<?> errorResponse = new ErrorResponse<>();
-		errorResponse.setStatus(404);
+		errorResponse.setStatus(407);
 		errorResponse.setMessage(ex.getMessage());
 		return new ResponseEntity<>(errorResponse,HttpStatus.OK);
 	}

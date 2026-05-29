@@ -128,9 +128,8 @@ public class PatientService {
 			} else {
 				throw new PasswordError("Incorrect Password");
 			}
-		} else {
-			throw new EmailIdException("Incorrect Email id");
-		}
+		} 
+		throw new EmailIdException("Incorrect Email id");
 	}
 	public String checkEmailidPresentInDB(String emailid) {
 		Optional<Patient> user = repo.findByEmail(emailid);

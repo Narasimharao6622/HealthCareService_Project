@@ -113,6 +113,7 @@ public class AppController {
 	public ResponseEntity<ApiResponse<?>> login(@RequestBody LoginRequest userDetails, HttpServletResponse response) {
 		// validate user from database
 		Patient patient = patientService.login(userDetails.getEmailid(), userDetails.getPassword());
+		
 		// create JWT token
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(patient.getPatientid(), userDetails.getPassword()));
@@ -128,12 +129,21 @@ public class AppController {
 			token = jwtService.generateToken(patient.getPatientid(), expiryTime);
 		if (authentication.isAuthenticated()) {
 			// create cookie for storing the token
-			ResponseCookie cookies = ResponseCookie.from("User-token", token).secure(false).httpOnly(true)
-					.sameSite("Lax").path("/").maxAge(cookieAge).build();
+			ResponseCookie cookies = ResponseCookie.from("User-token", token)
+					.secure(false)
+					.httpOnly(true)
+					.sameSite("Lax")
+					.path("/")
+					.maxAge(cookieAge)
+					.build();
 			response.addHeader(HttpHeaders.SET_COOKIE, cookies.toString());
 			ApiResponse<?> apiResponse = new ApiResponse<>(200, "login successful", token);
 			return ResponseEntity.status(200).body(apiResponse);
 		}
+		
+		
+		
+		
 		ApiResponse<?> apiResponse = new ApiResponse<>(201, "Some thing is fishy..", null);
 		return ResponseEntity.status(200).body(apiResponse);
 	}
