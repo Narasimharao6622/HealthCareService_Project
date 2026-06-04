@@ -42,7 +42,6 @@ public class AdminController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String adminid = authentication.getName();	
 		Admin admin = repo.findById(adminid).orElseThrow(()->new InvalidAdminID("Login failed..."));
-		
 		if(authentication.isAuthenticated()) {
 			ApiResponse<?> apiResponse = new ApiResponse<>(200,"Login successfull",admin);
 			return ResponseEntity.status(200).body(apiResponse);
@@ -60,8 +59,7 @@ public class AdminController {
 	
 	@PostMapping("/addDoctor")
 	public ResponseEntity<?> addDoctor(@RequestPart("doctor") DoctorDTO doctorRequest, @RequestPart("doctorImage") MultipartFile photo) {
-		System.out.println(doctorRequest);
-//		adminService.addDoctor(doctorRequest,photo);
+		adminService.addDoctor(doctorRequest,photo);
 		ApiResponse<?> apiResponse = new ApiResponse<>(200,"Add successfull",null);
 		return ResponseEntity.ok().body(apiResponse);
 	}
@@ -89,34 +87,4 @@ public class AdminController {
 		return ResponseEntity.status(200).body(apiResponse);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

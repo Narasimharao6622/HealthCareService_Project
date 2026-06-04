@@ -42,6 +42,7 @@ public class SecurityConfig {
 						.permitAll()
 						.requestMatchers("/userController/**").hasRole("USER")
 						.requestMatchers("/adminController/**").hasRole("ADMIN")
+						.requestMatchers("/doctorController").hasRole("DOCTOR")
 						.anyRequest().authenticated())
 
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

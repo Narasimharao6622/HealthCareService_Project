@@ -4,10 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
@@ -17,7 +14,6 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Doctor {
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
 	private String doctorid;
 	private String name;
 	private String specialization;
@@ -26,6 +22,7 @@ public class Doctor {
 	private String gender;
 	private long number;
 	private String email;
+	private String password;
 	private int experiance;
 
 	@OneToOne(cascade = CascadeType.ALL)
@@ -61,6 +58,16 @@ public class Doctor {
 	}
 
 	
+	public String getPassword() {
+		return password;
+	}
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
 	public int getExperiance() {
 		return experiance;
 	}

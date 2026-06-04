@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor LoginPage</title>
     <link rel="stylesheet" href="./css/doctorCSS_files/doctorLoginPage.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -15,18 +16,18 @@
         </header>
         <section>
             <form action="#" id="loginForm">
-                <div class="userInputContainer">
+                <div class="userInputContainer container">
                     <label for="userid" id="usernameHeading">Enter your User Id</label>
-                    <input type="text" name="userid" id="userid">
+                    <input type="text" name="userid" id="userid" required>
                 </div>
-                <div class="passwordInputContainer">
-                    <label for="passwordid">Enter your password</label>
+                <div class="passwordInputContainer container">
+                    <label for="passwordid" id="passwordHeading">Enter your password</label>
                     <div class="passwordInputBlock">
-                        <input type="password" name="passwordid" id="passwordid"><i class="fa-solid fa-eye-slash"
+                        <input type="password" name="passwordid" id="passwordid" required><i class="fa-solid fa-eye-slash"
                             id="eyeKey"></i>
                     </div>
                 </div>
-                <div class="submitContainer">
+                <div class="submitContainer container">
                     <input type="submit" value="Login" id="submit">
                 </div>
             </form>
@@ -41,5 +42,6 @@
     </div>
 </body>
 <script src="./js/doctorJS_files/doctorLoginPage.js"></script>
+<script src="./js/doctorJS_files/authDoctor.js"></script>
 
 </html>

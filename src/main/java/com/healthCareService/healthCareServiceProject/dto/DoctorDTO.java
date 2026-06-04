@@ -16,6 +16,7 @@ public class DoctorDTO {
 	private long number;
 	private String email;
 	private int experiance;
+	private String password;
 
 	private AddressDTO address;
 
@@ -30,8 +31,14 @@ public class DoctorDTO {
 
 	private String imagefilepath;
 
-	
-	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public List<Appointment> getAppointments() {
 		return appointments;
 	}

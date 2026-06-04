@@ -38,8 +38,9 @@ public class JWTFilter extends OncePerRequestFilter {
 			path.equals("/appController/adminLogin") || 
 			path.equals("/appController/user_login") ||
 			path.equals("/appController/email_otp_send") ||
-			path.equals("/appController/clearOTP") 
-			) {
+			path.equals("/appController/clearOTP") ||
+			path.equals("/doctorController/doctorLogin")
+			)  {
 
 			filterChain.doFilter(request, response);
 			return;

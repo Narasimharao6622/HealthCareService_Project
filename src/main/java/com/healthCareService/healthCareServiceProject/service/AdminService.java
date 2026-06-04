@@ -6,11 +6,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.Period;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,9 +36,6 @@ import com.healthCareService.healthCareServiceProject.repository.AdminRepo;
 public class AdminService {
 	@Autowired
 	private AdminRepo repo;
-
-//	@Autowired
-//	private AdminMapper mapper;
 
 	@Autowired
 	private DoctorDao doctorDao;
@@ -87,12 +83,11 @@ public class AdminService {
 		doctor.setNumber(validationClass.verifyMobilenumber(doctorRequest.getNumber()));
 		doctor.setJoindate(doctorRequest.getJoindate());
 		doctor.setExperiance(doctorRequest.getExperiance());
+		doctor.setPassword(encoder.encode(doctorRequest.getPassword()));
 		doctor.setSalary(getSalary(doctorRequest.getSpecialization(), doctorRequest.getExperiance()));
-		
-		
+		doctor.setDoctorid(genareteDoctorId(doctorRequest.getName()));
 		if (!file.isEmpty()) {
 			String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-
 			String uploadDir = "src/main/resources/static/images/doctors/profiles/";
 			try {
 				if (file.getSize() <= 3 * 1024 * 1024) {
@@ -110,10 +105,11 @@ public class AdminService {
 				throw new FileException(e.getMessage());
 			}
 			Doctor daoResponse = doctorDao.addDoctor(doctor);
+			System.out.println("hai");
 			if(daoResponse!=null){
-				
 				return;
 			}else {
+				System.out.println("Not save");
 				try {
 					Path path = Paths.get(uploadDir + fileName);
 					Files.delete(path);
@@ -124,13 +120,18 @@ public class AdminService {
 			
 		}
 		throw new DoctorSaveException("user doesn't saved..");
-
 	}
 	
-	
+	private String genareteDoctorId(String name) {
+		Random random = new Random();
+		long number = random.nextLong(9999);
+		String nameArray[] = name.split(" ");
+		String lastWord = nameArray[nameArray.length-1];
+		return lastWord+number;
+	}
+
 	private int getAge(LocalDate dateofbirth) {
 		LocalDate currentDate = LocalDate.now();
-		
 		return Period.between(dateofbirth, currentDate).getYears();
 	}
 	
@@ -195,33 +196,9 @@ public class AdminService {
 			newDoctor.setName(doctor.getName());
 			newDoctor.setDepartment(doctor.getSpecialization());
 			newDoctor.setTodayDate(LocalDate.now());
-			
 			responseDoctor.add(newDoctor);
 		});
 		return responseDoctor;
-		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

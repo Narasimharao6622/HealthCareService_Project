@@ -18,6 +18,9 @@ body{
     max-width: 700px;
     display: grid;
     grid-template-columns: 1fr;
+    border: 1px solid black;
+    border-radius: 1rem;
+    box-shadow: 10px 10px 10px black;
 }
 header{
     padding: 30px;
@@ -27,6 +30,7 @@ header{
 }
 header h1{
     font-size: clamp(1.3rem,3vw,2.5rem);
+    text-decoration: underline;
 }
 section{
     padding: 20px;
@@ -36,17 +40,109 @@ section{
 }
 #loginForm{
     display: flex;
-    /* width: 90%; */
+    align-items: center;
+    justify-content: center;
+    width: 90%;
     padding: 20px;
-    gap:10px;
+    gap:25px;
     flex-direction: column;
     /* background-color: red; */
+    border-radius: 1rem;
+    border: 1px solid black;
 }
-.userInputContainer{
-    background-color: red;
+.container{
+    /* background-color: red; */
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 90%;
+    height: 50px;
+    border-radius: 1rem;
 }
-#usernameHeading{
+#usernameHeading,#passwordHeading{
     position: absolute;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 20px;
+    font-size: clamp(.7rem,3vw,1.4rem);
+    transition: all 300ms ease;
+    background: white;
+    border-radius: 1rem;
+}
+
+#usernameHeading.active,#passwordHeading.active{
+    box-shadow: 0 0 0 .5px black;
+    background: rgb(208, 207, 207);
+    border-radius: 1rem;
+    transform: translateY(-1.4rem);
+    width: 95%;
+    height: auto;
+}
+.userInputContainer input,.passwordInputContainer .passwordInputBlock{
+    width: 95%;
+    height: 60%;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid black;
+    font-size: clamp(.7rem,3vw,1.1rem);
+    letter-spacing: 1px;
+}
+.passwordInputContainer .passwordInputBlock{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.passwordInputBlock input{
+    border: none;
+    outline: none;
+    width: 95%;
+    height: 100%;
+    font-size: clamp(.7rem,3vw,1.1rem);
+}
+.submitContainer{
+    position: relative;
+    top: 10px;
+}
+#submit{
+    width: 60%;
+    max-width: 300px;
+    height: 70%;
+    border-radius: 10px;
+    background: aqua;
+    font-size: clamp(.9rem,3vw,1.3rem);
+    transition: all 300ms ease-in-out;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid black;
+}
+#submit:hover{
+    background: blue;
+    height: 80%;
+    width: 80%;
+    max-width: 310px;
+    cursor: pointer;
+}
+footer{
+    padding: 20px;
+}
+.footerContent{
+    padding: 0 0 10px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.footerContent p::first-letter{
+    font-size: clamp(.9rem,3vw,1.6rem);
+    padding-left: 20px;
+}
+.footerContent a{
+    font-size: clamp(.7rem,3vw,1.1rem);
+}
+.footerContent p{
+    text-align: justify;
 }

@@ -18,10 +18,6 @@ public class DoctorDao {
 	private DoctorRepo doctorRepo;
 
 	public Doctor addDoctor(Doctor doctor) {
-		Doctor dbDoctor = doctorRepo.findByEmail(doctor.getEmail());
-		if(dbDoctor!=null) {
-			return dbDoctor;
-		}
 		return doctorRepo.save(doctor);
 	}
 

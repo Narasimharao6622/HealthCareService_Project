@@ -401,17 +401,15 @@ async function addDoctor() {
     let phone = document.getElementById("doctorPhone").value;
     let joindate = document.getElementById("doctorJoinDate").value;
     let experience = document.getElementById("doctorExperience").value;
+    let password = document.getElementById("doctorPassword").value;
 
-    /*if(name!="" && gender != "" && specialization != "" && email != "" && phone != "" && experience != ""){
-        alert("Fields are connot be empty");
-        return;
-    }*/
     const doctor = {
         "name": name,
         "dateofbirth": dateofbirth,
         "gender": gender,
         "specialization": specialization,
         "email": email,
+        "password": password,
         "number": phone,
         "joindate": joindate,
         "experiance": experience

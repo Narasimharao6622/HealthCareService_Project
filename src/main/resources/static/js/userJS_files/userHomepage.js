@@ -16,7 +16,7 @@ homePageSearch.addEventListener("input", (e) => {
 })
 var profileContainer_PopUp = document.getElementById("profileContainer");
 
-document.getElementById("userHomeProfilePage").addEventListener("click", function () {
+document.getElementById("userHomeProfilePage").addEventListener("click", function() {
     profileContainer_PopUp.style.display = "flex";
     profileContainer_PopUp.style.width = "100%";
     profileContainer_PopUp.style.height = "100%";
@@ -80,7 +80,7 @@ document.getElementById("appointmentTab").addEventListener("click", () => {
 })
 
 // MANUAL BACK BUTTON
-document.getElementById("userHomeProfilePageBackButton").addEventListener("click", function () {
+document.getElementById("userHomeProfilePageBackButton").addEventListener("click", function() {
     profileContainer_PopUp.style.width = "0%";
     profileContainer_PopUp.style.height = "0%";
     setTimeout(() => {
@@ -172,7 +172,7 @@ document.getElementById("homePageSearch").addEventListener("input", (e) => {
 							`;
             }, 300)
 
-            card.onclick = function () {
+            card.onclick = function() {
                 bookAppointment(doctorData.doctorid);
             };
 
@@ -274,11 +274,11 @@ async function bookAppointment(doctorid) {
     bookDoctorAppointmentContainer.append(div);
 
 }
-function getDoctorAvailableTimings(value,doctor_id) {
+function getDoctorAvailableTimings(value, doctor_id) {
     let successMessage = document.getElementById("successMessage");
     successMessage.innerHTML = "";
     let appointment_container_appointmentTime = document.getElementById("appointment_container_appointmentTime")
-    appointment_container_appointmentTime.innerHTML="";
+    appointment_container_appointmentTime.innerHTML = "";
     if (value.length === 0) {
         alert("please enter appointment date")
     } else {
@@ -297,8 +297,8 @@ function getDoctorAvailableTimings(value,doctor_id) {
             select_option.innerHTML = "Select Time"
             appointment_container_appointmentTime.append(select_option);
 
-            Object.entries(availableSlots).forEach(([key,value]) =>{
-                console.log(key +" - "+value);
+            Object.entries(availableSlots).forEach(([key, value]) => {
+                console.log(key + " - " + value);
                 let option = document.createElement("option")
                 option.value = key;
                 option.innerHTML = value;
@@ -425,15 +425,14 @@ function openspecializationListBoxDashboard(data, selectedSpecialization) {
     //Adds into history -- 2 --
     history.pushState({ page: "openspecializationListBoxDashboard" }, "")
     var doctors = data;
-    document.getElementById("dashboardHeading").innerHTML = `${selectedSpecialization} Dashboard`
     specializationListBoxDashboard.style.display = "block";
+    document.getElementById("dashboardHeading").innerHTML = `${selectedSpecialization} Dashboard`
     document.querySelector(".doctor-section").innerHTML = "";
     doctors.forEach(doctor => {
         let doctorCard = document.createElement("div");
         doctorCard.classList.add("doctor-card")
-        let id = doctor.doctorid;
         doctorCard.innerHTML = `
-        <img src="${doctor.photo}">
+        <img src="${doctor.photo}"> 
 		<div class="doctor-details">
 			<h3>Dr. ${doctor.name}</h3>
 			<p>
@@ -465,6 +464,29 @@ function specializationListBoxDashboard_BackButton() {
 }
 
 
+let dentistCard = document.getElementById("dentistCard");
+
+dentistCard.addEventListener("click", () => {
+    var specialization = dentistCard.innerText;
+    fetch("/userController/getSpecialiazation?specialization=" + specialization, {
+        method: "GET",
+        credentials: "include"
+    }).then(async res => {
+        var data = res.json();
+        if (!res.ok) {
+            throw data;
+        }
+        return data;
+    }).then(data => {
+        doctors = data.data;
+		console.log(doctors);
+        noDoctorFound.innerHTML = "";
+        openspecializationListBoxDashboard(doctors, specialization);
+    }).catch(err=>{
+		console.log(err);
+	})
+})
+
 
 
 
@@ -480,7 +502,7 @@ function hideAllPages() {
     bookDoctorAppointmentContainer.style.display = "none"
 }
 
-window.addEventListener("popstate", function (event) {
+window.addEventListener("popstate", function(event) {
     if (!event.state) {
         return;
     }

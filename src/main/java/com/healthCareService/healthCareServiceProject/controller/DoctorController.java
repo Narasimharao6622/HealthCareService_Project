@@ -1,7 +1,6 @@
 package com.healthCareService.healthCareServiceProject.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,15 +27,15 @@ public class DoctorController {
 	@Autowired
 	private DoctorService service;
 	
-	@PostMapping(value="/saveDoctor", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<?> addDoctor(@RequestBody DoctorDTO requestdoctor,@RequestPart("photo") MultipartFile file) throws Exception {
-		
-		Doctor doctor = service.saveDoctorDetails(requestdoctor, file);
-		if(doctor==null) {
-			throw new NoDoctorsFoundError("registration failed....");
-		}
-		return ResponseEntity.ok(doctor);
-	}
+//	@PostMapping(value="/saveDoctor", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//	public ResponseEntity<?> addDoctor(@RequestBody DoctorDTO requestdoctor,@RequestPart("photo") MultipartFile file) throws Exception {
+//		
+//		Doctor doctor = service.saveDoctorDetails(requestdoctor, file);
+//		if(doctor==null) {
+//			throw new NoDoctorsFoundError("registration failed....");
+//		}
+//		return ResponseEntity.ok(doctor);
+//	}
 	
 	@PutMapping("upadteDoctorProfileImage/{id}")
 	public ResponseEntity<?> updateDoctorProfileImage(@RequestPart("photo") MultipartFile file,@PathVariable String id) {
@@ -49,6 +48,16 @@ public class DoctorController {
 	}
 	
 	
+	@PostMapping("/doctorLogin")
+	public ResponseEntity<?> doctorLogin(@RequestBody DoctorDTO userdata) {
+		System.out.println(userdata.getDoctorid());
+		System.out.println(userdata.getPassword());
+		ApiResponse<?> apiResponse = new ApiResponse<>();
+		apiResponse.setStatus(201);
+		apiResponse.setCondition(true);
+		apiResponse.setMessage("created");
+		return ResponseEntity.status(201).body(apiResponse);
+	}
 	
 	
 	
