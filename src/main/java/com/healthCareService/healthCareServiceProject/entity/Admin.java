@@ -3,29 +3,50 @@ package com.healthCareService.healthCareServiceProject.entity;
 import java.time.LocalDate;
 import java.util.Random;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
+@Table(name = "AdminTable")
 @Entity
 public class Admin {
 	
 	@Id
+	@Column(name = "AdminID")
 	private String adminid;
 	
+	@Column(name = "Name" , nullable = false)
 	private String name;
+	
+	@Column(name = "Gender")
 	private String gender;
+	
+	@Column(name = "Date_Of_Birth")
 	private LocalDate dateofbirth;
+	
+	@Column(name = "Join_Date")
 	private LocalDate joinDate;
+	
+	@Column(name = "Email" , nullable = false)
 	private String email;
+	
+	@Column(name = "Mobile_Number", nullable = false)
 	private long mobilenumber;
+	
+	@Column(name = "Password", nullable = false)
 	private String password;
+	
+	@Column(name = "Image_URL")
 	private String imageURLPath;
 	
+	@Column(name = "Role")
 	@Enumerated(EnumType.STRING)
 	private Roles hasRole;
 	

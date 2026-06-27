@@ -119,7 +119,7 @@ public class AdminService {
 			}
 			
 		}
-		throw new DoctorSaveException("user doesn't saved..");
+		throw new DoctorSaveException("doctor doesn't saved..");
 	}
 	
 	private String genareteDoctorId(String name) {
@@ -138,9 +138,9 @@ public class AdminService {
 	private double getSalary(String jobType,int experiance) {
 		CalculateDoctorSalary doctorSalary = (job, exp) -> {
 			double baseSalary;
-			String lowerCase_Job = job.toLowerCase();
+			String lowerCase_Job = jobType.toLowerCase();
 			switch (lowerCase_Job) {
-			case "cardiologist": {
+			case "cardiology": {
 				baseSalary = 12000.00;
 			}break;
 			case "neurology": {

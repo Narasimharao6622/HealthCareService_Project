@@ -14,13 +14,14 @@ homePageSearch.addEventListener("input", (e) => {
     }
 
 })
-var profileContainer_PopUp = document.getElementById("profileContainer");
 
-document.getElementById("userHomeProfilePage").addEventListener("click", function() {
+var profileContainer_PopUp = document.getElementById("profileContainer");
+let isProfilePageOpen = true;
+document.getElementById("userHomeProfilePage").addEventListener("click", function () {
     profileContainer_PopUp.style.display = "flex";
     profileContainer_PopUp.style.width = "100%";
     profileContainer_PopUp.style.height = "100%";
-
+    console.log("Haii")
     document.getElementById("userProfileImage").src = user.imagefilepath;
     document.getElementById("profilePageUserName").innerHTML = user.name;
     document.getElementById("profilePageEmail").innerHTML = user.emailid;
@@ -33,8 +34,10 @@ document.getElementById("userHomeProfilePage").addEventListener("click", functio
     // document.getElementById("").value = user
     // document.getElementById("").value = user
 
-    history.pushState({ page: "profileOpen" }, "");
-
+    if (isProfilePageOpen) {
+        history.pushState({ page: "profileOpen" }, "");
+        isProfilePageOpen = false;
+    }
 });
 document.getElementById("appointmentTab").addEventListener("click", () => {
     let appointments = document.getElementById("appointments");
@@ -80,7 +83,7 @@ document.getElementById("appointmentTab").addEventListener("click", () => {
 })
 
 // MANUAL BACK BUTTON
-document.getElementById("userHomeProfilePageBackButton").addEventListener("click", function() {
+document.getElementById("userHomeProfilePageBackButton").addEventListener("click", function () {
     profileContainer_PopUp.style.width = "0%";
     profileContainer_PopUp.style.height = "0%";
     setTimeout(() => {
@@ -172,7 +175,7 @@ document.getElementById("homePageSearch").addEventListener("input", (e) => {
 							`;
             }, 300)
 
-            card.onclick = function() {
+            card.onclick = function () {
                 bookAppointment(doctorData.doctorid);
             };
 
@@ -465,28 +468,59 @@ function specializationListBoxDashboard_BackButton() {
 
 
 let dentistCard = document.getElementById("dentistCard");
-
+let noDoctorsPresent = document.querySelector(".nodoctorsPresent");
 dentistCard.addEventListener("click", () => {
     var specialization = dentistCard.innerText;
+    console.log("hai")
     fetch("/userController/getSpecialiazation?specialization=" + specialization, {
         method: "GET",
         credentials: "include"
     }).then(async res => {
-        var data = res.json();
+        var data = await res.json();
         if (!res.ok) {
             throw data;
         }
         return data;
     }).then(data => {
         doctors = data.data;
-		console.log(doctors);
+        console.log(doctors);
         noDoctorFound.innerHTML = "";
         openspecializationListBoxDashboard(doctors, specialization);
-    }).catch(err=>{
-		console.log(err);
-	})
+    }).catch(err => {
+        noDoctorsPresent.style.display = "flex";
+        noDoctorsPresent.innerHTML = err.errors[0];
+        noDoctorsPresent.style.color = "red";
+        history.pushState({ page: "noDoctorsPresent" }, "")
+        console.log(err);
+    })
 })
 
+let cardiologistCord = document.getElementById("cardiologistCord");
+cardiologistCord.addEventListener("click", () => {
+    var specialization = cardiologistCord.innerText;
+     fetch("/userController/getSpecialiazation?specialization=" + specialization, {
+        method: "GET",
+        credentials: "include"
+    }).then(async res => {
+        var data = await res.json();
+        if (!res.ok) {
+            throw data;
+        }
+        return data;
+    }).then(data => {
+        doctors = data.data;
+        console.log(doctors);
+        noDoctorFound.innerHTML = "";
+        openspecializationListBoxDashboard(doctors, specialization);
+    }).catch(err => {
+        noDoctorsPresent.style.display = "flex";
+        noDoctorsPresent.innerHTML = err.errors[0];
+        noDoctorsPresent.style.color = "red";
+        history.pushState({ page: "noDoctorsPresent" }, "")
+        console.log(err);
+    })
+
+});
 
 
 
@@ -500,9 +534,11 @@ function hideAllPages() {
     profileContainer_PopUp.style.display = "none";
 
     bookDoctorAppointmentContainer.style.display = "none"
+
+    noDoctorsPresent.style.display = "none";
 }
 
-window.addEventListener("popstate", function(event) {
+window.addEventListener("popstate", function (event) {
     if (!event.state) {
         return;
     }
@@ -525,23 +561,15 @@ window.addEventListener("popstate", function(event) {
         setTimeout(() => {
             profileContainer_PopUp.style.display = "flex";
         }, 100);
+        isProfilePageOpen = true;
     }
 
     if (currentPage === "bookDoctorAppointmentContainer") {
         bookDoctorAppointmentContainer.style.display = "flex"
     }
 
+    if(currentPage === "noDoctorsPresent") {
+        noDoctorsPresent.style.display = "flex";
+    }
+
 });
-
-
-
-
-
-
-
-
-
-
-
-
-

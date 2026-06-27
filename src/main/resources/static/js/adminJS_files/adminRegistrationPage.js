@@ -61,7 +61,7 @@ document.getElementById("adminForm")
 		console.log(response);
         const result = await response.json();
 		if(!response.ok){
-			return Promise.reject(result)
+			throw result
 		}
 		window.location.reload();
         console.log(result);
@@ -86,46 +86,46 @@ let cropper;
 let croppedFile;
 
 // Upload Image
-imageInput.addEventListener("change", function(e){
+imageInput.addEventListener("change", function(e) {
 
     const file = e.target.files[0];
 
-    if(!file) return;
+    if (!file) return;
 
     const reader = new FileReader();
 
-    reader.onload = function(event){
+    reader.onload = function(event) {
 
         cropImage.src = event.target.result;
         cropImage.style.display = "block";
 
         // Destroy previous cropper
-        if(cropper){
+        if (cropper) {
             cropper.destroy();
         }
 
         // Create Cropper
-        cropper = new Cropper(cropImage,{
+        cropper = new Cropper(cropImage, {
 
-            aspectRatio:1, // square crop
+            aspectRatio: 1, // square crop
 
-            viewMode:1,
+            viewMode: 1,
 
-            dragMode:"move",
+            dragMode: "move",
 
-            autoCropArea:1,
+            autoCropArea: 1,
 
-            responsive:true,
+            responsive: true,
 
-            background:false,
+            background: false,
 
-            movable:true,
+            movable: true,
 
-            zoomable:true,
+            zoomable: true,
 
-            scalable:true,
+            scalable: true,
 
-            rotatable:false
+            rotatable: false
         });
     };
 

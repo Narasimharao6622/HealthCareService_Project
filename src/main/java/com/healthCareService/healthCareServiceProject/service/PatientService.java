@@ -48,6 +48,7 @@ import com.healthCareService.healthCareServiceProject.exception.validation.Email
 import com.healthCareService.healthCareServiceProject.exception.validation.MobileNumberExcetion;
 import com.healthCareService.healthCareServiceProject.repository.DoctorRepo;
 import com.healthCareService.healthCareServiceProject.repository.PatientRepo;
+import com.healthCareService.healthCareServiceProject.utility.SpecialazationForKeyValuePair;
 
 @Service
 public class PatientService {
@@ -249,13 +250,15 @@ public class PatientService {
 		if (doctorsList.isEmpty()) {
 			throw new NoDoctorsFoundError("DB is empty, No doctors are found...");
 		} else {
+			Map<String, String> getSpecialization = SpecialazationForKeyValuePair.specializationPair();
+			String get_Specialization = getSpecialization.getOrDefault(specialization,specialization);
+			
 			List<DoctorDTO> responseList = new LinkedList<DoctorDTO>();
-			List<Doctor> list = doctorsList.stream()
-					.filter(doctor -> doctor.getSpecialization().equalsIgnoreCase(specialization)).toList();
-			if (list.isEmpty()) {
+			List<Doctor> dbDoctorsList = dao.getSpecializationDoctors(get_Specialization);
+			if (dbDoctorsList.isEmpty()) {
 				throw new NoDoctorsFoundError("No doctors found for " + specialization);
 			} else {
-				list.stream().forEach(doctor -> {
+				dbDoctorsList.stream().forEach(doctor -> {
 					DoctorDTO doctorResponse = new DoctorDTO();
 					doctorResponse.setName(doctor.getName());
 					doctorResponse.setAge(doctor.getAge());

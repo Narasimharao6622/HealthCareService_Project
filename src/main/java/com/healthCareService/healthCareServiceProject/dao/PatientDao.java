@@ -101,4 +101,9 @@ public class PatientDao {
 //		}
 //		System.out.println(slotAlreadyBooked);
 	}
+
+	public List<Doctor> getSpecializationDoctors(String get_Specialization) {
+		List<Doctor> getDoctors = doctorRepo.findBySpecialization(get_Specialization);
+		return getDoctors;
+	}
 }

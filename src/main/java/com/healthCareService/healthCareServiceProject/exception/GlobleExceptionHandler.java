@@ -51,7 +51,6 @@ public class GlobleExceptionHandler {
 		}else {
 			status_Code = 42;
 		}
-		System.out.println("Hai");
 		ErrorResponse<?> response = new ErrorResponse<>(
 				status_Code,
 				"USER_DETAILS_ERROR",
@@ -144,6 +143,7 @@ public class GlobleExceptionHandler {
 		ErrorResponse<?> errorResponse = new ErrorResponse<>();
 		errorResponse.setStatus(404);
 		errorResponse.setMessage(ex.getMessage());
+		errorResponse.setPath(request.getRequestURI());
 		return new ResponseEntity<>(errorResponse,HttpStatus.valueOf(200));
 	}
 	@ExceptionHandler(AppointmentBookedException.class)
@@ -172,6 +172,14 @@ public class GlobleExceptionHandler {
 	}
 	@ExceptionHandler(NoTodayScheduleDoctorsListNotFound.class)
 	public ResponseEntity<ErrorResponse<?>> handledNoTodayScheduleDoctorsListNotFound(NoTodayScheduleDoctorsListNotFound ex,HttpServletRequest request){
+		ErrorResponse<?> errorResponse = new ErrorResponse<>();
+		errorResponse.setStatus(404);
+		errorResponse.setMessage(ex.getMessage());
+		errorResponse.setPath(request.getRequestURI());
+		return new ResponseEntity<>(errorResponse,HttpStatus.valueOf(404));
+	}
+	@ExceptionHandler(JobNotFound.class)
+	public ResponseEntity<ErrorResponse<?>> handledJobNotFound(JobNotFound ex,HttpServletRequest request){
 		ErrorResponse<?> errorResponse = new ErrorResponse<>();
 		errorResponse.setStatus(404);
 		errorResponse.setMessage(ex.getMessage());

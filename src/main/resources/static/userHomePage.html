@@ -21,6 +21,7 @@
 					<div id="userHomeProfilePage">
 						<div id="profilePhoto">
 							<img id="userHomePagePhoto" alt="Profile">
+							<div class="userHomePagePhotoAbbriviation">profile page</div>
 						</div>
 						<div class="container" id="profileContainer">
 							<div id="profileViewBox">
@@ -33,9 +34,9 @@
 									</div>
 									<!-- <img src="https://via.placeholder.com/80" alt="Profile"> -->
 									<div class="profile-info">
-										<h2 id="profilePageUserName"></h2>
-										<p id="profilePageEmail"></p>
-										<p id="profilePageMobilenumber"></p>
+										<abbr title="User Name"><h2 id="profilePageUserName"></h2></abbr>
+										<abbr title="email id"><p id="profilePageEmail"></p></abbr>
+										<abbr title="mobile number"><p id="profilePageMobilenumber"></p></abbr>
 									</div>
 								</div>
 
@@ -92,7 +93,7 @@
 						</div>
 					</div>
 				</div>
-				<span id="homePageUserName"></span>
+				<abbr title="User Name"><span id="homePageUserName"></span></abbr>
 			</div>
 			<div class="logo">HealthCare</div>
 		</div>
@@ -178,9 +179,13 @@
 	</div>
 	<!-- CATEGORIES -->
 	<div class="grid categories">
+		<div class="nodoctorsPresent"></div>
 		<div class="card" id="dentistCard">Dentist</div>
-		
+		<div class="dentistDoctorsPage"></div>
 		<div class="card" id="cardiologistCord">Cardiologist</div>
+		<div class="card" id="neurologistCard">Neurologist</div>
+		<div class="card" id="pediatricianCard">Pediatrician</div>
+		<div class="card" id="oncologistCard">Oncologist</div>
 		<div class="card" id="dermatologistCard">Dermatologist</div>
 		<div class="card" id="generalCard">General</div>
 	</div>

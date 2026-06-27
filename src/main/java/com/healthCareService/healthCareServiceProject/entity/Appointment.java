@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -19,6 +20,7 @@ import jakarta.persistence.OneToMany;
 public class Appointment {
 
 	@Id
+	@Column(name = "ID")
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String appointmentid;
 	
@@ -30,18 +32,24 @@ public class Appointment {
 	@JoinColumn(name = "patientid")
 	private Patient patient;
 	
+	@Column(name = "Appointment_Date")
 	private LocalDate appointmentdate;
 	
 	@Enumerated(EnumType.STRING)
+	@Column(name = "Slots")
 	private AppointmentTimings slots;
 	
+	@Column(name = "Problem")
 	private String problem;
 	
 	@Enumerated(EnumType.STRING)
+	@Column(name = "Status")
 	private AppointmentStatus status;
 	
-	private LocalDateTime createdat;
+	@Column(name = "Created_Date")
+	private LocalDateTime createdate;
 
+	@Column(name = "Consultency_Fee")
 	private double consultencyfee;
 	
 	public double getConsultencyfee() {
@@ -109,18 +117,18 @@ public class Appointment {
 		this.status = status;
 	}
 
-	public LocalDateTime getCreatedat() {
-		return createdat;
+	public LocalDateTime getCreatedate() {
+		return createdate;
 	}
 
-	public void setCreatedat(LocalDateTime createdat) {
-		this.createdat = createdat;
+	public void setCreatedat(LocalDateTime createdate) {
+		this.createdate = createdate;
 	}
 
 	@Override
 	public String toString() {
 		return "Appointment [appointmentid=" + appointmentid + " appointmentdate=" + appointmentdate + ", slots=" + slots + ", problem=" + problem + ", status="
-				+ status + ", createdat=" + createdat + ", consultencyfee=" + consultencyfee + "]";
+				+ status + ", createdat=" + createdate + ", consultencyfee=" + consultencyfee + "]";
 	}
 	
 	

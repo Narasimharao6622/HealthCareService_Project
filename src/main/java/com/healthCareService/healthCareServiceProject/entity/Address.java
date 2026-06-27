@@ -1,24 +1,37 @@
 package com.healthCareService.healthCareServiceProject.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Table(name = "Address")
 @Entity
 public class Address {
 	@Id
+	@Column(name = "AddressID")
 	@GeneratedValue(strategy = GenerationType.UUID)	
 	private String address_id;
 	
+	@Column(name = "House_No")
 	private String house_no;
+	@Column(name = "Street")
 	private String street;
+	@Column(name = "City")
 	private String city;
+	@Column(name = "Location")
 	private String location;
+	@Column(name = "District")
 	private String district;
+	@Column(name = "State")
 	private String state;
+	@Column(name = "Country")
 	private String country = "INDIA";
+	@Column(name = "PinCode")
 	private long pincode;
+	
 	public String getAddress_id() {
 		return address_id;
 	}

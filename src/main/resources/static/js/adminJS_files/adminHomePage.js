@@ -428,7 +428,6 @@ async function addDoctor() {
         method: "POST",
         credentials: "include",
         body: formData,
-        credentials: "include"
 
     }).then(async res => {
         var data = await res.json();
