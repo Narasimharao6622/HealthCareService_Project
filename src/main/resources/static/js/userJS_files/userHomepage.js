@@ -21,7 +21,6 @@ document.getElementById("userHomeProfilePage").addEventListener("click", functio
     profileContainer_PopUp.style.display = "flex";
     profileContainer_PopUp.style.width = "100%";
     profileContainer_PopUp.style.height = "100%";
-    console.log("Haii")
     document.getElementById("userProfileImage").src = user.imagefilepath;
     document.getElementById("profilePageUserName").innerHTML = user.name;
     document.getElementById("profilePageEmail").innerHTML = user.emailid;
@@ -266,7 +265,7 @@ async function bookAppointment(doctorid) {
 
 				</div>
 
-				<button class="book-btn" onclick="conformbookAppointment('${doctor.doctorid}')">
+				<button class="book-btn" onchange="conformbookAppointment('${doctor.doctorid}')">
 					Confirm Appointment
 				</button>
 
@@ -298,6 +297,8 @@ function getDoctorAvailableTimings(value, doctor_id) {
             let availableSlots = data.data;
             let select_option = document.createElement("option");
             select_option.innerHTML = "Select Time"
+            select_option.disabled = true;
+            select_option.selected = true;
             appointment_container_appointmentTime.append(select_option);
 
             Object.entries(availableSlots).forEach(([key, value]) => {
@@ -312,9 +313,9 @@ function getDoctorAvailableTimings(value, doctor_id) {
             successMessage.style.display = "block";
             successMessage.style.color = "red"
             successMessage.innerHTML = err.message;
-            // appointment_container_appointmentTime.append(document.createElement("option").innerHTML=err.message);
             document.getElementById("appointment_container_appointmentDate").value = ""
         })
+        // appointment_container_appointmentTime.append(document.createElement("option").innerHTML=err.message);
     }
 }
 async function conformbookAppointment(doctorid) {
@@ -428,6 +429,7 @@ function openspecializationListBoxDashboard(data, selectedSpecialization) {
     //Adds into history -- 2 --
     history.pushState({ page: "openspecializationListBoxDashboard" }, "")
     var doctors = data;
+    console.log(doctors);
     specializationListBoxDashboard.style.display = "block";
     document.getElementById("dashboardHeading").innerHTML = `${selectedSpecialization} Dashboard`
     document.querySelector(".doctor-section").innerHTML = "";
@@ -435,7 +437,7 @@ function openspecializationListBoxDashboard(data, selectedSpecialization) {
         let doctorCard = document.createElement("div");
         doctorCard.classList.add("doctor-card")
         doctorCard.innerHTML = `
-        <img src="${doctor.photo}"> 
+        <img src="${doctor.imagefilepath}"> 
 		<div class="doctor-details">
 			<h3>Dr. ${doctor.name}</h3>
 			<p>
@@ -460,6 +462,13 @@ function openspecializationListBoxDashboard(data, selectedSpecialization) {
     });
 
 }
+
+// click View Appontments This function will called
+var view_all_User_appointments = document.getElementById("view_all_User_appointments")
+view_all_User_appointments.addEventListener("click",()=>{
+    console.log("hai")
+    location.href = `/userAppointmentsPage.html?request=view_all_User_appointments_in_specialization_dashBoard&id=${user.doctorid}`;
+}) 
 
 function specializationListBoxDashboard_BackButton() {
     specializationListBoxDashboard.style.display = "none";

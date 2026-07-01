@@ -240,7 +240,7 @@ public class Doctor {
 //		return "Doctor [doctorid=" + doctorid + ", name=" + name + ", specialization=" + specialization + ", age=" + age
 //				+ ", gender=" + gender + ", number=" + number + ", email=" + email + ", address=" + address
 //				+ ", salary=" + salary + ", noofcasesaccepted=" + noofcasesaccepted + ", noofcaseshold=" + noofcaseshold
-//				+ ", totalrating=" + totalrating + ", workingdates=" + workingdates + ", rating=" + rating
+//				+ ", totalrating=" + totalrating + ", rating=" + rating
 //				+ ", consaltentpatients=" + consaltentpatients + ", imagefilepath=" + imagefilepath + "]";
 //	}
 

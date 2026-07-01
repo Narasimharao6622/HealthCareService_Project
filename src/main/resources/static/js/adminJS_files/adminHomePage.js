@@ -44,23 +44,12 @@ function hideFullProfileImage() {
     fullImageContainer.style.display = "none";
 }
 
-/* Dynamic Patient Counter */
-setInterval(() => {
-
-    let patientCount = document.getElementById("patients");
-
-    let current = parseInt(patientCount.innerHTML);
-
-    patientCount.innerHTML = current + 1;
-
-}, 1000);
-
 
 let adminData = null;
 window.onload =async function() {
     history.pushState({ page: "homepage" }, "")
 
-    fetch("/adminController/adminHomePage", {
+    await fetch("/adminController/adminHomePage", {
         method: "GET",
         credentials: "include"
     }).then(async res => {
@@ -69,15 +58,15 @@ window.onload =async function() {
             throw new Error(data);
         }
         return data;
-    }).then(data => {
+    }).then(async data => {
         adminData = data.data;
-        console.log(adminData)
+        // console.log(adminData)
         document.getElementById("homePageAdminName").innerText = adminData.name;
         document.getElementById("adminProfileImage").src = adminData.imageURLPath;
         document.getElementById("adminRole").innerText = "Admin";
 		
 		
-		fetch("/adminController/getTodayScheduleDoctorsList",{
+		await fetch("/adminController/getTodayScheduleDoctorsList",{
 			method : "GET",
 			credentials : "include"
 		}).then(async res=>{
@@ -97,8 +86,50 @@ window.onload =async function() {
         console.log(err);
         window.location.replace("adminLoginPage.html");
     })
+     
+    getAllPatientCount();
+
+    getDoctorsCountInDB();
+
 }
 
+async function getDoctorsCountInDB(){
+    // this api is used to get total count of the Doctors present in database
+    await fetch("/adminController/getAllDoctorsCount_fromDB", {
+        method: "GET",
+        credentials: "include"
+    }).then(async res => {   
+        let data = await res.json();
+        if(!res.ok){
+            throw data;
+        }
+        return data;
+    }).then(data => {
+        console.log(data);
+        document.getElementById("doctorsCount_In_DB").textContent = data.message || 0;
+    }).catch(err => {
+        console.log(err);
+    })
+} 
+
+async function getAllPatientCount(){
+    // this api is used to get total count of the patient present in database
+    await fetch("/adminController/getPatientsCount_presentIn_DB", {
+        method: "GET",
+        credentials: "include"
+    }).then(async res => {   
+        let data = await res.json();
+        if(!res.ok){
+            throw data;
+        }
+        return data;
+    }).then(data => {
+        console.log(data);
+        document.getElementById("patientsCount_In_DB").textContent = data.message || 0;
+    }).catch(err => {
+        console.log(err);
+    })
+}
 
 // Edit Admin Details
 function editAdminDetails(editButton) {
@@ -238,7 +269,7 @@ function openDoctorManagement() {
         return;
     }
     history.pushState({ page: "openDoctorManagement" }, "")
-    document.getElementById("doctorManagementBlock").style.width = "83%";
+    document.getElementById("doctorManagementBlock").style.width = "100%";
     document.getElementById("doctorManagementBlock").style.height = "auto";
     setTimeout(() => {
         document.getElementById("doctorManagementBlock").style.display = "block";
@@ -264,7 +295,7 @@ function openPatientManagement() {
         return;
     }
     history.pushState({ page: "openPatientManagement" }, "")
-    document.getElementById("patientManagementBlock").style.width = "83%";
+    document.getElementById("patientManagementBlock").style.width = "100%";
     document.getElementById("patientManagementBlock").style.height = "auto";
     setTimeout(() => {
         document.getElementById("patientManagementBlock").style.display = "block";
@@ -493,6 +524,7 @@ async function addDoctor() {
         document.getElementById("doctorCardsContainer").appendChild(card);
         history.pushState({ page: "doctorCardsContainer" }, "")
         closeAddDoctorPopup();
+        getDoctorsCountInDB();
     }).catch(err => {
         console.log(err)
     })
@@ -580,6 +612,56 @@ window.addEventListener("popstate", (e) => {
 
 })
 
+
+let getAllDoctors_PresentIn_DB = document.getElementById("getAllDoctors_PresentIn_DB");
+
+getAllDoctors_PresentIn_DB.addEventListener("click", async () => {
+    // history.pushState({ page: "getAllDoctors_PresentIn_DB" }, "getAllDoctors_PresentIn_DB")
+    fetch("/adminController/getAllDoctors_PresentIn_DB", {
+        method: "GET",
+        credentials: "include"
+    })
+    .then(async response => {
+        let data = await response.json();
+        if(!response.ok){
+            throw data;
+        }
+        return data;
+    })
+    .then(data => {
+        console.log(data);
+        // document.getElementById("doctorsCount_In_DB").textContent = data.length;
+        getDoctorsCountInDB();
+    })
+    .catch(error => {
+        console.error("Error fetching doctors:", error);
+    });
+});
+
+
+let getAllPatients_presentIn_DB = document.getElementById("getAllPatients_presentIn_DB");
+
+getAllPatients_presentIn_DB.addEventListener("click", async () => {
+    // history.pushState({ page: "getAllPatients_presentIn_DB" }, "getAllPatients_presentIn_DB")
+    fetch("/adminController/getAllPatients_presentIn_DB", {
+        method: "GET",
+        credentials: "include"
+    })
+    .then(async response => {
+        let data = await response.json();
+        if(!response.ok){
+            throw data;
+        }
+        return data;
+    })
+    .then(data => {
+        console.log(data);
+        // document.getElementById("doctorsCount_In_DB").textContent = data.length;
+    })
+    .catch(error => {
+        console.error("Error fetching doctors:", error);
+    });
+});
 
 
 

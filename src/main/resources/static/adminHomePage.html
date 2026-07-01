@@ -23,7 +23,8 @@
                 <div id="profileContainerBack" onclick="backToHomePageFromProfileContainer()"></div>
                 <div class="showProfileContainer">
                     <div class="adminProfileHeader">
-                        <img alt="Admin Profile" class="adminProfileImage" id="adminProfileContainerImage" onclick="showFullProfileImage()">
+                        <img alt="Admin Profile" class="adminProfileImage" id="adminProfileContainerImage"
+                            onclick="showFullProfileImage()">
                         <div id="fullProfileImageContainer" style="display:none;">
                             <img id="fullProfileImage"></img>
                             <div class="profileFooter">
@@ -44,22 +45,20 @@
                         <div class="profileItem" id="inputNameContainer">
                             <span>Gender</span>
                             <p id="adminGender">
-                                <input type="text" name="gender" class="input" id="adminGenderInput" value=""
-                                    readonly>
+                                <input type="text" name="gender" class="input" id="adminGenderInput" value="" readonly>
                             </p>
                         </div>
                         <div class="profileItem">
                             <span>Date of Birth</span>
                             <p id="adminDateOfBirth">
-                                <input type="text" class="input" name="dateOfBirth" id="adminDateOfBirthInput"
-                                    value="" readonly>
+                                <input type="text" class="input" name="dateOfBirth" id="adminDateOfBirthInput" value=""
+                                    readonly>
                             </p>
                         </div>
                         <div class="profileItem">
                             <span>Email Id</span>
                             <p id="adminEmail">
-                                <input type="email" name="email" class="input" id="adminEmailInput"
-                                    value="">
+                                <input type="email" name="email" class="input" id="adminEmailInput" value="">
                             </p>
                         </div>
                         <div class="profileItem">
@@ -71,8 +70,8 @@
                         <div class="profileItem">
                             <span>Join Date</span>
                             <p id="adminJoinDate">
-                                <input type="text" class="input" name="joinDate" id="adminJoinDateInput"
-                                    value="" readonly>
+                                <input type="text" class="input" name="joinDate" id="adminJoinDateInput" value=""
+                                    readonly>
                             </p>
                         </div>
                     </div>
@@ -92,7 +91,7 @@
         <div class="sidebar">
             <h2>Menu</h2>
             <ul>
-                <li onclick="openDoctorManagement()">Doctor Management</li>
+                <li onclick="openDoctorManagement()"><a href="#doctorManagementBlock">Doctor Management</a></li>
                 <li onclick="openPatientManagement()">Patient Management</li>
                 <li onclick="showMessage('About Hospital')">About</li>
                 <li onclick="showMessage('Contact Details')">Contact</li>
@@ -101,150 +100,18 @@
                 <li onclick="showMessage('Doctor Schedules')">Schedules</li>
                 <li onclick="showMessage('Settings Opened')">Settings</li>
             </ul>
-            <div id="doctorManagementBlock">
-                <div class="doctorManagementContainer">
-                    <!-- Header -->
-                    <div class="doctorManagementHeader">
-                        <h1>Doctor Management</h1>
-                        <button class="addDoctorBtn" onclick="openAddDoctorPopup()">
-                            Add Doctor
-                        </button>
-                    </div>
-                    <!-- Search -->
-                    <div class="doctorSearchContainer">
-                        <input type="text" placeholder="Search doctor..." id="doctorSearchInput">
-                    </div>
-                    <!-- Doctors List -->
-                    <div class="doctorCardsContainer" id="doctorCardsContainer">
-                        <!-- Doctor Card -->
-                        <!-- <div class="doctorCard">
-
-                            <div class="doctorTopSection">
-                                <img alt="Doctor">
-
-                                <div>
-                                    <h2>Dr. John</h2>
-                                    <p>Cardiologist</p>
-                                </div>
-                            </div>
-
-                            <div class="doctorDetails">
-
-                                <div class="doctorInfo">
-                                    <span>Email</span>
-                                    <p>doctor@gmail.com</p>
-                                </div>
-
-                                <div class="doctorInfo">
-                                    <span>Phone</span>
-                                    <p>9876543210</p>
-                                </div>
-
-                                <div class="doctorInfo">
-                                    <span>Timing</span>
-                                    <p>9:00 AM - 5:00 PM</p>
-                                </div>
-
-                                <div class="doctorInfo">
-                                    <span>Experience</span>
-                                    <p>8 Years</p>
-                                </div>
-
-                            </div>
-
-                            <div class="doctorButtons">
-
-                                <button class="updateBtn">
-                                    Update
-                                </button>
-
-                                <button class="timingBtn">
-                                    Update Timing
-                                </button>
-
-                                <button class="deleteBtn">
-                                    Delete
-                                </button>
-
-                            </div>
-
-                        </div> -->
-                    </div>
-                </div>
-                <!-- Add Doctor Popup -->
-                <div class="popupContainer" id="addDoctorPopup">
-                    <div class="popupBox">
-                        <h2 style="color:black">Add Doctor</h2>
-                        <input type="file" name="" id="doctorImageInput" accept="image/*" onchange="previewDoctorImage(event)">
-                        <div id="cropImagePopUp">
-							<div class="image-container"><img id="cropImage"></div>
-							<button type="button" class="crop-btn" id="cropButton">Crop Image</button>
-						</div>
-						<img id="previewDoctorImage" class="image-preview">
-                        <input type="text" placeholder="Doctor Name" required id="doctorName">
-                        <input type="date" placeholder="Date of Birth" required id="doctorDateOfBirth">
-                        <select name="gender" id="gender">
-                            <option value="">Select Gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                        <select name="Specialization" id="doctorSpecialization">
-                            <option value="">Select Specialization</option>
-                            <option value="Cardiology">Cardiology</option>
-                            <option value="Dermatology">Dermatology</option>
-                            <option value="Neurology">Neurology</option>
-                            <option value="Pediatrics">Pediatrics</option>
-                            <option value="Oncology">Oncology</option>
-                            <option value="Orthopedics">Orthopedics</option>
-                            <option value="Dentist">Dentist</option>
-                            <option value="Pulmonology">Pulmonology</option>
-                            <option value="Rheumatology">Rheumatology</option>
-                            <option value="Gastroenterology">Gastroenterology</option>
-                            <option value="Endocrinology">Endocrinology</option>
-                            <option value="Medico">Medico</option>
-                        </select>
-                        <input type="email" placeholder="Email" required id="doctorEmail">
-                        <input type="password" placeholder="Password" required id="doctorPassword">
-                        <input type="text" placeholder="Phone Number" required id="doctorPhone">
-                        <input type="date" placeholder="Doctor Join Date" required id="doctorJoinDate">
-                        <!-- <input type="text" placeholder="Timing" required id="doctorTiming"> -->
-                        <input type="text" placeholder="Experience" required id="doctorExperience">
-                        <div class="popupButtons">
-                            <button style="background-color: skyblue;" onclick="addDoctor()">
-                                Verify
-                            </button>
-                            <button onclick="closeAddDoctorPopup()">
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="patientManagementBlock">
-                <div class="patientManagementContainer">
-                    <!-- Header -->
-                    <div class="patientManagementHeader">
-                        <h1>Patient Management</h1>
-                    </div>
-                    <!-- Search -->
-                    <div class="patientSearchContainer">
-                        <input type="text" placeholder="Search patient..." id="patientSearchInput">
-                    </div>
-                </div>
-            </div>
         </div>
         <!-- MAIN CONTENT -->
         <div class="content">
             <!-- TOP CARDS -->
             <div class="cards">
-                <div class="card">
+                <div class="card" id="getAllPatients_presentIn_DB">
                     <h3>Total Patients</h3>
-                    <p id="patients">1245</p>
+                    <p id="patientsCount_In_DB">0</p>
                 </div>
-                <div class="card">
+                <div class="card" id="getAllDoctors_PresentIn_DB">
                     <h3>Total Doctors</h3>
-                    <p id="doctors">56</p>
+                    <p id="doctorsCount_In_DB">0</p>
                 </div>
                 <div class="card">
                     <h3>Appointments Today</h3>
@@ -304,6 +171,92 @@
                         <li>Emergency ward maintenance at 6 PM.</li>
                         <li>Staff meeting tomorrow morning.</li>
                     </ul>
+                </div>
+            </div>
+            <div id="doctorManagementBlock">
+                <div class="doctorManagementContainer">
+                    <!-- Header -->
+                    <div class="doctorManagementHeader">
+                        <h1>Doctor Management</h1>
+                        <button class="addDoctorBtn" onclick="openAddDoctorPopup()">
+                            Add Doctor
+                        </button>
+                    </div>
+                    <!-- Search -->
+                    <div class="doctorSearchContainer">
+                        <input type="text" placeholder="Search doctor..." id="doctorSearchInput">
+                    </div>
+                    <!-- Top Doctors View -->
+                    <div class="topDoctors_In_doctorManagementBlock">
+
+                    </div>
+                    <!-- Doctors List -->
+                    <div class="doctorCardsContainer" id="doctorCardsContainer">
+
+                    </div>
+                </div>
+                <!-- Add Doctor Popup -->
+                <div class="popupContainer" id="addDoctorPopup">
+                    <div class="popupBox">
+                        <h2 style="color:black">Add Doctor</h2>
+                        <input type="file" name="" id="doctorImageInput" accept="image/*"
+                            onchange="previewDoctorImage(event)">
+                        <div id="cropImagePopUp">
+                            <div class="image-container"><img id="cropImage"></div>
+                            <button type="button" class="crop-btn" id="cropButton">Crop Image</button>
+                        </div>
+                        <img id="previewDoctorImage" class="image-preview">
+                        <input type="text" placeholder="Doctor Name" required id="doctorName">
+                        <input type="date" placeholder="Date of Birth" required id="doctorDateOfBirth">
+                        <select name="gender" id="gender">
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <select name="Specialization" id="doctorSpecialization">
+                            <option value="">Select Specialization</option>
+                            <option value="Cardiology">Cardiology</option>
+                            <option value="Dermatology">Dermatology</option>
+                            <option value="Neurology">Neurology</option>
+                            <option value="Pediatrics">Pediatrics</option>
+                            <option value="Oncology">Oncology</option>
+                            <option value="Orthopedics">Orthopedics</option>
+                            <option value="Dentist">Dentist</option>
+                            <option value="Pulmonology">Pulmonology</option>
+                            <option value="Rheumatology">Rheumatology</option>
+                            <option value="Gastroenterology">Gastroenterology</option>
+                            <option value="Endocrinology">Endocrinology</option>
+                            <option value="Medico">Medico</option>
+                        </select>
+                        <input type="email" placeholder="Email" required id="doctorEmail">
+                        <input type="password" placeholder="Password" required id="doctorPassword">
+                        <input type="text" placeholder="Phone Number" required id="doctorPhone">
+                        <input type="date" placeholder="Doctor Join Date" required id="doctorJoinDate">
+                        <!-- <input type="text" placeholder="Timing" required id="doctorTiming"> -->
+                        <input type="text" placeholder="Experience" required id="doctorExperience">
+                        <div class="popupButtons">
+                            <button style="background-color: skyblue;" onclick="addDoctor()">
+                                Verify
+                            </button>
+                            <button onclick="closeAddDoctorPopup()">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div id="patientManagementBlock">
+                <div class="patientManagementContainer">
+                    <!-- Header -->
+                    <div class="patientManagementHeader">
+                        <h1>Patient Management</h1>
+                    </div>
+                    <!-- Search -->
+                    <div class="patientSearchContainer">
+                        <input type="text" placeholder="Search patient..." id="patientSearchInput">
+                    </div>
                 </div>
             </div>
         </div>

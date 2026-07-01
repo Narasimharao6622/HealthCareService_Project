@@ -27,7 +27,7 @@ document.getElementById("formPage").addEventListener("submit", async (e) => {
     }).then(data => {
         if (data.status == 200) {
             window.location.reload();
-			window.location.replace("userHomePage.html");
+			window.location.replace("/user/userHomePage.html");
         }else if (data.status === 406) {
             emailidInputHeading.style.background = "red"
         } else {

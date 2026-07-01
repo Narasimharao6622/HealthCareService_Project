@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -16,18 +17,23 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.healthCareService.healthCareServiceProject.dao.AdminDao;
 import com.healthCareService.healthCareServiceProject.dao.DoctorDao;
+import com.healthCareService.healthCareServiceProject.dao.PatientDao;
 import com.healthCareService.healthCareServiceProject.dto.DoctorDTO;
+import com.healthCareService.healthCareServiceProject.dto.PatientDTO;
 import com.healthCareService.healthCareServiceProject.dto.TodayScheduledDoctor;
 import com.healthCareService.healthCareServiceProject.dto.admin.AdminLoginRequestDTO;
 import com.healthCareService.healthCareServiceProject.dto.admin.UpdateAdminRequest;
 import com.healthCareService.healthCareServiceProject.entity.Admin;
 import com.healthCareService.healthCareServiceProject.entity.Doctor;
+import com.healthCareService.healthCareServiceProject.entity.Patient;
 import com.healthCareService.healthCareServiceProject.exception.DoctorSaveException;
 import com.healthCareService.healthCareServiceProject.exception.FileException;
 import com.healthCareService.healthCareServiceProject.exception.InvalidAdminID;
 import com.healthCareService.healthCareServiceProject.exception.JobNotFound;
 import com.healthCareService.healthCareServiceProject.exception.NoTodayScheduleDoctorsListNotFound;
+import com.healthCareService.healthCareServiceProject.exception.NoUserFoundExepction;
 import com.healthCareService.healthCareServiceProject.exception.PasswordError;
 import com.healthCareService.healthCareServiceProject.interfaces.CalculateDoctorSalary;
 import com.healthCareService.healthCareServiceProject.repository.AdminRepo;
@@ -37,6 +43,9 @@ public class AdminService {
 	@Autowired
 	private AdminRepo repo;
 
+	@Autowired
+	private AdminDao adminDao;
+	
 	@Autowired
 	private DoctorDao doctorDao;
 
@@ -199,6 +208,55 @@ public class AdminService {
 			responseDoctor.add(newDoctor);
 		});
 		return responseDoctor;
+	}
+
+	public List<DoctorDTO> getAllDoctors_PresentIn_DB() {
+		ArrayList<Doctor> doctorsList_from_DB = adminDao.getAllDoctors_PresentIn_DB();
+		List<DoctorDTO> doctors_responseList = new ArrayList<DoctorDTO>();
+		doctorsList_from_DB.stream().forEach(doctor -> {
+			DoctorDTO doctorDTO = new DoctorDTO();
+			doctorDTO.setName(doctor.getName());
+			doctorDTO.setAge(doctor.getAge());
+			doctorDTO.setDoctorid(doctor.getDoctorid());
+			doctorDTO.setAvilability(doctor.getAvilability());
+			doctorDTO.setAppointments(doctor.getAppointments());
+			doctorDTO.setExperiance(doctor.getExperiance());
+			doctorDTO.setImagefilepath(doctor.getImagefilepath());
+			doctorDTO.setGender(doctor.getGender());
+			doctorDTO.setSpecialization(doctor.getSpecialization());
+			doctorDTO.setTotalrating(doctor.getTotalrating());
+			doctorDTO.setRating(doctor.getRating());
+			doctorDTO.setNoofcasesaccepted(doctor.getNoofcasesaccepted());
+			doctors_responseList.add(doctorDTO);
+		});
+		return doctors_responseList;
+		
+	}
+
+	public long getAllDoctorsCount_fromDB() {
+		ArrayList<Doctor> totalDoctors = adminDao.getAllDoctors();
+		System.out.println(totalDoctors);
+		long doctorsCount = totalDoctors.stream().count();
+		return doctorsCount;
+	}
+
+	public List<PatientDTO> getAllPatients_presentIn_DB() {
+		ArrayList<Patient> totalPatients = adminDao.getAllPatients_presentIn_DB();
+		List<PatientDTO> patientList = new ArrayList<PatientDTO>();
+		if(totalPatients.isEmpty()) {
+			throw new NoUserFoundExepction("No user are present in db");
+		}
+		patientList.stream().forEach(patient -> {
+			PatientDTO patientDTO = new PatientDTO();
+			patientDTO.setName(patient.getName());
+			patientList.add(patientDTO);
+		});
+		return patientList;
+	}
+	public long getAllPatientsCount_fromDB() {
+		ArrayList<Patient> totalPatients = adminDao.getAllPatients_presentIn_DB();
+		long doctorsCount = totalPatients.stream().count();
+		return doctorsCount;
 	}
 	
 }

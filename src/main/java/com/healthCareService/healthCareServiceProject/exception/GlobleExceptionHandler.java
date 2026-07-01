@@ -186,6 +186,14 @@ public class GlobleExceptionHandler {
 		errorResponse.setPath(request.getRequestURI());
 		return new ResponseEntity<>(errorResponse,HttpStatus.valueOf(404));
 	}
+	@ExceptionHandler(NoUserFoundExepction.class)
+	public ResponseEntity<ErrorResponse<?>> handledNoUserFoundExepction(NoUserFoundExepction ex,HttpServletRequest request){
+		ErrorResponse<?> errorResponse = new ErrorResponse<>();
+		errorResponse.setStatus(404);
+		errorResponse.setMessage(ex.getMessage());
+		errorResponse.setPath(request.getRequestURI());
+		return new ResponseEntity<>(errorResponse,HttpStatus.valueOf(404));
+	}
 }
 
 

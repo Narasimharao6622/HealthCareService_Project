@@ -86,5 +86,36 @@ public class AdminController {
 		apiResponse.setMessage("Today some Schedules are present...");
 		return ResponseEntity.status(200).body(apiResponse);
 	}
+	
+	@GetMapping("/getAllDoctors_PresentIn_DB")
+	public ResponseEntity<?> getAllDoctors_PresentIn_DB() {
+		ApiResponse<?> response = new ApiResponse<>();
+		response.setStatus(200);
+		response.setMessage("Get All Doctors Which are present inside database");
+		response.setObjects(adminService.getAllDoctors_PresentIn_DB());
+		return ResponseEntity.ok().body(response);
+	}
+	
+	@GetMapping("/getAllDoctorsCount_fromDB")
+	public ResponseEntity<?> getAllDoctorsCount_fromDB() {
+		ApiResponse<?> response = new ApiResponse<>();
+		response.setMessage(adminService.getAllDoctorsCount_fromDB()+"");
+		return ResponseEntity.status(200).body(response);
+	}
+	@GetMapping("/getAllPatients_presentIn_DB")
+	public ResponseEntity<?> getAllPatients_presentIn_DB() {
+		ApiResponse<?> response = new ApiResponse<>();
+		response.setStatus(200);
+		response.setMessage("Get All Patients Which are present inside database");
+		response.setObjects(adminService.getAllPatients_presentIn_DB());
+		return ResponseEntity.ok().body(response);
+	}
+	
+	@GetMapping("/getPatientsCount_presentIn_DB")
+	public ResponseEntity<?> getAllPatientsCount_fromDB() {
+		ApiResponse<?> response = new ApiResponse<>();
+		response.setMessage(adminService.getAllPatientsCount_fromDB()+"");
+		return ResponseEntity.status(200).body(response);
+	}
 }
 

@@ -33,18 +33,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
 
 		String path = request.getServletPath();
-//		System.out.println(path);
-		if (path.equals("/appController/forgetPassword") ||
-			path.equals("/appController/adminLogin") || 
-			path.equals("/appController/user_login") ||
-			path.equals("/appController/email_otp_send") ||
-			path.equals("/appController/clearOTP") ||
-			path.equals("/doctorController/doctorLogin")
-			)  {
-
-			filterChain.doFilter(request, response);
-			return;
-		}
+		System.out.println(path);
 		String token = null;
 		String value = null;
 		String actualPath = "";
@@ -85,3 +74,15 @@ public class JWTFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 }
+
+//		if (path.equals("/appController/forgetPassword") ||
+//			path.equals("/appController/adminLogin") || 
+//			path.equals("/appController/user_login") ||
+//			path.equals("/appController/email_otp_send") ||
+//			path.equals("/appController/clearOTP") ||
+//			path.equals("/doctorController/doctorLogin")
+//			)  {
+//
+//			filterChain.doFilter(request, response);
+//			return;
+//		}

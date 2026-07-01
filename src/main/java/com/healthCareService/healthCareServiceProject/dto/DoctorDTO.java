@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.healthCareService.healthCareServiceProject.entity.Appointment;
+import com.healthCareService.healthCareServiceProject.entity.DoctorAvilability;
 import com.healthCareService.healthCareServiceProject.entity.Rating;
 
 public class DoctorDTO {
@@ -25,6 +26,8 @@ public class DoctorDTO {
 	private int noofcasesaccepted;
 	private int noofcaseshold;
 	private double totalrating;
+	
+	private DoctorAvilability avilability;
 
 	private List<Rating> rating;
 	private List<Appointment> appointments;
@@ -190,6 +193,13 @@ public class DoctorDTO {
 				+ ", salary=" + salary + ", noofcasesaccepted=" + noofcasesaccepted + ", noofcaseshold=" + noofcaseshold
 				+ ", totalrating=" + totalrating + ", rating=" + rating
 				+ " imagefilepath=" + imagefilepath + "]";
+	}
+
+	public void setAvilability(DoctorAvilability avilability) {
+		this.avilability = avilability;
+	}
+	public DoctorAvilability getAvilability() {
+		return avilability;
 	}
 
 //	public List<Rating> getRating() {

@@ -1,5 +1,6 @@
 package com.healthCareService.healthCareServiceProject.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,5 +37,8 @@ public interface PatientRepo extends JpaRepository<Patient, String>{
 	@Transactional
 	@Query("UPDATE Patient p SET p.password = :password WHERE p.emailid = :email")
 	public int updatePasswordUsingEmail(@Param("email") String email,@Param("password") String password);
+
+	@Query("SELECT p FROM Patient p")
+	public ArrayList<Patient> getAllPatients();
 
 }

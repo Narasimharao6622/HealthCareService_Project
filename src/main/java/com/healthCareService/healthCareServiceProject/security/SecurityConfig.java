@@ -32,15 +32,17 @@ public class SecurityConfig {
 
 								"/favicon.ico",
 
-								// allow this all Controllers methods
-								"/doctorController/**", "/appController/**",
-								
-								"/loginPage.html", "/registrationPage.html", "/adminRegistrationPage.html",
-								"/adminLoginPage.html","/forgetPassword.html",
-
+								// allow this all Controllers methods in this classes and allow HTML, CSS, JavaScript Pages and Images folder
+								"/doctorController/**",
+								"/appController/**",
+								"/appHTMLFiles/**",
+								"/user/**",
 								"/css/**", "/js/**", "/images/**")
 						.permitAll()
+						// This end points can be accessible for only allowed role
 						.requestMatchers("/userController/**").hasRole("USER")
+						.requestMatchers("/users_folder/**").hasRole("USER")
+						
 						.requestMatchers("/adminController/**").hasRole("ADMIN")
 						.requestMatchers("/doctorController").hasRole("DOCTOR")
 						.anyRequest().authenticated())
